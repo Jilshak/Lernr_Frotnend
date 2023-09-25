@@ -6,7 +6,9 @@ function Navbar() {
     return (
         <div className="navbar bg-base-100 shadow-lg sticky top-0">
             <div className="flex-1">
-                <a className="btn btn-ghost normal-case text-xl font-bold">Lernr</a>
+                <Link to='/'>
+                    <span className="btn btn-ghost normal-case text-xl font-bold">Lernr</span>
+                </Link>
             </div>
             <div className='relative flex items-center justify-center w-full'>
                 <ul className='flex'>
@@ -14,7 +16,12 @@ function Navbar() {
                         <li className='mx-3 font-semibold cursor-pointer'>Home</li>
                     </Link>
                     <li className='mx-3 font-semibold cursor-pointer'>Courses</li>
-                    <li className='mx-3 font-semibold cursor-pointer'>Enrolled</li>
+                    <Link to='/enrolled'>
+                        <li className='mx-3 font-semibold cursor-pointer'>Enrolled</li>
+                    </Link>
+                    <Link to='/mycourses'>
+                        <li className='mx-3 font-semibold cursor-pointer'>My Courses</li>
+                    </Link>
                 </ul>
             </div>
             <div className="flex-none">
@@ -36,10 +43,11 @@ function Navbar() {
                     </label>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                         <li>
-                            <a className="justify-between">
-                                Profile
-                                <span className="badge">New</span>
-                            </a>
+                            <Link to='/profile'>
+                                <span className="justify-between">
+                                    Profile
+                                </span>
+                            </Link>
                         </li>
                         <li><a>Settings</a></li>
                         <li><a>Logout</a></li>
