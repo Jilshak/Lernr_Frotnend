@@ -16,7 +16,6 @@ export const Register = createAsyncThunk('register',
                         text: "Your account has been created!!",
                     }
                 )
-                console.log("The user has been created")
             } else {
                 await Swal.fire(
                     {
@@ -218,6 +217,7 @@ const initialState = {
     isLoading: true,
     data: [],
     user: [],
+    profile: [],
     instructor: [],
     msg: 'is still loading'
 }
@@ -284,6 +284,21 @@ const UserSlice = createSlice({
             state.msg = "The state has been loaded"
         },
         [getInstructors.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the state has been finished with some problem.'
+        },
+
+        
+        [getMyProfile.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The state is still loading!!"
+        },
+        [getMyProfile.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.profile = action.payload
+            state.msg = "The state has been loaded"
+        },
+        [getMyProfile.rejected]: (state) => {
             state.isLoading = false
             state.msg = 'The loading of the state has been finished with some problem.'
         },

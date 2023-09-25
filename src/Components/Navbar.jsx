@@ -1,15 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import noprofile from '../icons/noprofile.png'
+import jwtDecode from 'jwt-decode'
 
 function Navbar() {
 
     const navigate = useNavigate()
+    const [token, setToken] = useState()
 
     const handleLogout = async () => {
         await localStorage.removeItem('authToken')
         await navigate('/login')
     }
+
+    //the token is here
+    useEffect(() => {
+        const handleToken = async () => {
+            if (localStorage.getItem('authToken')) {
+                let access = await jwtDecode(localStorage?.getItem('authToken'))
+                await setToken(access)
+            }
+        }
+        handleToken()
+    }, [])
 
     return (
         <div className="navbar bg-base-100 shadow-lg sticky top-0">
@@ -27,9 +40,14 @@ function Navbar() {
                     <Link to='/enrolled'>
                         <li className='mx-3 font-semibold cursor-pointer'>Enrolled</li>
                     </Link>
-                    <Link to='/mycourses'>
-                        <li className='mx-3 font-semibold cursor-pointer'>My Courses</li>
-                    </Link>
+                    {
+                        token?.is_instructor ?
+                            <>
+                                <Link to='/mycourses'>
+                                    <li className='mx-3 font-semibold cursor-pointer'>My Courses</li>
+                                </Link>
+                            </> : null
+                    }
                 </ul>
             </div>
             <div className="flex-none">
@@ -38,7 +56,7 @@ function Navbar() {
                         <label tabIndex={0} className="btn btn-ghost btn-circle">
                             <div className="indicator">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                                <span className="badge badge-sm indicator-item">8</span>
+                                <span className="badge badge-sm indicator-item">0</span>
                             </div>
                         </label>
                     </div>
@@ -50,15 +68,24 @@ function Navbar() {
                         </div>
                     </label>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                        <li>
-                            <Link to='/profile'>
-                                <span className="justify-between">
-                                    Profile
-                                </span>
-                            </Link>
-                        </li>
-                        <li><a>Settings</a></li>
-                        <li onClick={handleLogout}><span>Logout</span></li>
+                        {
+                            !localStorage?.getItem('guestToken') ?
+                                <>
+                                    <li>
+                                        <Link to='/profile'>
+                                            <span className="justify-between">
+                                                Profile
+                                            </span>
+                                        </Link>
+                                    </li>
+                                    <li><a>Settings</a></li>
+                                    <li onClick={handleLogout}><span>Logout</span></li>
+                                </>
+                                :
+                                <Link to='/login'>
+                                    <h1 className='text-orange-400 ms-3 font-semibold'>Login first</h1>
+                                </Link>
+                        }
                     </ul>
                 </div>
             </div>

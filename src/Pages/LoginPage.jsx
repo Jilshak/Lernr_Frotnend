@@ -44,6 +44,12 @@ function LoginPage() {
         refresh()
     }, [])
 
+    const handleGuestMode = async () => {
+        await localStorage.setItem('guestToken', true)
+        await navigate('/')
+    }
+
+
     return (
         <div className="hero min-h-screen bg-base-200">
             <div className="hero-content flex-col lg:flex-row-reverse min-w-[450px]">
@@ -61,7 +67,7 @@ function LoginPage() {
                             <button onClick={handleLogin} className="btn btn-outline">Login</button>
                         </div>
                         <div className="form-control mt-2">
-                            <button className="btn btn-neutral">GuestMode</button>
+                            <button onClick={handleGuestMode} className="btn btn-neutral">GuestMode</button>
                         </div>
                         <div className='flex items-center justify-center'>
                             <label className="label">
