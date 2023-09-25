@@ -1,8 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import noprofile from '../icons/noprofile.png'
 
 function Navbar() {
+
+    const navigate = useNavigate()
+
+    const handleLogout = async () => {
+        await localStorage.removeItem('authToken')
+        await navigate('/login')
+    }
+
     return (
         <div className="navbar bg-base-100 shadow-lg sticky top-0">
             <div className="flex-1">
@@ -50,7 +58,7 @@ function Navbar() {
                             </Link>
                         </li>
                         <li><a>Settings</a></li>
-                        <li><a>Logout</a></li>
+                        <li onClick={handleLogout}><span>Logout</span></li>
                     </ul>
                 </div>
             </div>
