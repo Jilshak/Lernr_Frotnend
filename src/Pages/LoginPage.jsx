@@ -6,7 +6,7 @@ import jwtDecode from 'jwt-decode'
 
 
 function LoginPage() {
-    
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -50,7 +50,7 @@ function LoginPage() {
                 <div className="card flex-shrink-0 w-full max-w-sm  hover:shadow-md hover:shadow-[#e5e4e4] shadow-[#e5e4e4] bg-base-100">
                     <div className="card-body">
                         <div className="form-control">
-                            <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="eamil" className="input input-bordered" />
+                            <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" className="input input-bordered" />
                         </div>
                         <div className="form-control my-5">
 

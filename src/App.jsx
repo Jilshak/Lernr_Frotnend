@@ -10,6 +10,11 @@ import ProfilePage from './Pages/ProfilePage'
 import MyCourses from './Pages/MyCourses'
 import EnrolledPage from './Pages/EnrolledPage'
 import ProtectedRoutes from './utils/ProtectedRoutes'
+import AdminDashboard from './Pages/Admin/AdminDashboard'
+import AdminUsers from './Pages/Admin/AdminUsers'
+import AdminReports from './Pages/Admin/AdminReports'
+import AdminHome from './Pages/Admin/AdminHome'
+import AdminInstructorPage from './Pages/Admin/AdminInstructorPage'
 
 function App() {
 
@@ -27,10 +32,17 @@ function App() {
           <Route path='/profile' element={<ProfilePage />} />
           <Route path='/mycourses' element={<MyCourses />} />
           <Route path='/enrolled' element={<EnrolledPage />} />
+
+          <Route path='/admin/' element={<AdminHome />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path='admin_users' element={<AdminUsers />} />
+            <Route path='admin_reports' element={<AdminReports />} />
+            <Route path='admin_instructors' element={<AdminInstructorPage />} />
+          </Route>
         </>
       </Route>
 
-      
+
     </Routes>
   )
 }

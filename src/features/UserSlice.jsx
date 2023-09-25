@@ -10,7 +10,7 @@ export const Register = createAsyncThunk('register',
             if (request.status == 201) {
                 await Swal.fire(
                     {
-                        background: '#191C24',
+                        background: '#fff',
                         icon: 'success',
                         title: 'Account Created!',
                         text: "Your account has been created!!",
@@ -20,7 +20,7 @@ export const Register = createAsyncThunk('register',
             } else {
                 await Swal.fire(
                     {
-                        background: '#191C24',
+                        background: '#fff',
                         icon: 'error',
                         title: 'Failed!!!!',
                         text: "Somthing happened while you were creating the account",
@@ -51,7 +51,36 @@ export const getUsers = createAsyncThunk('get_usres',
     async () => {
         try {
             const request = await api.get(`user/`)
-            const response = request.data.length
+            const response = request.data
+            if (request.status === 200) {
+                return response
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+export const getInstructors = createAsyncThunk('get_instructors',
+    async () => {
+        try {
+            const request = await api.get(`user/`)
+            const response = request.data
+            if (request.status === 200) {
+                const data = response.filter((item) => item.is_instructor)
+                return data
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+export const getDesiredUser = createAsyncThunk('get_desired_user',
+    async (id) => {
+        try {
+            const request = await api.get(`user/${id}/`)
+            const response = request.data
             if (request.status === 200) {
                 return response
             }
@@ -92,7 +121,7 @@ export const Login = createAsyncThunk('login',
                     await localStorage.removeItem('authToken')
                     await Swal.fire(
                         {
-                            background: '#191C24',
+                            background: '#fff',
                             icon: 'error',
                             title: 'Blocked!',
                             text: "You have been blocked by the Admin!!",
@@ -101,7 +130,7 @@ export const Login = createAsyncThunk('login',
                 } else {
                     await Swal.fire(
                         {
-                            background: '#191C24',
+                            background: '#fff',
                             icon: 'success',
                             title: 'Login Successful!',
                             text: "Welcome!!",
@@ -111,7 +140,7 @@ export const Login = createAsyncThunk('login',
             } else {
                 await Swal.fire(
                     {
-                        background: '#191C24',
+                        background: '#fff',
                         icon: 'error',
                         title: 'Failed!!!!',
                         text: "Somthing happened while you were logging in to the account",
@@ -131,7 +160,7 @@ export const DeleteUser = createAsyncThunk('delete_user',
             if (request.status == 200) {
                 await Swal.fire(
                     {
-                        background: '#191C24',
+                        background: '#fff',
                         icon: 'success',
                         title: 'Deleted!!',
                         text: "The User has been deleted Successfully!!",
@@ -151,7 +180,7 @@ export const BlockUser = createAsyncThunk('block_user',
             if (request.status == 200) {
                 await Swal.fire(
                     {
-                        background: '#191C24',
+                        background: '#fff',
                         icon: 'success',
                         title: 'Blocked!!',
                         text: "The User has been Blocked Successfully!!",
@@ -171,7 +200,7 @@ export const UnblockUser = createAsyncThunk('unblock_user',
             if (request.status == 200) {
                 await Swal.fire(
                     {
-                        background: '#191C24',
+                        background: '#fff',
                         icon: 'success',
                         title: 'UnBlocked!!',
                         text: "The User has been UnBlocked Successfully!!",
@@ -188,6 +217,8 @@ export const UnblockUser = createAsyncThunk('unblock_user',
 const initialState = {
     isLoading: true,
     data: [],
+    user: [],
+    instructor: [],
     msg: 'is still loading'
 }
 
@@ -195,18 +226,64 @@ const UserSlice = createSlice({
     name: 'user_slice',
     initialState,
     reducers: {
-
+        blockUser: (state, action) => {
+            const { userId } = action.payload;
+            // Find the user by userId and update their block status in the state
+            const userToBlock = state.data.find(user => user.id === userId);
+            if (userToBlock) {
+                userToBlock.is_blocked = true;
+            }
+        },
+        unblockUser: (state, action) => {
+            const { userId } = action.payload;
+            // Find the user by userId and update their block status in the state
+            const userToUnblock = state.data.find(user => user.id === userId);
+            if (userToUnblock) {
+                userToUnblock.is_blocked = false;
+            }
+        },
     },
     extraReducers: {
-        [Register.pending]: (state) => {
+        [getUsers.pending]: (state) => {
             state.isLoading = true
             state.msg = "The state is still loading!!"
         },
-        [Register.fulfilled]: (state) => {
+        [getUsers.fulfilled]: (state, action) => {
             state.isLoading = false
+            state.data = action.payload
             state.msg = "The state has been loaded"
         },
-        [Register.rejected]: (state) => {
+        [getUsers.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the state has been finished with some problem.'
+        },
+
+
+        [getDesiredUser.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The state is still loading!!"
+        },
+        [getDesiredUser.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.user = action.payload
+            state.msg = "The state has been loaded"
+        },
+        [getDesiredUser.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the state has been finished with some problem.'
+        },
+
+        
+        [getInstructors.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The state is still loading!!"
+        },
+        [getInstructors.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.instructor = action.payload
+            state.msg = "The state has been loaded"
+        },
+        [getInstructors.rejected]: (state) => {
             state.isLoading = false
             state.msg = 'The loading of the state has been finished with some problem.'
         },
@@ -214,3 +291,4 @@ const UserSlice = createSlice({
 })
 
 export default UserSlice.reducer
+export const { blockUser, unblockUser } = UserSlice.actions
