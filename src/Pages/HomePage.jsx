@@ -4,8 +4,7 @@ import CoursesCards from '../Components/CoursesCards'
 import CategoriesCards from '../Components/CategoriesCards'
 import Footer from '../Components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCourses } from '../features/CourseSlice'
-import { Link } from 'react-router-dom'
+import { getCategories, getCourses } from '../features/CourseSlice'
 
 function HomePage() {
 
@@ -14,6 +13,7 @@ function HomePage() {
 
     useEffect(() => {
         dispatch(getCourses())
+        dispatch(getCategories())
     }, [])
 
     return (
@@ -40,19 +40,24 @@ function HomePage() {
                     </> : null
             }
 
-            <div className='mx-[30px]'>
-                <h1 className='text-2xl font-bold text-[#3D3D3D] '>Top Categories</h1>
-                <div className='grid lg:grid-cols-4 md:grid-cols-3 justify-center sm:grid-cols-2 gap-20 my-8'>
-                    <CategoriesCards />
-                    <CategoriesCards />
-                    <CategoriesCards />
-                    <CategoriesCards />
-                    <CategoriesCards />
-                    <CategoriesCards />
-                    <CategoriesCards />
-                    <CategoriesCards />
-                </div>
-            </div>
+            {
+                course && course.category.length >= 1 ?
+                    <>
+                        <div className='mx-[30px]'>
+                            <h1 className='text-2xl font-bold text-[#3D3D3D] '>Top Categories</h1>
+                            <div className='grid lg:grid-cols-4 md:grid-cols-3 justify-center sm:grid-cols-2 gap-20 my-8'>
+                               {
+                                course.category.map((item) => {
+                                    return (
+                                        <CategoriesCards key={item.id} item={item} />
+                                    )
+                                })
+                               }
+                                
+                            </div>
+                        </div>
+                    </> : null
+           }
             <div>
                 <Footer />
             </div>

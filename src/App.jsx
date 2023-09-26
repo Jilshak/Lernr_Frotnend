@@ -17,6 +17,8 @@ import AdminHome from './Pages/Admin/AdminHome'
 import AdminInstructorPage from './Pages/Admin/AdminInstructorPage'
 import AddCoursePage from './Pages/AddCoursePage'
 import RootPage from './Pages/RootPage'
+import AllCoursesPage from './Pages/AllCoursesPage'
+import CategoryPage from './Pages/CategoryPage'
 
 function App() {
 
@@ -36,6 +38,8 @@ function App() {
             <Route path='mycourses' element={<MyCourses />} />
             <Route path='enrolled' element={<EnrolledPage />} />
             <Route path='add_course' element={<AddCoursePage />} />
+            <Route path='allCourse/' element={<AllCoursesPage />} />
+            <Route path='category/:id?' element={<CategoryPage />} />
           </Route>
 
           <Route path='/admin/' element={<AdminHome />}>
