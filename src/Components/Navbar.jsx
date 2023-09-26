@@ -36,7 +36,11 @@ function Navbar() {
                     <Link to='/'>
                         <li className='mx-3 font-semibold cursor-pointer'>Home</li>
                     </Link>
-                    <li className='mx-3 font-semibold cursor-pointer'>Courses</li>
+                    {
+                        <Link to='allCourse'>
+                            <li className='mx-3 font-semibold cursor-pointer'>Courses</li>
+                        </Link>
+                    }
                     {
                         !token?.is_instructor ?
                             <>

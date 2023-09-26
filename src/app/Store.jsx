@@ -4,7 +4,7 @@ import CourseSlice from '../features/CourseSlice'
 
 export const store = configureStore({
     reducer: {
-        users: UserSlice,
         courses: CourseSlice,
+        users: UserSlice,
     }
 })

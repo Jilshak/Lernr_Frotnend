@@ -68,7 +68,7 @@ function AdminUsers() {
                         <ul className='mx-10 mt-3 '>
                           {
                             users.map((item) => {
-                              if (!item.is_superuser) {
+                              if (!item.is_superuser && !item.is_instructor) {
                                 if (!item.is_blocked) {
                                   return (
                                     <li key={item.id} onClick={(e) => {

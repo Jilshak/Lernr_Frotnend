@@ -38,7 +38,7 @@ function App() {
             <Route path='mycourses' element={<MyCourses />} />
             <Route path='enrolled' element={<EnrolledPage />} />
             <Route path='add_course' element={<AddCoursePage />} />
-            <Route path='allCourse/' element={<AllCoursesPage />} />
+            <Route path='allCourse' element={<AllCoursesPage />} />
             <Route path='category/:id?' element={<CategoryPage />} />
           </Route>
 
