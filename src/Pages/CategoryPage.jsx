@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { categoryCourse, getCategories } from '../features/CourseSlice'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import MyCoursesCard from '../Components/MyCoursesCard'
 
 function CategoryPage() {
@@ -41,7 +41,9 @@ function CategoryPage() {
                             {
                                 data.category.map((item) => {
                                     return (
-                                        <MyCoursesCard key={item.id} item={item} />
+                                        <Link to={`/coursepage/${item.id}`}>
+                                            <MyCoursesCard key={item.id} item={item} />
+                                        </Link>
                                     )
                                 })
                             }

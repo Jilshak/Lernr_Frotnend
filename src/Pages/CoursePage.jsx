@@ -60,10 +60,23 @@ function CoursePage() {
                                 </div>
                                 {/* second row */}
                                 <div className='lg:col-span-4 xs:col-span-7 lg:mx-3 my-3 bg-white shadow-xl h-[270px] xs:w-full lg:w-auto'>
-                                    <h1>What you'll learn</h1>
+                                    <div className='flex items-center justify-start'>
+                                        <h1 className='text-xl font-semibold text-[#3D3D3D] my-3 mx-3'>What you'll learn</h1>
+                                    </div>
                                 </div>
                                 <div className='lg:col-span-3 xs:col-span-7 lg:mx-3 my-3 bg-white shadow-xl h-[270px] w-full'>
-                                    <h1>Prior requirements</h1>
+                                    <div className='flex items-center justify-start mx-3'>
+                                        <h1 className='text-xl font-semibold my-3 text-[#3D3D3D]'>Prior Requirements</h1>
+                                    </div>
+                                    {
+                                        courseDetails.mycourses[0]?.requirements !== 'None' || null ?
+                                            <>
+                                                <h1>Prior requirements</h1>
+                                            </> :
+                                            <div className='w-full flex items-center justify-center h-full'>
+                                                <span className='p-3 relative bottom-10 right-5 bg-[#b5b1b1] rounded-full text-[#fff] font-bold'>No Requirements</span>
+                                            </div>
+                                    }
                                 </div>
                                 {/* third row */}
                                 <div className='col-span-7 lg:mx-3 my-3 bg-white shadow-xl lg:h-[300px] sm:h-[680px] xs:h-[680px] w-full '>
@@ -71,7 +84,7 @@ function CoursePage() {
                                         <div className='lg:col-span-2 sm:col-span-8 xs:col-span-8 h-[250px] my-5 lg:mx-0 sm:mx-[50px] xs:mx-[50px] rounded-lg bg-[#D9D9D9]'>
                                             <div className='flex flex-col items-center justify-center my-5'>
                                                 <div className='rounded-full h-[70px] w-[70px] bg-white'></div>
-                                                <h1 className='mt-1 font-semibold'>Jilshak</h1>
+                                                <h1 className='mt-1 font-semibold'>{courseDetails.mycourses[0]?.course_by?.username}</h1>
                                                 <h1>4.9 Instructor rating</h1>
                                                 <h1>73462 reviewes</h1>
                                             </div>
@@ -81,12 +94,7 @@ function CoursePage() {
                                                 <h1 className='text-xl font-semibold'>Description</h1>
                                                 <div className='mt-2 overflow-auto max-h-[200px] object-contain'>
                                                     <p className='object-contain'>
-                                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                                                        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-                                                        scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
-                                                        electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of
-                                                        Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like
-                                                        Aldus PageMaker including versions of Lorem Ipsum.
+                                                        {courseDetails?.mycourses[0]?.description}
                                                     </p>
                                                 </div>
                                             </div>
