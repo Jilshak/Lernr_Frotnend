@@ -6,7 +6,6 @@ import Footer from '../Components/Footer'
 function CoursePage() {
     return (
         <>
-            <Navbar />
             <div className='lg:mx-[70px] md:mx-[70px] sm:mx-[70px] xs:mx-[30px] my-[50px] h-full'>
                 <div className='grid grid-cols-7 gap-0 h-full w-full'>
                     {/* first row */}

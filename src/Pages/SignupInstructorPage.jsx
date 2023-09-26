@@ -1,9 +1,12 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Register } from '../features/UserSlice'
-
+import { useDispatch } from 'react-redux'
 
 function SignupInstructorPage() {
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [email, setEmail] = useState('')
     const [password, setPasswrod] = useState('')
@@ -23,6 +26,7 @@ function SignupInstructorPage() {
                 is_instructor: true
             }
             await dispatch(Register(credentials))
+            await navigate('/login')
         } else {
             await Swal.fire(
                 {

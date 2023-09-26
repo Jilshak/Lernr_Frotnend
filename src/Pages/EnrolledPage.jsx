@@ -5,7 +5,6 @@ import Navbar from '../Components/Navbar'
 function EnrolledPage() {
     return (
         <div className='min-h-screen'>
-            <Navbar />
             <div className='flex items-center justify-center text-2xl font-bold text-[#4D4848] my-10'>
                 <h1>COURSES ENROLLED</h1>
             </div>

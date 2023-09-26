@@ -15,6 +15,8 @@ import AdminUsers from './Pages/Admin/AdminUsers'
 import AdminReports from './Pages/Admin/AdminReports'
 import AdminHome from './Pages/Admin/AdminHome'
 import AdminInstructorPage from './Pages/Admin/AdminInstructorPage'
+import AddCoursePage from './Pages/AddCoursePage'
+import RootPage from './Pages/RootPage'
 
 function App() {
 
@@ -26,12 +28,15 @@ function App() {
 
       <Route element={<ProtectedRoutes />}>
         <>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/coursepage' element={<CoursePage />} />
-          <Route path='/cart' element={<CartPage />} />
-          <Route path='/profile' element={<ProfilePage />} />
-          <Route path='/mycourses' element={<MyCourses />} />
-          <Route path='/enrolled' element={<EnrolledPage />} />
+          <Route path='/' element={<RootPage />}>
+            <Route index element={<HomePage />} />
+            <Route path='coursepage/:id?' element={<CoursePage />} />
+            <Route path='cart' element={<CartPage />} />
+            <Route path='profile' element={<ProfilePage />} />
+            <Route path='mycourses' element={<MyCourses />} />
+            <Route path='enrolled' element={<EnrolledPage />} />
+            <Route path='add_course' element={<AddCoursePage />} />
+          </Route>
 
           <Route path='/admin/' element={<AdminHome />}>
             <Route index element={<AdminDashboard />} />

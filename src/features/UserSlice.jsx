@@ -4,9 +4,9 @@ import Swal from 'sweetalert2'
 import jwtDecode from 'jwt-decode'
 
 export const Register = createAsyncThunk('register',
-    async (credential) => {
+    async (credentials) => {
         try {
-            const request = await api.post(`user/`, credential)
+            const request = await api.post(`user/`, credentials)
             if (request.status == 201) {
                 await Swal.fire(
                     {

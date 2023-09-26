@@ -6,7 +6,6 @@ import Navbar from '../Components/Navbar'
 function MyCourses() {
     return (
         <div className='min-h-screen'>
-            <Navbar />
             <div className='flex text-2xl items-center justify-center font-bold text-[#4D4848] mt-5'>
                 <h1>MY COURSES</h1>
             </div>

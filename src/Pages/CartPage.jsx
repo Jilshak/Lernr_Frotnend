@@ -7,9 +7,6 @@ import CartProduct from '../Components/CartProduct'
 function CartPage() {
     return (
         <div >
-            <div className='sticky top-0 z-50'>
-                <Navbar />
-            </div>
             <div class="max-h-[90vh] overflow-y-auto">
                 <h1 class="mb-10 text-center text-2xl font-bold relative top-10">Cart Items</h1>
                 <div class="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0 relative top-10">

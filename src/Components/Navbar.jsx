@@ -37,9 +37,22 @@ function Navbar() {
                         <li className='mx-3 font-semibold cursor-pointer'>Home</li>
                     </Link>
                     <li className='mx-3 font-semibold cursor-pointer'>Courses</li>
-                    <Link to='/enrolled'>
-                        <li className='mx-3 font-semibold cursor-pointer'>Enrolled</li>
-                    </Link>
+                    {
+                        !token?.is_instructor ?
+                            <>
+                                <Link to='/enrolled'>
+                                    <li className='mx-3 font-semibold cursor-pointer'>Enrolled</li>
+                                </Link>
+                            </> : null
+                    }
+                    {
+                        token?.is_instructor ?
+                            <>
+                                <Link to='/add_course'>
+                                    <li className='mx-3 font-semibold cursor-pointer'>Add Course</li>
+                                </Link>
+                            </> : null
+                    }
                     {
                         token?.is_instructor ?
                             <>

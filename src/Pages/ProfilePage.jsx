@@ -11,22 +11,19 @@ function ProfilePage() {
 
   const profileDetails = useSelector((state) => state.users);
 
-  const [activeSection, setActiveSection] = useState('Account'); // Initialize the active section as 'Account'
+  const [activeSection, setActiveSection] = useState('Account');
 
   useEffect(() => {
     dispatch(getMyProfile(access.user_id));
   }, []);
 
+  //for controlling different section
   const handleSectionClick = (sectionName) => {
-    // Update the active section when a section link is clicked
     setActiveSection(sectionName);
   };
 
   return (
     <>
-      <div className="sticky top-0 z-50">
-        <Navbar />
-      </div>
       {profileDetails && profileDetails.profile ? (
         <>
           <div className="p-12 relative">
