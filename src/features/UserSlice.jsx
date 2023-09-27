@@ -111,7 +111,7 @@ export const Login = createAsyncThunk('login',
         try {
             const request = await api.post(`token/`, credentials)
             const response = request.data
-            if (request.status == 200) {
+            if (request.status === 200) {
                 await localStorage.removeItem('guestToken')
                 await localStorage.setItem('authToken', response.access)
                 let token = await localStorage.getItem('authToken')
@@ -136,17 +136,16 @@ export const Login = createAsyncThunk('login',
                         }
                     )
                 }
-            } else {
-                await Swal.fire(
-                    {
-                        background: '#fff',
-                        icon: 'error',
-                        title: 'Failed!!!!',
-                        text: "Somthing happened while you were logging in to the account",
-                    }
-                )
             }
         } catch (error) {
+            await Swal.fire(
+                {
+                    background: '#fff',
+                    icon: 'error',
+                    title: 'Failed!!!!',
+                    text: "A user with the given credential does not exist!!",
+                }
+            )
             console.log("Error: ", error)
         }
     }
@@ -273,7 +272,7 @@ const UserSlice = createSlice({
             state.msg = 'The loading of the state has been finished with some problem.'
         },
 
-        
+
         [getInstructors.pending]: (state) => {
             state.isLoading = true
             state.msg = "The state is still loading!!"
@@ -288,7 +287,7 @@ const UserSlice = createSlice({
             state.msg = 'The loading of the state has been finished with some problem.'
         },
 
-        
+
         [getMyProfile.pending]: (state) => {
             state.isLoading = true
             state.msg = "The state is still loading!!"

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCourses } from '../features/CourseSlice'
 import MyCoursesCard from '../Components/MyCoursesCard'
+import { Link } from 'react-router-dom'
 
 function AllCoursesPage() {
 
@@ -14,11 +15,11 @@ function AllCoursesPage() {
 
   return (
     <div className='min-h-screen'>
-      <div className=' h-[40px] grid items-center justify-end mt-10 me-10'>
-        <div className="drawer z-50 relative">
+      <div className=' h-[40px] grid items-center justify-start mt-10 ms-14'>
+        <div className="drawer relative z-50">
           <input id="my-drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
-            <label htmlFor="my-drawer" className="btn btn-sm btn-outline btn-neutral drawer-button">Filter</label>
+            <label htmlFor="my-drawer" className="btn btn-sm btn-outline btn-neutral drawer-button z-0">Filter</label>
           </div>
           <div className="drawer-side">
             <label htmlFor="my-drawer" className="drawer-overlay"></label>
@@ -60,7 +61,9 @@ function AllCoursesPage() {
             {
               all.data.map((item) => {
                 return (
-                  <MyCoursesCard key={item.id} item={item} />
+                  <Link to={`/coursepage/${item.id}`}>
+                    <MyCoursesCard key={item.id} item={item} />
+                  </Link>
                 )
               })
             }

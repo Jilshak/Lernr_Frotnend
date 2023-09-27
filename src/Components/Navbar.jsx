@@ -25,7 +25,7 @@ function Navbar() {
     }, [])
 
     return (
-        <div className="navbar bg-base-100 shadow-lg sticky top-0">
+        <div className="navbar bg-base-100 z-50 shadow-lg sticky top-0">
             <div className="flex-1">
                 <Link to='/'>
                     <span className="btn btn-ghost normal-case text-xl font-bold">Lernr</span>
@@ -53,7 +53,7 @@ function Navbar() {
                         token?.is_instructor ?
                             <>
                                 <Link to='/add_course'>
-                                    <li className='mx-3 font-semibold cursor-pointer'>Add Course</li>
+                                    <li className='mx-3 font-semibold cursor-pointer lg:block md:block sm:hidden xs:hidden'>Add Course</li>
                                 </Link>
                             </> : null
                     }
@@ -95,8 +95,15 @@ function Navbar() {
                                             </span>
                                         </Link>
                                     </li>
-                                    <li><a>Settings</a></li>
-                                    <li onClick={handleLogout}><span>Logout</span></li>
+                                    <li>
+                                        <Link to='/add_course'>
+                                            <span className="justify-between">
+                                                <li className='lg:hidden md:hidden sm:block xs:block'>Add Course</li>
+                                            </span>
+                                        </Link>
+                                    </li>
+
+                                    <li onClick={handleLogout}><span className='text-red-400'>Logout</span></li>
                                 </>
                                 :
                                 <Link to='/login'>

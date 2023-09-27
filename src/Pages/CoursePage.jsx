@@ -50,7 +50,7 @@ function CoursePage() {
                                     </div>
                                     <div className='flex relative bottom-2'>
                                         <p className='text-[#3D3D3D] mb-3 mx-3 text-xs'>Course Length:</p>
-                                        <p className='mb-3 mx-3 text-xs relative text-blue-600 right-5'>8hr</p>
+                                        <p className='mb-3 mx-3 text-xs relative text-blue-600 right-5'>{courseDetails.mycourses[0]?.course_length} hr</p>
                                     </div>
                                     <div className='flex relative '>
                                         <button className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#A435F0] text-white">BUY THIS COURSE</button>
@@ -69,7 +69,7 @@ function CoursePage() {
                                         <h1 className='text-xl font-semibold my-3 text-[#3D3D3D]'>Prior Requirements</h1>
                                     </div>
                                     {
-                                        courseDetails.mycourses[0]?.requirements !== 'None' || null ?
+                                        courseDetails?.mycourses[0]?.requirements !== '' ?
                                             <>
                                                 <h1>Prior requirements</h1>
                                             </> :

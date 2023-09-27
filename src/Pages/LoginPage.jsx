@@ -53,7 +53,7 @@ function LoginPage() {
     return (
         <div className="hero min-h-screen bg-base-200">
             <div className="hero-content flex-col lg:flex-row-reverse min-w-[450px]">
-                <div className="card flex-shrink-0 w-full max-w-sm  hover:shadow-md hover:shadow-[#e5e4e4] shadow-[#e5e4e4] bg-base-100">
+                <div className="card flex-shrink-0 w-full max-w-sm  hover:shadow-lg hover:shadow-[#555454] shadow-[#e5e4e4] bg-base-100">
                     <div className="card-body">
                         <div className="form-control">
                             <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" className="input input-bordered" />
