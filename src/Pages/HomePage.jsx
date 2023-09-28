@@ -25,7 +25,7 @@ function HomePage() {
                 course && course.data.length >= 1 ?
                     <>
                         <div className='mt-4 h-[400px] mx-[30px]'>
-                            <h1 className='text-2xl font-bold text-[#3D3D3D] '>Courses Available </h1>
+                            <h1 className='text-2xl font-bold text-[#3D3D3D] '>Popular Courses </h1>
                             <div className='h-[300px] grid grid-flow-col lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-1 carousel carousel-center rounded-box bg-white relative top-5  overflow-x-auto overflow-y-hidden' style={{ maxWidth: '100%' }}>
                                 {
                                     course.data.map((item) => {

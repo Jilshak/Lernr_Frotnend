@@ -19,6 +19,7 @@ import AddCoursePage from './Pages/AddCoursePage'
 import RootPage from './Pages/RootPage'
 import AllCoursesPage from './Pages/AllCoursesPage'
 import CategoryPage from './Pages/CategoryPage'
+import CourseAnalytics from './Pages/CourseAnalytics'
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
             <Route path='add_course' element={<AddCoursePage />} />
             <Route path='allCourse' element={<AllCoursesPage />} />
             <Route path='category/:id?' element={<CategoryPage />} />
+            <Route path='course_analytics/:id?' element={<CourseAnalytics />} />
           </Route>
 
           <Route path='/admin/' element={<AdminHome />}>

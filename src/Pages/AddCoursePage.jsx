@@ -53,6 +53,10 @@ function AddCoursePage() {
             <h1></h1>
           </div>
         </div>
+
+        <div className='flex items-center justify-center my-10'>
+          <button className="btn btn-wide bg-[#A435F0] hover:bg-[#6e3892] text-white font-semibold">UPLOAD AND PUBLISH</button>
+        </div>
       </div>
       <div>
         <Footer />

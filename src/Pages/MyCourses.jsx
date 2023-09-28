@@ -3,6 +3,7 @@ import MyCoursesCard from '../Components/MyCoursesCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { myCourses } from '../features/CourseSlice'
 import jwtDecode from 'jwt-decode'
+import { Link } from 'react-router-dom'
 
 function MyCourses() {
 
@@ -28,7 +29,9 @@ function MyCourses() {
                             {
                                 course.mycourses.map((item) => {
                                     return (
-                                        <MyCoursesCard item={item}/>
+                                        <Link to={`/course_analytics/${item.id}`}>
+                                            <MyCoursesCard item={item} />
+                                        </Link>
                                     )
                                 })
                             }
