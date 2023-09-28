@@ -30,7 +30,10 @@ function AdminNavbar() {
                         <li className='mx-3 font-semibold cursor-pointer'>INSTRUCTORS</li>
                     </Link>
                     <Link to='admin_reports'>
-                        <li className='mx-3 font-semibold cursor-pointer'>REPORTS</li>
+                        <li className='mx-3 font-semibold cursor-pointer lg:block md:block sm:hidden xs:hidden'>REPORTS</li>
+                    </Link>
+                    <Link to='add_category'>
+                        <li className='mx-3 font-semibold cursor-pointer lg:block md:block sm:hidden xs:hidden'>ADD CATEGORY</li>
                     </Link>
                 </ul>
             </div>
@@ -49,8 +52,22 @@ function AdminNavbar() {
                                 </span>
                             </Link>
                         </li>
-                        <li><a>Settings</a></li>
-                        <li onClick={handleLogout}><span>Logout</span></li>
+                        <li className='lg:hidden md:hidden sm:block xs:block'>
+                            <Link to='admin_reports'>
+                                <span className="justify-between">
+                                    Reports
+                                </span>
+                            </Link>
+                        </li>
+                        <li className='lg:hidden md:hidden sm:block xs:block'>
+                            <Link to='add_category'>
+                                <span className="justify-between">
+                                    Add Category
+                                </span>
+                            </Link>
+                        </li>
+
+                        <li onClick={handleLogout}><span className='text-red-400'>Logout</span></li>
                     </ul>
                 </div>
             </div>

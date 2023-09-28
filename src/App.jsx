@@ -20,6 +20,7 @@ import RootPage from './Pages/RootPage'
 import AllCoursesPage from './Pages/AllCoursesPage'
 import CategoryPage from './Pages/CategoryPage'
 import CourseAnalytics from './Pages/CourseAnalytics'
+import AddCategoryPage from './Pages/Admin/AddCategoryPage'
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
             <Route path='admin_users' element={<AdminUsers />} />
             <Route path='admin_reports' element={<AdminReports />} />
             <Route path='admin_instructors' element={<AdminInstructorPage />} />
+            <Route path='add_category' element={<AddCategoryPage />} />
           </Route>
         </>
       </Route>
