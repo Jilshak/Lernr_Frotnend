@@ -1,9 +1,10 @@
 import React from 'react'
 import image1 from '../Images/image1.avif'
 import { Link } from 'react-router-dom'
+import Rating from './Rating'
 
 function CoursesCards(props) {
-    const {item} = props
+    const { item } = props
     return (
         <Link to={`/coursepage/${item?.id}`}>
             <div className='relative my-6 mx-7 group cursor-pointer carousal-item '>
@@ -13,13 +14,7 @@ function CoursesCards(props) {
                 <h1 className='font-bold text-md'>{item?.title}</h1>
                 <div className='relative bottom-2'>
                     <small className='text-xs'>{item?.course_by?.username}</small><br />
-                    <div className="rating rating-xs relative bottom-2">
-                        <input type="radio" name="rating-5" className="mask mask-star-2 bg-orange-400" />
-                        <input type="radio" name="rating-5" className="mask mask-star-2 bg-orange-400" checked />
-                        <input type="radio" name="rating-5" className="mask mask-star-2 bg-orange-400" />
-                        <input type="radio" name="rating-5" className="mask mask-star-2 bg-orange-400" />
-                        <input type="radio" name="rating-5" className="mask mask-star-2 bg-orange-400" />
-                    </div>
+                    <small className='relative bottom-2'><Rating rating={item.rating} /></small>
                     <small className='text-xs relative bottom-2.5 ms-1'>
                         ({item?.no_of_reviews ? item?.no_of_reviews : 0})
                     </small>
