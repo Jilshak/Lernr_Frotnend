@@ -40,7 +40,7 @@ function CategoryPage() {
           <div className='flex items-center justify-start mx-[40px] mt-10'>
             <h1 className='text-2xl font-bold text-[#3D3D3D]'>{categoryTitle[0]?.title}</h1>
           </div>
-          <div className='mx-[40px] mt-10 gap-x-6  h-full grid grid-cols-2'>
+          <div className='mx-[40px] mt-10 gap-x-6  h-full grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1'>
             {categories.map((item) => (
               <Link to={`/coursepage/${item.id}`} key={item.id}>
                 <MyCoursesCard item={item} />

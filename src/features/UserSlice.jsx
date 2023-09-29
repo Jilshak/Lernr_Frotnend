@@ -46,6 +46,31 @@ export const getMyProfile = createAsyncThunk('my_profile',
     }
 )
 
+//profile image
+export const profileImage = createAsyncThunk('profile_image',
+    async (credentials) => {
+        try {
+            console.log("This is the credentials: ", credentials)
+            console.log("This is from the userSlice: ", credentials.profile_image)
+            const request = await api.patch(`/user/${credentials.id}/`, credentials.profile_image, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            const response = request.data
+            if (request.status === 200) {
+                console.log("The profile image has been updated")
+                console.log("This is the response: ", response)
+            } else {
+                console.log("Something went wrong while patching the profile image")
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+
+)
+
 export const getUsers = createAsyncThunk('get_usres',
     async () => {
         try {

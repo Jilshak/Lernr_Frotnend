@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMyProfile } from '../features/UserSlice';
+import { getMyProfile, profileImage } from '../features/UserSlice';
 import jwtDecode from 'jwt-decode';
 
 function ProfilePage() {
@@ -17,33 +17,62 @@ function ProfilePage() {
     dispatch(getMyProfile(access.user_id));
   }, []);
 
+
+
+  const [profile, setProfile] = useState()
+
   //for controlling different section
   const handleSectionClick = (sectionName) => {
     setActiveSection(sectionName);
   };
 
+
+  const updateImage = async (e) => {
+    const formData = new FormData();
+    formData.append('profile_image', e);
+
+    const credentials = {
+      id: access.user_id,
+      profile_image: formData
+    }
+
+    await Promise.resolve(dispatch(profileImage(credentials)))
+    await dispatch(getMyProfile(access.user_id))
+  };
+
+  useEffect(() => {
+    if (profileDetails.profile) {
+      setProfile(profileDetails.profile)
+      console.log("This is the profile: ", profile)
+    }
+  }, [profileDetails.profile])
+
   return (
     <>
-      {profileDetails && profileDetails.profile ? (
+      {!profileDetails.isLoading && profile ? (
         <>
           <div className="p-12 relative">
             <div className="p-8  bg-white mt-12">
               <div className="">
                 <div className="relative ">
-                  <div className="w-40 shadow-md shadow-[#c3c1c1] h-40  mx-auto rounded-full bg-[#b2b5b7] absolute inset-x-0 top-0 -mt-24 flex items-center justify-center text-indigo-500">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-20 w-20"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                        clipRule="evenodd"
+                  <button type="button" className="w-40 shadow-md shadow-[#c3c1c1] h-40  mx-auto rounded-full bg-[#b2b5b7] absolute inset-x-0 top-0 -mt-24 flex items-center justify-center" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                    <label htmlFor="profile_image">
+                      <input
+                        type="file"
+                        name='profile_image'
+                        accept='image/*'
+                        id='profile_image'
+                        onChange={(e) => {
+                          updateImage(e.target.files[0])
+                        }}
+                        className="hidden"
                       />
-                    </svg>
-                  </div>
+                      <img
+                        className="rounded-full w-[160px] outline-none border h-[160px] object-cover cursor-pointer"
+                        src={profile?.profile_image ? profile?.profile_image : null}
+                      />
+                    </label>
+                  </button>
                 </div>
               </div>
 
@@ -55,25 +84,22 @@ function ProfilePage() {
                   <div className="grid grid-cols-3 w-[800px] my-5">
                     {/* Apply conditional styling for each section based on the activeSection */}
                     <span
-                      className={`cursor-pointer ${
-                        activeSection === 'Account' ? 'font-bold border-b-2 border-b-[#5df069]' : ''
-                      }`}
+                      className={`cursor-pointer ${activeSection === 'Account' ? 'font-bold border-b-2 border-b-[#5df069]' : ''
+                        }`}
                       onClick={() => handleSectionClick('Account')}
                     >
                       Account
                     </span>
                     <span
-                      className={`cursor-pointer ${
-                        activeSection === 'PaymentMethod' ? 'font-bold border-b-2 border-b-[#5df069]' : ''
-                      }`}
+                      className={`cursor-pointer ${activeSection === 'PaymentMethod' ? 'font-bold border-b-2 border-b-[#5df069]' : ''
+                        }`}
                       onClick={() => handleSectionClick('PaymentMethod')}
                     >
                       Payment Method
                     </span>
                     <span
-                      className={`cursor-pointer ${
-                        activeSection === 'Notification' ? ' font-bold border-b-2 border-b-[#5df069]' : ''
-                      }`}
+                      className={`cursor-pointer ${activeSection === 'Notification' ? ' font-bold border-b-2 border-b-[#5df069]' : ''
+                        }`}
                       onClick={() => handleSectionClick('Notification')}
                     >
                       Notification

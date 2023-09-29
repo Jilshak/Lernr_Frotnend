@@ -4,12 +4,17 @@ import Footer from '../Components/Footer'
 import image1 from '../Images/image1.avif'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { individualCourse } from '../features/CourseSlice'
+import { addToCart, individualCourse } from '../features/CourseSlice'
 import Rating from '../Components/Rating'
+import jwtDecode from 'jwt-decode'
 
 function CoursePage() {
 
     const { id } = useParams()
+
+    //to get the user id
+    const token = localStorage.getItem('authToken')
+    const access = jwtDecode(token)
 
     const dispatch = useDispatch()
     const courseDetails = useSelector((state) => state.courses)
@@ -17,6 +22,14 @@ function CoursePage() {
     useEffect(() => {
         dispatch(individualCourse(id))
     }, [])
+
+    const handleAddToCart = async () => {
+        const credential = {
+            user: access.user_id,
+            on_course: id
+        }
+        await dispatch(addToCart(credential))
+    }
 
     return (
         <>
@@ -54,7 +67,7 @@ function CoursePage() {
                                     </div>
                                     <div className='flex relative '>
                                         <button className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#A435F0] text-white">BUY THIS COURSE</button>
-                                        <button className="min-h-[40px] mx-3 w-[190px] font-semibold rounded-lg bg-[#D6BF45] text-white">ADD TO CART</button>
+                                        <button onClick={handleAddToCart} className="min-h-[40px] mx-3 w-[190px] font-semibold rounded-lg bg-[#D6BF45] text-white">ADD TO CART</button>
                                     </div>
 
                                 </div>
