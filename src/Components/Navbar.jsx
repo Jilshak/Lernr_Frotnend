@@ -4,6 +4,7 @@ import noprofile from '../icons/noprofile.png'
 import jwtDecode from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCartItems } from '../features/CourseSlice'
+import { getMyProfile } from '../features/UserSlice'
 
 function Navbar() {
 
@@ -11,9 +12,10 @@ function Navbar() {
     const [token, setToken] = useState()
 
     const cartItemCount = useSelector((state) => state.courses)
+    const profile = useSelector((state) => state.users)
     const dispatch = useDispatch()
 
-    const [count, setCount] = useState()
+
 
     const handleLogout = async () => {
         await localStorage.removeItem('authToken')
@@ -26,6 +28,7 @@ function Navbar() {
             if (localStorage.getItem('authToken')) {
                 let access = await jwtDecode(localStorage?.getItem('authToken'))
                 await setToken(access)
+                await dispatch(getMyProfile(access.user_id))
             }
         }
         handleToken()
@@ -33,9 +36,7 @@ function Navbar() {
 
     useEffect(() => {
         const access = jwtDecode(localStorage.getItem('authToken'))
-        if (cartItemCount.cart.length >= 1) {
-            dispatch(getCartItems(access.user_id))
-        }
+        dispatch(getCartItems(access.user_id))
     }, [])
 
 
@@ -101,7 +102,12 @@ function Navbar() {
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                         <div className="w-10 rounded-full">
-                            <img className='h-7' src={noprofile} />
+                            {
+                                profile && profile.profile ?
+                                    <>
+                                        <img className='h-7' src={profile?.profile.profile_image ? profile?.profile.profile_image : noprofile} />
+                                    </> : null
+                            }
                         </div>
                     </label>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">

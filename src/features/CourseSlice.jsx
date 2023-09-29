@@ -6,17 +6,29 @@ import Swal from 'sweetalert2'
 export const getCourses = createAsyncThunk('get_course',
     async () => {
         try {
-            const request = await api.get('courses/course')
-            const response = request.data
-            if (request.status == 200) {
-                return response
+            const courseRequest = await api.get('courses/course');
+            const courseResponse = courseRequest.data;
+
+            if (courseRequest.status === 200) {
+                // Create an array of promises for fetching usernames
+                const usernamePromises = courseResponse.map(async (course) => {
+                    const userRequest = await api.get(`user/${course.course_by}`);
+                    const userResponse = userRequest.data;
+                    return {
+                        ...course,
+                        username: userResponse.username,
+                    };
+                });
+
+                // Wait for all promises to resolve
+                const coursesWithUsername = await Promise.all(usernamePromises);
+                console.log("This is the updated course: ",coursesWithUsername)
+                return coursesWithUsername;
             }
         } catch (error) {
-            console.log("Error: ", error)
+            console.log('Error: ', error);
         }
-    }
-)
-
+    });
 
 export const getCategories = createAsyncThunk('get_categories',
     async () => {
@@ -55,7 +67,7 @@ export const myCourses = createAsyncThunk('my_courses',
             const request = await api.get('courses/course')
             const response = request.data
             if (request.status == 200) {
-                const data = response.filter((item) => item.course_by.id == id)
+                const data = response.filter((item) => item.course_by == id)
                 return data
             }
         } catch (error) {
@@ -78,7 +90,7 @@ export const addToCart = createAsyncThunk('add_to_cart',
                         text: "The Course has been added to Cart!!",
                     }
                 )
-            }else{
+            } else {
                 await Swal.fire(
                     {
                         background: '#fff',
@@ -96,32 +108,32 @@ export const addToCart = createAsyncThunk('add_to_cart',
 
 
 export const getCartItems = createAsyncThunk('get_cart_items',
-  async (id) => {
-    try {
-      const request = await api.get('courses/cartItem/');
-      const response = request.data;
-      if (request.status === 200) {
-    
-        const courseIds = response
-          .filter((item) => item.user === id)
-          .map((item) => item.on_course);
+    async (id) => {
+        try {
+            const request = await api.get('courses/cartItem/');
+            const response = request.data;
+            if (request.status === 200) {
 
-        console.log("This is the course ids: ", courseIds)
-        
-        const courseDetailsPromises = courseIds.map(async (courseId) => {
-          const courseResponse = await api.get(`courses/course/${courseId}`);
-          return courseResponse.data;
-        });
+                const courseIds = response
+                    .filter((item) => item.user === id)
+                    .map((item) => item.on_course);
 
-        const courseDetails = await Promise.all(courseDetailsPromises);
+                console.log("This is the course ids: ", courseIds)
 
-        return courseDetails;
-      }
-    } catch (error) {
-      console.log("Error: ", error);
-      throw error;
+                const courseDetailsPromises = courseIds.map(async (courseId) => {
+                    const courseResponse = await api.get(`courses/course/${courseId}`);
+                    return courseResponse.data;
+                });
+
+                const courseDetails = await Promise.all(courseDetailsPromises);
+
+                return courseDetails;
+            }
+        } catch (error) {
+            console.log("Error: ", error);
+            throw error;
+        }
     }
-  }
 );
 
 
@@ -160,6 +172,39 @@ export const individualCourse = createAsyncThunk('individual_course',
 )
 
 
+export const AddNewCourse = createAsyncThunk('add_new_course',
+    async (credentials) => {
+        console.log("This is the credentials from the instructor: ", credentials)
+        try {
+            const request = await api.post(`courses/course/`, credentials, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            if (request.status === 201) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'success',
+                        title: 'ADDED!',
+                        text: "Your new Course has been added!!",
+                    }
+                )
+            } else {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'error',
+                        title: 'FAILED!',
+                        text: "Something went wrong while adding your new Course please try again!!",
+                    }
+                )
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
 
 
 const initialState = {

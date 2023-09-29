@@ -13,7 +13,7 @@ function CoursesCards(props) {
                 </div>
                 <h1 className='font-bold text-md'>{item?.title}</h1>
                 <div className='relative bottom-2'>
-                    <small className='text-xs'>{item?.course_by?.username}</small><br />
+                    <small className='text-xs'>{item?.username}</small><br />
                     <small className='relative bottom-2'><Rating rating={item.rating} /></small>
                     <small className='text-xs relative bottom-2.5 ms-1'>
                         ({item?.no_of_reviews ? item?.no_of_reviews : 0})

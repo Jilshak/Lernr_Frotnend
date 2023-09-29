@@ -22,7 +22,7 @@ function CartProduct(props) {
                 <div class="sm:ml-4 sm:flex sm:w-full relative sm:justify-between">
                     <div class="mt-5 sm:mt-0">
                         <h2 class="text-md font-bold ">{item?.title}</h2>
-                        <p class="mt-1 text-xs ">{item?.course_by?.username}</p>
+                        <p class="mt-1 text-xs ">{item?.username}</p>
                         <div className='flex'>
                             <Rating />
                             <p className='text-xs relative bottom-0.5 ms-2'>({item.students ? item.students : 0})</p>
