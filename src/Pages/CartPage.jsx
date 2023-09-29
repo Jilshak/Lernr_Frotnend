@@ -19,9 +19,11 @@ function CartPage() {
     const [items, setItems] = useState([])
 
     useEffect(() => {
-        const token = localStorage.getItem('authToken')
-        const access = jwtDecode(token)
-        dispatch(getCartItems(access.user_id))
+        if (localStorage.getItem('authToken')) {
+            const token = localStorage.getItem('authToken')
+            const access = jwtDecode(token)
+            dispatch(getCartItems(access.user_id))
+        }
     }, [])
 
     useEffect(() => {
@@ -30,7 +32,7 @@ function CartPage() {
         }
     }, [cartItems.cart])
 
-    const handleRemoveCartItem =  async (id) => {
+    const handleRemoveCartItem = async (id) => {
         const access = jwtDecode(localStorage.getItem('authToken'))
         const credentials = {
             user: access.user_id,
@@ -126,7 +128,7 @@ function CartPage() {
                                 </div>
                             </div>
                         </div>
-                    </> : 
+                    </> :
                     <div className='h-screen w-full flex items-center justify-center'>
                         <span className='p-3 bg-white rounded-3xl'>
                             <h1 className='font-bold text-3xl'>CART IS EMPTY</h1>

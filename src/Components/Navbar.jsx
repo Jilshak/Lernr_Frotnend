@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import noprofile from '../icons/noprofile.png'
 import jwtDecode from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCartItems } from '../features/CourseSlice'
+import { getCartItems, hasBoughtAnyCourse } from '../features/CourseSlice'
 import { getMyProfile } from '../features/UserSlice'
 
 function Navbar() {
@@ -16,27 +16,30 @@ function Navbar() {
     const dispatch = useDispatch()
 
 
-
+    //logout functionality
     const handleLogout = async () => {
-        await localStorage.removeItem('authToken')
+        await localStorage?.removeItem('authToken')
         await navigate('/login')
     }
 
     //the token is here
     useEffect(() => {
         const handleToken = async () => {
-            if (localStorage.getItem('authToken')) {
+            if (localStorage?.getItem('authToken')) {
                 let access = await jwtDecode(localStorage?.getItem('authToken'))
                 await setToken(access)
                 await dispatch(getMyProfile(access.user_id))
+                await dispatch(hasBoughtAnyCourse(access.user_id))
             }
         }
         handleToken()
-    }, [])
+    }, [profile.community])
 
     useEffect(() => {
-        const access = jwtDecode(localStorage.getItem('authToken'))
-        dispatch(getCartItems(access.user_id))
+        if (localStorage.getItem('authToken')) {
+            const access = jwtDecode(localStorage.getItem('authToken'))
+            dispatch(getCartItems(access.user_id))
+        }
     }, [])
 
 
@@ -62,6 +65,14 @@ function Navbar() {
                             <>
                                 <Link to='/enrolled'>
                                     <li className='mx-3 font-semibold cursor-pointer'>Enrolled</li>
+                                </Link>
+                            </> : null
+                    }
+                    {
+                        !token?.is_instructor && cartItemCount.community ?
+                            <>
+                                <Link to='/community'>
+                                    <li className='mx-3 font-semibold cursor-pointer'>Communities</li>
                                 </Link>
                             </> : null
                     }
@@ -106,7 +117,8 @@ function Navbar() {
                                 profile && profile.profile ?
                                     <>
                                         <img className='h-7' src={profile?.profile.profile_image ? profile?.profile.profile_image : noprofile} />
-                                    </> : null
+                                    </> :
+                                    <img className='h-7' src={noprofile} />
                             }
                         </div>
                     </label>

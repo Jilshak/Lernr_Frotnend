@@ -22,7 +22,7 @@ export const getCourses = createAsyncThunk('get_course',
 
                 // Wait for all promises to resolve
                 const coursesWithUsername = await Promise.all(usernamePromises);
-                console.log("This is the updated course: ",coursesWithUsername)
+                console.log("This is the updated course: ", coursesWithUsername)
                 return coursesWithUsername;
             }
         } catch (error) {
@@ -206,12 +206,84 @@ export const AddNewCourse = createAsyncThunk('add_new_course',
     }
 )
 
+export const buyCourse = createAsyncThunk('buy_course',
+    async (credentials) => {
+        try {
+            const request = await api.post(`courses/bought_courses/`, credentials)
+            const response = request.data
+            if (request.status == 201) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'success',
+                        title: 'CONGRATS!',
+                        text: "Your Purchase is Successful !!",
+                    }
+                )
+            } else {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'error',
+                        title: 'OOPS....',
+                        text: "Something went wrong while trying to buy this please try again!!",
+                    }
+                )
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+export const getBoughtCourses = createAsyncThunk('get_bought_course',
+    async (_id) => {
+        try{
+            const request = await api.get(`courses/bought_courses`)
+            const response = request.data
+            if (request.status == 200){
+                const courseID = response.filter((item) => item.user = _id).map((item) => item.course_id)
+
+                const courseDetails = courseID.map(async (id) => {
+                    const courseResponse = await api.get(`courses/course/${id}`)
+                    return courseResponse.data
+                })
+
+                const data = await Promise.all(courseDetails);
+                return data
+            }
+        }catch(error){
+            console.log("Error: ", error)
+        }
+    }
+)
+
+export const hasBoughtAnyCourse = createAsyncThunk('has_bought_any_course',
+    async (id) => {
+        try {
+            const request = await api.get(`courses/bought_courses`)
+            const response = request.data
+            if (request.status == 200){
+                let data = response.filter((item) => item.user == id)
+                if (data.length >= 1){
+                    return true
+                }else{
+                    return false
+                }
+            }
+        }catch(error){
+            console.log("Errror: ", error)
+        }
+    }
+)
 
 const initialState = {
     isLoading: true,
+    community: false,
     data: [],
     cart: [],
     category: [],
+    bought: [],
     mycourses: [],
     msg: 'is still loading'
 }
@@ -309,6 +381,36 @@ const CoursesSlice = createSlice({
             state.msg = "The state has been loaded"
         },
         [getCartItems.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the state has been finished with some problem.'
+        },
+
+
+        [getBoughtCourses.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The state is still loading!!"
+        },
+        [getBoughtCourses.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.bought = action.payload
+            state.msg = "The state has been loaded"
+        },
+        [getBoughtCourses.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the state has been finished with some problem.'
+        },
+
+        
+        [hasBoughtAnyCourse.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The state is still loading!!"
+        },
+        [hasBoughtAnyCourse.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.community = action.payload
+            state.msg = "The state has been loaded"
+        },
+        [hasBoughtAnyCourse.rejected]: (state) => {
             state.isLoading = false
             state.msg = 'The loading of the state has been finished with some problem.'
         },
