@@ -20,5 +20,6 @@
   
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
+    
     background: #5e6067;
 }

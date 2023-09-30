@@ -6,6 +6,7 @@ import send from '../icons/send.png'
 import leftarrow_copy from '../icons/leftarrow_copy.png'
 import { base } from '../services/Axios';
 import { UserMessages } from '../features/ChatSlice';
+import { individualCourse } from '../features/CourseSlice';
 
 
 
@@ -28,6 +29,7 @@ function ChatPage() {
     //redux tools
     const dispatch = useDispatch()
     const message = useSelector((state) => (state.chat))
+    const title = useSelector((state) => state.courses)
 
     //these are the user id required to create the chat_room id
     //the chat room id will look somethin like this : group_id
@@ -55,39 +57,31 @@ function ChatPage() {
                     if (!prevMessages) {
                         return [message];
                     } else {
+                        console.log("Message received: ", message)
+                        console.log(decode)
                         return [...prevMessages, message];
                     }
                 });
-
             };
-
         }
-    }, [room_id, socket]);
+    }, [socket]);
 
-    // Creating the socket connection with retry logic
-    //creating the socket connection
+
     useEffect(() => {
         let credential = id
         let room_id = `group_${credential}`
-        console.log("This is the credential: ", credential)
-
-        // Define a variable to keep track of retry attempts
         let retryAttempts = 0;
-        const maxRetries = 3; // Maximum number of retry attempts
-
+        const maxRetries = 3;
         const createSocket = async () => {
             try {
                 const request = await new WebSocket(`${base}/ws/chat/${credential}/`)
-
                 request.onopen = async () => {
                     await setSocket(request);
                 }
-
                 request.onclose = (event) => {
                     if (event.code === 1006 && retryAttempts < maxRetries) {
-                        // If the connection closed with code 1006 (abnormal closure) and retries are allowed
                         retryAttempts++;
-                        setTimeout(createSocket, 1000); // Retry after 1 second
+                        setTimeout(createSocket, 1000);
                     } else {
                         console.log("WebSocket connection closed.");
                     }
@@ -96,18 +90,19 @@ function ChatPage() {
                 console.log("Error: ", error);
             }
         }
-
         createSocket();
         dispatch(UserMessages(room_id));
+        dispatch(individualCourse(id))
     }, []);
 
 
-    // for the message loading
     useEffect(() => {
-        if (message.messages.length >= 1) {
-            setMessages(message.messages)
+        const decode = jwtDecode(localStorage.getItem('authToken'))
+        if (message?.messages?.length >= 1 && decode?.user_id) {
+            setMessages(message?.messages)
         }
     }, [message.messages])
+
 
 
 
@@ -136,32 +131,28 @@ function ChatPage() {
                     <img className='h-5' src={leftarrow_copy} alt="" />
                 </div>
                 <div className='absolute w-full right-0'>
-                    {/* {
-                        userMessages?.user_details && userMessages?.user_details?.length >= 0 ?
+                    {
+                        title.mycourses && title.mycourses.length >= 1 ?
                             <>
                                 {
-                                    userMessages.user_details.map((item) => {
-                                        if (item.id == user_id) {
-                                            return (
-                                                <div className='flex items-center justify-end'>
-                                                    <p className='text-white font-semibold text-xl me-4'>{item.username}</p>
-                                                    <span className='me-5 rounded-full h-12 w-12'>
-                                                        <img className='h-12 rounded-full' src={item.image ? item.image : noprofile} />
-                                                    </span>
-                                                </div>
-                                            )
-                                        }
+                                    title?.mycourses.map((item) => {
+                                        return (
+                                            <div className='flex items-center justify-end'>
+                                                <p className=' font-bold text-2xl relative me-10'>{item.title}</p>
+                                                
+                                            </div>
+                                        )
                                     })
                                 }
                             </> : null
-                    } */}
+                    }
                 </div>
             </div>
             <div>
                 <div className="w-full h-[88vh] px-5 flex flex-col justify-between">
                     <div className="flex flex-col mt-5 overflow-x-auto">
                         {
-                            !message.isLoading && message.messages.length >= 0 ?
+                            !message.isLoading && message.messages.length >= 1 ?
                                 <>
                                     {
                                         messages?.map((item, index) => {
@@ -169,19 +160,30 @@ function ChatPage() {
                                             return (
                                                 <div
                                                     key={index}
-                                                    className={`flex ${item.senderUsername === decode?.username || item?.sender === decode?.user_id ? 'justify-end' : 'justify-start'} mb-4`}
+                                                    className={`flex ${item.senderUsername == decode.user_id || item.sender == decode.user_id ? 'justify-end' : 'justify-start'} mb-4`}
                                                     ref={messageRef}
                                                 >
                                                     <div
-                                                        className={`py-3 px-4 ${item.senderUsername === decode?.username || item?.sender === decode?.user_id ? 'bg-gray-300 rounded-br-3xl rounded-tr-3xl rounded-tl-xl' : 'bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white'}`}
+                                                        className={`py-3 px-4 ${item.senderUsername == decode.user_id || item.sender == decode.user_id ? 'bg-gray-300 rounded-br-3xl rounded-tr-3xl rounded-tl-xl' : 'bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white'}`}
                                                     >
                                                         {item.message}
                                                     </div>
-                                                    <img
+                                                    {/* <img
                                                         src={`https://source.unsplash.com/vpOeXr5wmR4/600x600`}
                                                         className="object-cover h-8 w-8 rounded-full"
                                                         alt=""
-                                                    />
+                                                    /> */}
+                                                    {
+                                                        decode.user_id == item.sender || item.senderUsername == decode.user_id ?
+                                                            <>
+                                                                
+                                                            </> :
+                                                            <div className='rounded-full h-8 w-8 bg-white mx-2'>
+                                                                <small className='flex items-center justify-center mt-1'>
+                                                                    {item.sender}
+                                                                </small>
+                                                            </div>
+                                                    }
                                                 </div>
                                             )
                                         })
