@@ -5,3 +5,5 @@ const api = axios.create({
 })
 
 export default api
+
+export const base = 'ws://127.0.0.1:8000'

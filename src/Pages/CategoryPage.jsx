@@ -15,14 +15,14 @@ function CategoryPage() {
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(categoryCourse(id));
-    dispatch(getCategories());
+    Promise.resolve(dispatch(getCategories()))
+    Promise.resolve(dispatch(categoryCourse(id)))
   }, [dispatch, id]);
 
   useEffect(() => {
     if (data.category.length >= 1) {
-      setCategories(data.category);
-      setCategoryTitle(categories?.filter((item) => item.id == id));
+      Promise.resolve(setCategories(data.category))
+      Promise.resolve(setCategoryTitle(categories?.filter((item) => item.id == id)))
       setIsLoading(false);
     }
   }, [data.category, id]);

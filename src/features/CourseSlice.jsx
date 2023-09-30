@@ -106,7 +106,7 @@ export const addToCart = createAsyncThunk('add_to_cart',
     }
 )
 
-
+//for getting the cartItems
 export const getCartItems = createAsyncThunk('get_cart_items',
     async (id) => {
         try {
@@ -137,7 +137,7 @@ export const getCartItems = createAsyncThunk('get_cart_items',
 );
 
 
-
+//removing the cart items
 export const removeCartItem = createAsyncThunk('remove_cart_item',
     async (credentials) => {
         try {
@@ -155,7 +155,7 @@ export const removeCartItem = createAsyncThunk('remove_cart_item',
 )
 
 
-
+//for getting individual course details
 export const individualCourse = createAsyncThunk('individual_course',
     async (id) => {
         try {
@@ -171,7 +171,7 @@ export const individualCourse = createAsyncThunk('individual_course',
     }
 )
 
-
+//for adding an new course
 export const AddNewCourse = createAsyncThunk('add_new_course',
     async (credentials) => {
         console.log("This is the credentials from the instructor: ", credentials)
@@ -206,6 +206,8 @@ export const AddNewCourse = createAsyncThunk('add_new_course',
     }
 )
 
+
+//for buying an course
 export const buyCourse = createAsyncThunk('buy_course',
     async (credentials) => {
         try {
@@ -236,42 +238,46 @@ export const buyCourse = createAsyncThunk('buy_course',
     }
 )
 
+//for getting the bought courses to appear on the courses enrolled and also on the community page for chat
 export const getBoughtCourses = createAsyncThunk('get_bought_course',
     async (_id) => {
-        try{
+        console.log("this is the users id: ", _id)
+        try {
             const request = await api.get(`courses/bought_courses`)
             const response = request.data
-            if (request.status == 200){
-                const courseID = response.filter((item) => item.user = _id).map((item) => item.course_id)
-
+            if (request.status == 200) {
+                const courseID = response.filter((item) => item.user == _id).map((item) => item.course_id)
+                console.log("This is the course id: ",courseID)
                 const courseDetails = courseID.map(async (id) => {
                     const courseResponse = await api.get(`courses/course/${id}`)
                     return courseResponse.data
                 })
 
                 const data = await Promise.all(courseDetails);
+                console.log("This is all the data: ", data)
                 return data
             }
-        }catch(error){
+        } catch (error) {
             console.log("Error: ", error)
         }
     }
 )
 
+//for the navbar--> i.e; if anyone has bought any course the community navitem to appear
 export const hasBoughtAnyCourse = createAsyncThunk('has_bought_any_course',
     async (id) => {
         try {
             const request = await api.get(`courses/bought_courses`)
             const response = request.data
-            if (request.status == 200){
+            if (request.status == 200) {
                 let data = response.filter((item) => item.user == id)
-                if (data.length >= 1){
+                if (data.length >= 1) {
                     return true
-                }else{
+                } else {
                     return false
                 }
             }
-        }catch(error){
+        } catch (error) {
             console.log("Errror: ", error)
         }
     }
@@ -400,7 +406,7 @@ const CoursesSlice = createSlice({
             state.msg = 'The loading of the state has been finished with some problem.'
         },
 
-        
+
         [hasBoughtAnyCourse.pending]: (state) => {
             state.isLoading = true
             state.msg = "The state is still loading!!"

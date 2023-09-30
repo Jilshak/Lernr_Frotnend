@@ -22,6 +22,8 @@ import CategoryPage from './Pages/CategoryPage'
 import CourseAnalytics from './Pages/CourseAnalytics'
 import AddCategoryPage from './Pages/Admin/AddCategoryPage'
 import CourseViewPage from './Pages/CourseViewPage'
+import CommunityPage from './Pages/CommunityPage'
+import ChatPage from './Pages/ChatPage'
 
 function App() {
 
@@ -45,8 +47,9 @@ function App() {
             <Route path='category/:id?' element={<CategoryPage />} />
             <Route path='course_analytics/:id?' element={<CourseAnalytics />} />
             <Route path='course_view/:id?' element={<CourseViewPage />} />
-            <Route path='community' element={<CourseViewPage />} />
+            <Route path='community' element={<CommunityPage />} />
           </Route>
+          <Route path='chat/:id?' element={<ChatPage />} />
 
           <Route path='/admin/' element={<AdminHome />}>
             <Route index element={<AdminDashboard />} />
