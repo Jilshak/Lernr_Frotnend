@@ -44,6 +44,41 @@ export const getCategories = createAsyncThunk('get_categories',
     }
 )
 
+//add Category
+export const AddCategory = createAsyncThunk('add_category',
+    async (credentials) => {
+        try {
+            const request = await api.post(`courses/category/`, credentials, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            const response = request.data
+            if (request.status == 201) {
+                console.log("This is the new added course: ", response)
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'success',
+                        title: 'ADDED!',
+                        text: "The Category has been added!!",
+                    }
+                )
+            } else {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'error',
+                        title: 'FAILED!',
+                        text: "Something went wrong while adding the Category please try again!!",
+                    }
+                )
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
 
 export const categoryCourse = createAsyncThunk('category_course',
     async (id) => {
@@ -247,7 +282,7 @@ export const getBoughtCourses = createAsyncThunk('get_bought_course',
             const response = request.data
             if (request.status == 200) {
                 const courseID = response.filter((item) => item.user == _id).map((item) => item.course_id)
-                console.log("This is the course id: ",courseID)
+                console.log("This is the course id: ", courseID)
                 const courseDetails = courseID.map(async (id) => {
                     const courseResponse = await api.get(`courses/course/${id}`)
                     return courseResponse.data

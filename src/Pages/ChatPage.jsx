@@ -168,11 +168,6 @@ function ChatPage() {
                                                     >
                                                         {item.message}
                                                     </div>
-                                                    {/* <img
-                                                        src={`https://source.unsplash.com/vpOeXr5wmR4/600x600`}
-                                                        className="object-cover h-8 w-8 rounded-full"
-                                                        alt=""
-                                                    /> */}
                                                     {
                                                         decode.user_id == item.sender || item.senderUsername == decode.user_id ?
                                                             <>

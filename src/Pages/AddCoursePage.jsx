@@ -78,7 +78,6 @@ function AddCoursePage() {
                     </div>
                     <div className=' h-[50px] my-5 rounded-lg'>
                       <input onChange={(e) => {
-                        console.log(e.target.files[0])
                         updateThumbnail(e)
                       }} type="file" name='thumbnail_image' accept='image/*' id='thumbnail_image' className="file-input bg-[#D9D9D9] file-input-bordered w-full " />
                     </div>
