@@ -323,9 +323,33 @@ export const hasBoughtAnyCourse = createAsyncThunk('has_bought_any_course',
     }
 )
 
+//if course already bought then shouldn't be able to add that course again for that user
+export const alreadyBoughtCourse = createAsyncThunk('already_bought_course',
+    async (credentials) => {
+        try{
+            console.log("This is the credentials: ", credentials)
+            const request = await api.get(`courses/bought_courses`)
+            const response = request.data
+            if (request.status == 200){
+                console.log("This is the bought courses: ", response)
+                const data = response.filter((item) => item.user == credentials.user && item.course_id == credentials.course_id) 
+                console.log("This is the data that is coming from this: ", data)
+                if (data.length == 0){
+                    return false
+                }else{
+                    return true
+                }
+            }
+        }catch(error){
+            console.log("Error: ", error)
+        }
+    }
+)
+
 const initialState = {
     isLoading: true,
     community: false,
+    alreadybought: false,
     data: [],
     cart: [],
     category: [],
@@ -457,6 +481,21 @@ const CoursesSlice = createSlice({
             state.msg = "The state has been loaded"
         },
         [hasBoughtAnyCourse.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the state has been finished with some problem.'
+        },
+
+
+        [alreadyBoughtCourse.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The state is still loading!!"
+        },
+        [alreadyBoughtCourse.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.alreadybought = action.payload
+            state.msg = "The state has been loaded"
+        },
+        [alreadyBoughtCourse.rejected]: (state) => {
             state.isLoading = false
             state.msg = 'The loading of the state has been finished with some problem.'
         },

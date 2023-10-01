@@ -91,7 +91,11 @@ function ChatPage() {
             }
         }
         createSocket();
-        dispatch(UserMessages(room_id));
+        const data = {
+            room_id: room_id,
+            user_id: decode.user_id
+        }
+        dispatch(UserMessages(data));
         dispatch(individualCourse(id))
     }, []);
 

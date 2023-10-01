@@ -3,8 +3,8 @@ import Reviews from '../Components/Reviews'
 import Footer from '../Components/Footer'
 import image1 from '../Images/image1.avif'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { addToCart, buyCourse, individualCourse } from '../features/CourseSlice'
+import { useNavigate, useParams } from 'react-router-dom'
+import { addToCart, alreadyBoughtCourse, buyCourse, individualCourse } from '../features/CourseSlice'
 import Rating from '../Components/Rating'
 import jwtDecode from 'jwt-decode'
 
@@ -16,11 +16,21 @@ function CoursePage() {
     const token = localStorage.getItem('authToken')
     const access = jwtDecode(token)
 
+    const navigate = useNavigate()
+
     const dispatch = useDispatch()
     const courseDetails = useSelector((state) => state.courses)
 
     useEffect(() => {
         dispatch(individualCourse(id))
+    }, [])
+
+    useEffect(() => {
+        const credentials = {
+            user: parseInt(access.user_id),
+            course_id: parseInt(id)
+        }
+        dispatch(alreadyBoughtCourse(credentials))
     }, [])
 
     const handleAddToCart = async () => {
@@ -37,12 +47,13 @@ function CoursePage() {
             course_id: id
         }
         await dispatch(buyCourse(credentials))
+        await navigate(`/enrolled`)
     }
 
     return (
         <>
             {
-                courseDetails && courseDetails.mycourses.length >= 1 ?
+                !courseDetails.isLoading && courseDetails.mycourses.length >= 1 ?
                     <>
                         <div className='lg:mx-[70px] md:mx-[70px] sm:mx-[70px] xs:mx-[30px] my-[50px] h-full'>
                             <div className='grid grid-cols-7 gap-0 h-full w-full'>
@@ -74,8 +85,15 @@ function CoursePage() {
                                         <p className='mb-3 mx-3 text-xs relative text-blue-600 right-5'>{courseDetails.mycourses[0]?.course_length} hr</p>
                                     </div>
                                     <div className='flex relative '>
-                                        <button onClick={handleBuyCourse} className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#A435F0] text-white">BUY THIS COURSE</button>
-                                        <button onClick={handleAddToCart} className="min-h-[40px] mx-3 w-[190px] font-semibold rounded-lg bg-[#D6BF45] text-white">ADD TO CART</button>
+                                        {
+                                            !courseDetails?.isLoading && courseDetails?.alreadybought == false ?
+                                                <>
+                                                    <button onClick={handleBuyCourse} className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#A435F0] text-white">BUY THIS COURSE</button>
+                                                    <button onClick={handleAddToCart} className="min-h-[40px] mx-3 w-[190px] font-semibold rounded-lg bg-[#D6BF45] text-white">ADD TO CART</button>
+                                                </>
+                                                :
+                                                <button className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#A435F0] text-white">LEAVE A REVIEW</button>
+                                        }
                                     </div>
 
                                 </div>

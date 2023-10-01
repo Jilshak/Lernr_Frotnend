@@ -8,8 +8,14 @@ export const UserMessages = createAsyncThunk('user_messages',
             const request = await api.get(`/community/messages/`)
             const response = request.data
             if (request.status === 200) {
-                let data = await response.filter((item) => item.thread_name == room_id)
-                return data
+                const data = await response.filter((item) => item.thread_name == room_id.room_id)
+                const req = await api.get(`user/${room_id.user_id}/`)
+                const res = req.data
+                if (req.status == 200){
+                    const final = data.filter((item) => item.timestamp > res.date_joined)
+                    console.log("These are the final message: ", final)
+                    return final
+                }
             }
         } catch (error) {
             console.log("Error: ", error)
