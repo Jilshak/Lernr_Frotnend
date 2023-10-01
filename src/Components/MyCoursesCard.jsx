@@ -12,7 +12,7 @@ function MyCoursesCard(props) {
                             <div class="mt-5 sm:mt-0">
                                 <h2 class="text-md font-bold ">{item?.title}</h2>
                                 <p class="mt-1 text-xs ">{item?.username}</p>
-                                <div className='flex'>
+                                <div className='flex z-0'>
                                     <Rating />
                                     <p className='text-xs relative bottom-0.5 ms-2'>({item.reviews ? item.reviews : 0})</p>
                                 </div>

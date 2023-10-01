@@ -8,7 +8,7 @@ function Rating(props) {
         <>
             {
                 rating ?
-                    <>
+                    <div className='z-0'>
                         {
                             rating.map((item) => {
                                 return (
@@ -16,7 +16,7 @@ function Rating(props) {
                                 )
                             })
                         }
-                    </> :
+                    </div> :
                     <div className="rating rating-xs">
                         <input type="radio" name="rating-5" className="mask mask-star-2 bg-[#FEE9D8]" />
                         <input type="radio" name="rating-5" className="mask mask-star-2 bg-[#FEE9D8]" />

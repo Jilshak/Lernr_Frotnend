@@ -1,10 +1,13 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import noprofile from '../icons/noprofile.png'
+import jwtDecode from 'jwt-decode'
 
 function AdminNavbar() {
 
     const navigate = useNavigate()
+
+    const access = jwtDecode(localStorage.getItem('authToken'))
 
     const handleLogout = async () => {
         await localStorage.removeItem('authToken')
@@ -45,13 +48,18 @@ function AdminNavbar() {
                         </div>
                     </label>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                        <li>
-                            <Link to='/profile'>
-                                <span className="justify-between">
-                                    Profile
-                                </span>
-                            </Link>
-                        </li>
+                        {
+                            !access.is_superuser ?
+                                <>
+                                    <li>
+                                        <Link to='/profile'>
+                                            <span className="justify-between">
+                                                Profile
+                                            </span>
+                                        </Link>
+                                    </li>
+                                </> : null
+                       }
                         <li className='lg:hidden md:hidden sm:block xs:block'>
                             <Link to='admin_reports'>
                                 <span className="justify-between">

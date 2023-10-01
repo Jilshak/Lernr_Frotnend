@@ -153,8 +153,6 @@ export const getCartItems = createAsyncThunk('get_cart_items',
                     .filter((item) => item.user === id)
                     .map((item) => item.on_course);
 
-                console.log("This is the course ids: ", courseIds)
-
                 const courseDetailsPromises = courseIds.map(async (courseId) => {
                     const courseResponse = await api.get(`courses/course/${courseId}`);
                     return courseResponse.data;

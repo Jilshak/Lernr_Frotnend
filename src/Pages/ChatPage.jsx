@@ -150,7 +150,7 @@ function ChatPage() {
             </div>
             <div>
                 <div className="w-full h-[88vh] px-5 flex flex-col justify-between">
-                    <div className="flex flex-col mt-5 overflow-x-auto">
+                    <div className="flex flex-col mt-5 overflow-x-auto scrollbar-none">
                         {
                             !message.isLoading && message.messages.length >= 1 ?
                                 <>
@@ -175,7 +175,7 @@ function ChatPage() {
                                                             </> :
                                                             <div className='rounded-full h-8 w-8 bg-white mx-2'>
                                                                 <small className='flex items-center justify-center mt-1'>
-                                                                    {item.sender}
+                                                                    {item.sender || item.senderUsername}
                                                                 </small>
                                                             </div>
                                                     }

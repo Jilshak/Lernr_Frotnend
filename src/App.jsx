@@ -24,6 +24,8 @@ import AddCategoryPage from './Pages/Admin/AddCategoryPage'
 import CourseViewPage from './Pages/CourseViewPage'
 import CommunityPage from './Pages/CommunityPage'
 import ChatPage from './Pages/ChatPage'
+import CheckoutForm from './Components/CheckoutForm'
+
 
 function App() {
 
@@ -48,6 +50,7 @@ function App() {
             <Route path='course_analytics/:id?' element={<CourseAnalytics />} />
             <Route path='course_view/:id?' element={<CourseViewPage />} />
             <Route path='community' element={<CommunityPage />} />
+            <Route path='test' element={<CheckoutForm />} />
           </Route>
           <Route path='chat/:id?' element={<ChatPage />} />
 
