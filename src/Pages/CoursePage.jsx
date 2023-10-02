@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Reviews from '../Components/Reviews'
 import Footer from '../Components/Footer'
 import image1 from '../Images/image1.avif'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { addToCart, alreadyBoughtCourse, buyCourse, individualCourse } from '../features/CourseSlice'
+import { addToCart, alreadyBoughtCourse, buyCourse, individualCourse, toggleButton } from '../features/CourseSlice'
 import Rating from '../Components/Rating'
 import jwtDecode from 'jwt-decode'
+import ReviewRating from '../Components/ReviewRating'
 
 function CoursePage() {
 
@@ -50,12 +51,21 @@ function CoursePage() {
         await navigate(`/enrolled`)
     }
 
+    //for toggling the review-rating
+    
+
     return (
         <>
             {
                 !courseDetails.isLoading && courseDetails.mycourses.length >= 1 ?
                     <>
                         <div className='lg:mx-[70px] md:mx-[70px] sm:mx-[70px] xs:mx-[30px] my-[50px] h-full'>
+                            {
+                                courseDetails.toggle ?
+                                <div className='absolute h-1/2 lg:left-80 md:left-40 sm:left-40 xs:left-32 top-52 flex items-center justify-center w-1/2 z-30 '>
+                                    <ReviewRating id={id}/>
+                                </div> : null
+                            }
                             <div className='grid grid-cols-7 gap-0 h-full w-full'>
                                 {/* first row */}
                                 <div className='lg:col-span-2 xs:col-span-7 lg:mx-3 xs:mx-[70px] mx-3 my-3 bg-white shadow-xl h-[250px]'>
@@ -66,6 +76,8 @@ function CoursePage() {
                                         }}
                                     ></div>
                                 </div>
+
+                            
 
                                 <div className='lg:col-span-5 xs:col-span-7 lg:mx-3 my-3 bg-white shadow-xl h-[250px] w-full'>
                                     <h1 className='my-3 text-lg font-semibold text-[#3D3D3D] mx-3'>{courseDetails?.mycourses[0]?.title}</h1>
@@ -92,7 +104,7 @@ function CoursePage() {
                                                     <button onClick={handleAddToCart} className="min-h-[40px] mx-3 w-[190px] font-semibold rounded-lg bg-[#D6BF45] text-white">ADD TO CART</button>
                                                 </>
                                                 :
-                                                <button className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#A435F0] text-white">LEAVE A REVIEW</button>
+                                                <button onClick={(e) => dispatch(toggleButton())} className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#A435F0] text-white">LEAVE A REVIEW</button>
                                         }
                                     </div>
 

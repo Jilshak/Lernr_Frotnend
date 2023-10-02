@@ -35,7 +35,7 @@ function CheckoutForm() {
                         <h5>$20.00</h5>
                     </div>
                 </div>
-                <form action={`${api}/payments/test-payment/`} method="POST">
+                <form action={`/payments/test-payment/`} method="POST">
                     <button className='btn btn-outline btn-sm' type="submit">
                         Checkout
                     </button>

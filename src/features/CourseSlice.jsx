@@ -258,9 +258,9 @@ export const buyCourse = createAsyncThunk('buy_course',
                 )
                 const req = await api.get(`courses/course/${parseInt(credentials.course_id)}`)
                 const res = req.data
-                if (req.status == 200){
+                if (req.status == 200) {
                     console.log(res)
-                    const update = api.patch(`courses/course/${parseInt(credentials.course_id)}/`, {students: res.students + 1})
+                    const update = api.patch(`courses/course/${parseInt(credentials.course_id)}/`, { students: res.students + 1 })
                 }
             } else {
                 await Swal.fire(
@@ -326,21 +326,21 @@ export const hasBoughtAnyCourse = createAsyncThunk('has_bought_any_course',
 //if course already bought then shouldn't be able to add that course again for that user
 export const alreadyBoughtCourse = createAsyncThunk('already_bought_course',
     async (credentials) => {
-        try{
+        try {
             console.log("This is the credentials: ", credentials)
             const request = await api.get(`courses/bought_courses`)
             const response = request.data
-            if (request.status == 200){
+            if (request.status == 200) {
                 console.log("This is the bought courses: ", response)
-                const data = response.filter((item) => item.user == credentials.user && item.course_id == credentials.course_id) 
+                const data = response.filter((item) => item.user == credentials.user && item.course_id == credentials.course_id)
                 console.log("This is the data that is coming from this: ", data)
-                if (data.length == 0){
+                if (data.length == 0) {
                     return false
-                }else{
+                } else {
                     return true
                 }
             }
-        }catch(error){
+        } catch (error) {
             console.log("Error: ", error)
         }
     }
@@ -350,6 +350,7 @@ const initialState = {
     isLoading: true,
     community: false,
     alreadybought: false,
+    toggle: false,
     data: [],
     cart: [],
     category: [],
@@ -363,7 +364,14 @@ const CoursesSlice = createSlice({
     name: 'course_slice',
     initialState,
     reducers: {
-
+        toggleButton(state, action) {
+            state.toggle = true
+            console.log('this is the toggleButton: ', state.toggle)
+        },
+        closeButton(state, action) {
+            state.toggle = false
+            console.log('this is the closeButton: ', state.toggle)
+        }
     },
     extraReducers: {
         [getCourses.pending]: (state) => {
@@ -502,4 +510,5 @@ const CoursesSlice = createSlice({
     }
 })
 
+export const { toggleButton, closeButton } = CoursesSlice.actions
 export default CoursesSlice.reducer
