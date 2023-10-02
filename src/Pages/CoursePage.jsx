@@ -82,9 +82,9 @@ function CoursePage() {
                                 <div className='lg:col-span-5 xs:col-span-7 lg:mx-3 my-3 bg-white shadow-xl h-[250px] w-full'>
                                     <h1 className='my-3 text-lg font-semibold text-[#3D3D3D] mx-3'>{courseDetails?.mycourses[0]?.title}</h1>
                                     <div className='mb-3 mx-3 text-sm text-[#3D3D3D] max-h-[40px] overflow-hidden'>{courseDetails?.mycourses[0]?.description}</div>
-                                    <div className='mx-3 flex'>
-                                        <p className='relative bottom-1.5 mx-1 text-[#3D3D3D]'>{courseDetails?.mycourses[0]?.rating}.0</p>
-                                        <Rating />
+                                    <div className='mx-3 flex items-center'>
+                                        <p className='relative bottom-1.5 mx-1 text-[#3D3D3D]'>{courseDetails?.mycourses[0]?.rating}</p>
+                                        <Rating rating={courseDetails?.mycourses[0]?.rating} bottom={1}/>
                                         <p className='relative bottom-1.5 mx-2 text-[#3D3D3D]'>({courseDetails?.mycourses[0]?.no_of_reviews})</p>
                                         <p className='relative bottom-1.5 mx-2 text-[#3D3D3D]'>{courseDetails?.mycourses[0]?.students}</p>
                                     </div>

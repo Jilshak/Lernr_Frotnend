@@ -14,12 +14,13 @@ function CoursesCards(props) {
                 <h1 className='font-bold text-md'>{item?.title}</h1>
                 <div className='relative bottom-2'>
                     <small className='text-xs'>{item?.username}</small><br />
-                    <small className='relative bottom-2'><Rating rating={item.rating} /></small>
-                    <small className='text-xs relative bottom-2.5 ms-1'>
-                        ({item?.no_of_reviews ? item?.no_of_reviews : 0})
-                    </small>
-                    <br />
-                    <div className='flex'>
+                    <div className='flex relative top-2 items-center'>
+                        <small className='relative bottom-2'><Rating rating={item.rating} /></small>
+                        <small className='text-xs relative bottom-2.5 ms-1'>
+                            ({item?.no_of_reviews ? item?.no_of_reviews : 0})
+                        </small>
+                    </div>
+                    <div className='flex top-2 relative'>
                         <p className='font-semibold relative bottom-3'>₹ {item?.price}</p>
                         <p className='font-semibold text-sm relative bottom-2.5 ms-3 line-through'>(₹ 543)</p>
                     </div>
