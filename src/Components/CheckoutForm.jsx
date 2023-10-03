@@ -1,48 +1,79 @@
-import React, { useEffect } from 'react'
-import { useLocation } from 'react-router-dom';
+import React, { useState } from "react";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
-function CheckoutForm() {
+const CheckoutForm = () => {
+    const [error, setError] = useState(null);
+    const [email, setEmail] = useState("");
+    const stripe = useStripe();
+    const elements = useElements();
 
-    const location = useLocation()
+    // Handle real-time validation errors from the CardElement.
+    const handleChange = (event) => {
+        if (event.error) {
+            setError(event.error.message);
+        } else {
+            setError(null);
+        }
+    };
 
-    useEffect(() => {
+    // Handle form submission.
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const card = elements.getElement(CardElement);
+        // Add your payment processing logic here.
 
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: card
+        });
 
-        // const query = new URLSearchParams(window.location.search);
-        const values = location.search
-        console.log(values)
-        
-
-        // if (query.get("success")) {
-        //     console.log("Order placed! You will receive an email confirmation.");
-        // }
-
-        // if (query.get("canceled")) {
-        //     console.log("Order canceled -- continue to shop around and checkout when you're ready.");
-        // }
-    }, []);
+        console.log("This is the payment method: ", paymentMethod)
+    };
 
     return (
-        <div>
-            <section>
-                <div className="product">
-                    <img
-                        src="https://i.imgur.com/EHyR2nP.png"
-                        alt="The cover of Stubborn Attachments"
-                    />
-                    <div className="description">
-                        <h3>Stubborn Attachments</h3>
-                        <h5>$20.00</h5>
+        <div className="min-h-screen">
+            <div className="max-w-md relative top-32 mx-auto p-4 bg-white shadow-lg rounded-lg">
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label htmlFor="email" className="text-gray-600">
+                            Email Address
+                        </label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="jenny.rosen@example.com"
+                            className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-400"
+                            required
+                            value={email}
+                            onChange={(event) => {
+                                setEmail(event.target.value);
+                            }}
+                        />
                     </div>
-                </div>
-                <form action={`/payments/test-payment/`} method="POST">
-                    <button className='btn btn-outline btn-sm' type="submit">
-                        Checkout
+                    <div className="mb-4">
+                        <label htmlFor="card-element" className="text-gray-600">
+                            Credit or debit card
+                        </label>
+                        <CardElement
+                            id="card-element"
+                            onChange={handleChange}
+                            className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-400"
+                        />
+                        {error && (
+                            <p className="text-red-500 mt-2 text-sm">{error}</p>
+                        )}
+                    </div>
+                    <button
+                        type="submit"
+                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-400"
+                    >
+                        Submit Payment
                     </button>
                 </form>
-            </section>
+            </div>
         </div>
-    )
-}
+    );
+};
 
-export default CheckoutForm
+export default CheckoutForm;
