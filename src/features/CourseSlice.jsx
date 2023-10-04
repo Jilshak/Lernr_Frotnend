@@ -277,43 +277,6 @@ export const buyCourse = createAsyncThunk('buy_course',
         }
     }
 )
-//for buying courses
-export const buyCourses = createAsyncThunk('buy_course',
-    async (credentials) => {
-        console.log("This is the credentials: ", credentials)
-        try {
-            const request = await api.post(`courses/bought_courses/`, credentials)
-            const response = request.data
-            if (request.status == 201) {
-                await Swal.fire(
-                    {
-                        background: '#fff',
-                        icon: 'success',
-                        title: 'CONGRATS!',
-                        text: "Your Purchase is Successful !!",
-                    }
-                )
-                const req = await api.get(`courses/course/${parseInt(credentials.course_id)}`)
-                const res = req.data
-                if (req.status == 200) {
-                    console.log(res)
-                    const update = api.patch(`courses/course/${parseInt(credentials.course_id)}/`, { students: res.students + 1 })
-                }
-            } else {
-                await Swal.fire(
-                    {
-                        background: '#fff',
-                        icon: 'error',
-                        title: 'OOPS....',
-                        text: "Something went wrong while trying to buy this please try again!!",
-                    }
-                )
-            }
-        } catch (error) {
-            console.log("Error: ", error)
-        }
-    }
-)
 
 //for getting the bought courses to appear on the courses enrolled and also on the community page for chat
 export const getBoughtCourses = createAsyncThunk('get_bought_course',
