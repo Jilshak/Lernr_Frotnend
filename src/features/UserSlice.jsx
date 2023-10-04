@@ -266,6 +266,22 @@ const UserSlice = createSlice({
                 userToUnblock.is_blocked = false;
             }
         },
+        blockInstructor: (state, action) => {
+            const { userId } = action.payload;
+            // Find the user by userId and update their block status in the state
+            const userToBlock = state.instructor.find(user => user.id === userId);
+            if (userToBlock) {
+                userToBlock.is_blocked = true;
+            }
+        },
+        unblockInstructor: (state, action) => {
+            const { userId } = action.payload;
+            // Find the user by userId and update their block status in the state
+            const userToUnblock = state.instructor.find(user => user.id === userId);
+            if (userToUnblock) {
+                userToUnblock.is_blocked = false;
+            }
+        },
     },
     extraReducers: {
         [getUsers.pending]: (state) => {
@@ -330,4 +346,4 @@ const UserSlice = createSlice({
 })
 
 export default UserSlice.reducer
-export const { blockUser, unblockUser } = UserSlice.actions
+export const { blockUser, unblockUser, blockInstructor, unblockInstructor } = UserSlice.actions

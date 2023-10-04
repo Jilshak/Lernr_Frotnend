@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { BlockUser, UnblockUser, blockUser, getInstructors, getUsers, unblockUser } from '../../features/UserSlice'
+import { BlockUser, UnblockUser, blockInstructor, blockUser, getInstructors, getUsers, unblockInstructor, unblockUser } from '../../features/UserSlice'
 import noprofile from '../../icons/noprofile.png'
 
 
@@ -12,6 +12,7 @@ function AdminInstructorPage() {
     const [users, setUsers] = useState()
     const [userdetails, setUserdetails] = useState()
     const [toggle, setToggle] = useState(false)
+    const [toggle1, setToggle1] = useState(false)
 
     useEffect(() => {
         const handleUserState = async () => {
@@ -38,14 +39,13 @@ function AdminInstructorPage() {
 
     //block and unblock
     const handleBlock = async (id) => {
-
-        await dispatch(blockUser({ userId: id }));
+        await dispatch(blockInstructor({ userId: id }));
         await dispatch(BlockUser(id))
         setToggle(false)
     }
 
     const handleUnblock = async (id) => {
-        await dispatch(unblockUser({ userId: id }));
+        await dispatch(unblockInstructor({ userId: id }));
         await dispatch(UnblockUser(id))
         setToggle(false)
     }
@@ -61,43 +61,78 @@ function AdminInstructorPage() {
                                 <div className='relative mx-10 mt-5'>
                                     <input type="text" placeholder="Search..." className="input input-sm input-bordered  w-full relative" />
                                 </div>
-                                <div className='max-h-[60vh] scrollbar-none overflow-y-auto'>
-                                    {
-                                        users && users.length >= 1 ?
-                                            <>
-                                                <ul className='mx-10 mt-3 '>
-                                                    {
-                                                        users.map((item) => {
-                                                            if (!item.is_blocked) {
-                                                                return (
-                                                                    <li key={item.id} onClick={(e) => {
-                                                                        displayUser(item.id)
-                                                                    }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
-                                                                        <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
-                                                                        <h1 className='ms-2'>{item.email}</h1>
-                                                                        <div className='flex items-center justify-end w-full'>
-                                                                            <h1 className='text-green-400'>Active</h1>
-                                                                        </div>
-                                                                    </li>
-                                                                )
-                                                            } else {
-                                                                return (
-                                                                    <li key={item.id} onClick={(e) => {
-                                                                        displayUser(item.id)
-                                                                    }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
-                                                                        <img className='h-12 ms-2' src={item.profile_image ? item.profile_image : noprofile} alt="" />
-                                                                        <h1 className='ms-2'>{item.email}</h1>
-                                                                        <h1 className='text-sm text-orange-400 absolute right-10 me-2'>Blocked</h1>
-                                                                    </li>
-                                                                )
-                                                            }
-                                                        })
-                                                    }
-                                                </ul>
-                                            </>
-                                            : null
-                                    }
-                                </div>
+                                {
+                                    !toggle1 ?
+                                        <>
+                                            <div className='max-h-[60vh] scrollbar-none overflow-y-auto'>
+                                                {
+                                                    users && users.length >= 1 ?
+                                                        <>
+                                                            <ul className='mx-10 mt-3 '>
+                                                                {
+                                                                    users.map((item) => {
+                                                                        return (
+                                                                            <li key={item.id} onClick={(e) => {
+                                                                                displayUser(item.id)
+                                                                            }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
+                                                                                <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
+                                                                                <h1 className='ms-2'>{item.email}</h1>
+                                                                                <div className='flex items-center justify-end w-full'>
+                                                                                    {!item.is_blocked ? <h1 className='text-green-400 text-xs mx-3'>Active</h1> : <h1 className='text-red-400'>Blocked</h1>}
+                                                                                </div>
+                                                                            </li>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </ul>
+                                                        </>
+                                                        : null
+                                                }
+                                                <div className='grid grid-cols-2 relative'>
+                                                    <button onClick={(e) => setToggle1(false)} className="btn rounded-none ">Authorized</button>
+                                                    <button onClick={(e) => setToggle1(true)} className="btn rounded-none ">UnAuthorized</button>
+                                                </div>
+                                            </div>
+                                        </> : null
+                                }
+                                {
+                                    toggle1 ?
+                                        <>
+                                            <div className='max-h-[60vh] min-h-[30vh] scrollbar-none overflow-y-auto'>
+
+                                                {
+                                                    users && users.length >= 1 ?
+                                                        <>
+                                                            <ul className='mx-10 mt-3 '>
+                                                                {
+                                                                    users.map((item) => {
+                                                                        if (!item.is_authorized) {
+                                                                            return (
+                                                                                <li key={item.id} onClick={(e) => {
+                                                                                    displayUser(item.id)
+                                                                                }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
+                                                                                    <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
+                                                                                    <h1 className='ms-2'>{item.email}</h1>
+                                                                                    <div className='flex items-center justify-end w-full'>
+                                                                                        <h1 className='text-orange-400 text-xs mx-3'>UnAuthorized</h1>
+                                                                                    </div>
+                                                                                </li>
+                                                                            )
+                                                                        }
+                                                                    })
+                                                                }
+                                                            </ul>
+                                                        </>
+                                                        : null
+                                                }
+
+                                                <div className='grid grid-cols-2 absolute w-full bottom-0 mt-5'>
+                                                    <button onClick={(e) => setToggle1(false)} className="btn rounded-none ">Authorized</button>
+                                                    <button onClick={(e) => setToggle1(true)} className="btn rounded-none ">UnAuthorized</button>
+                                                </div>
+                                            </div>
+                                        </> : null
+                                }
                             </div>
                             {
                                 user && user.user && toggle && userdetails ?
@@ -134,7 +169,12 @@ function AdminInstructorPage() {
                                                                     <button onClick={(e) => handleBlock(userdetails[0].id)} className="btn rounded-none hover:btn-warning">Block</button>
                                                                 </> : <button onClick={(e) => handleUnblock(userdetails[0].id)} className="btn rounded-none hover:btn-success">Unblock</button>
                                                         }
-                                                        <button className="btn  hover:btn-error rounded-none">Delete</button>
+                                                        {
+                                                            !userdetails[0].is_authorized ?
+                                                                <>
+                                                                    <button className="btn  hover:btn-warning rounded-none">UnAuthorize</button>
+                                                                </> : <button className="btn  hover:btn-warning rounded-none">Authorize</button>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>

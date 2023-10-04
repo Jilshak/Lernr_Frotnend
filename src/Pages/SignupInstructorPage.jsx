@@ -23,7 +23,8 @@ function SignupInstructorPage() {
                 first_name: firstName,
                 last_name: lastName,
                 username: username,
-                is_instructor: true
+                is_instructor: true,
+                is_authorized: false,
             }
             await dispatch(Register(credentials))
             await navigate('/login')
