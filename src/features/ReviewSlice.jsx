@@ -8,6 +8,7 @@ export const addReview = createAsyncThunk('add_review', async (credentials) => {
             review_by: credentials.review_by,
             review: credentials.review,
             course: credentials.course,
+            stars: credentials.no_of_stars,
         }
         const request = await api.post(`courses/review/`, credential)
         const response = request.data
@@ -19,7 +20,7 @@ export const addReview = createAsyncThunk('add_review', async (credentials) => {
             const newRating = NoOfReviews !== 0 ? newStars / NoOfReviews : 0;
             console.log("This is the new rating: ", newRating)
             const req = await api.patch(`courses/course/${credentials.course}/`, { no_of_stars: newStars, no_of_reviews: NoOfReviews, rating: newRating })
-            
+
             if (req.status == 200) {
                 await Swal.fire({
                     background: '#fff',
@@ -41,6 +42,31 @@ export const addReview = createAsyncThunk('add_review', async (credentials) => {
     }
 })
 
+export const getReview = createAsyncThunk('get_reviews',
+    async (id) => {
+        try {
+            const request = await api.get(`courses/review/`);
+            const response = request.data;
+
+            if (request.status == 200){
+               const data = await Promise.all(response.filter((item) => item.course == id)
+               .map(async (item) => {
+                const userDetails = await api.get(`user/${item.review_by}`)
+                if (userDetails.status == 200){
+                    const userData = userDetails.data
+                    return {...item, user: userData}
+                }
+                return item
+               }))
+               console.log(data)
+               return data
+
+            }
+        } catch (error) {
+            console.log("Error: ", error);
+        }
+    }
+);
 
 const initialState = {
     isLoading: true,
@@ -55,7 +81,19 @@ const ReviewSlice = createSlice({
 
     },
     extraReducers: {
-
+        [getReview.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The state is still loading!!"
+        },
+        [getReview.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.data = action.payload
+            state.msg = "The state has been loaded"
+        },
+        [getReview.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the state has been finished with some problem.'
+        },
     }
 })
 

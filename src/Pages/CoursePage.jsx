@@ -8,8 +8,8 @@ import { addToCart, alreadyBoughtCourse, buyCourse, individualCourse, toggleButt
 import Rating from '../Components/Rating'
 import jwtDecode from 'jwt-decode'
 import ReviewRating from '../Components/ReviewRating'
-import { makePayment } from '../features/PaymentSlice'
 import api from '../services/Axios'
+import { getReview } from '../features/ReviewSlice'
 
 function CoursePage() {
 
@@ -23,10 +23,11 @@ function CoursePage() {
 
     const dispatch = useDispatch()
     const courseDetails = useSelector((state) => state.courses)
-    const payment = useSelector((state) => state.payment)
+    const review = useSelector((state) => state.reviews)
 
     useEffect(() => {
         dispatch(individualCourse(id))
+        dispatch(getReview(id))
     }, [])
 
     useEffect(() => {
@@ -45,21 +46,9 @@ function CoursePage() {
         await dispatch(addToCart(credential))
     }
 
-    // const handleBuyCourse = async () => {
-    //     const credentials = {
-    //         user: access.user_id,
-    //         course_id: id
-    //     }
-    //     await dispatch(makePayment(id))
-    //     if (payment.session_id != null){
-    //         navigate('/test')
-    //     }
-    // }
-
-    //payment
     const handleBuyCourse = async () => {
         try {
-            const request = await api.post(`payments/stripe/`, {course_id: id})
+            const request = await api.post(`payments/stripe/`, { course_id: id })
             const response = request.data
             if (request.status == 200) {
                 console.log(response)
@@ -71,7 +60,7 @@ function CoursePage() {
             console.log("Error: ", error)
         }
     }
-    
+
 
     return (
         <>
@@ -81,9 +70,9 @@ function CoursePage() {
                         <div className='lg:mx-[70px] md:mx-[70px] sm:mx-[70px] xs:mx-[30px] my-[50px] h-full'>
                             {
                                 courseDetails.toggle ?
-                                <div className='absolute h-1/2 lg:left-80 md:left-40 sm:left-40 xs:left-32 top-52 flex items-center justify-center w-1/2 z-30 '>
-                                    <ReviewRating id={id}/>
-                                </div> : null
+                                    <div className='absolute h-1/2 lg:left-80 md:left-40 sm:left-40 xs:left-32 top-52 flex items-center justify-center w-1/2 z-30 '>
+                                        <ReviewRating id={id} />
+                                    </div> : null
                             }
                             <div className='grid grid-cols-7 gap-0 h-full w-full'>
                                 {/* first row */}
@@ -96,14 +85,14 @@ function CoursePage() {
                                     ></div>
                                 </div>
 
-                            
+
 
                                 <div className='lg:col-span-5 xs:col-span-7 lg:mx-3 my-3 bg-white shadow-xl h-[250px] w-full'>
                                     <h1 className='my-3 text-lg font-semibold text-[#3D3D3D] mx-3'>{courseDetails?.mycourses[0]?.title}</h1>
                                     <div className='mb-3 mx-3 text-sm text-[#3D3D3D] max-h-[40px] overflow-hidden'>{courseDetails?.mycourses[0]?.description}</div>
                                     <div className='mx-3 flex items-center'>
                                         <p className='relative bottom-1.5 mx-1 text-[#3D3D3D]'>{courseDetails?.mycourses[0]?.rating}</p>
-                                        <Rating rating={courseDetails?.mycourses[0]?.rating} bottom={1}/>
+                                        <Rating rating={courseDetails?.mycourses[0]?.rating} bottom={1} />
                                         <p className='relative bottom-1.5 mx-2 text-[#3D3D3D]'>({courseDetails?.mycourses[0]?.no_of_reviews})</p>
                                         <p className='relative bottom-1.5 mx-2 text-[#3D3D3D]'>{courseDetails?.mycourses[0]?.students}</p>
                                     </div>
@@ -177,10 +166,18 @@ function CoursePage() {
                                     <div className='mx-3 my-3'>
                                         <h1 className='text-2xl font-semibold ms-5 text-[#3D3D3D]'>Ratings</h1>
                                         <div className='grid grid-flow-col lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 carousel carousel-center rounded-box'>
-                                            <Reviews />
-                                            <Reviews className="hidden xs:hidden" /> {/* Show one review on sm screens */}
-                                            <Reviews className="hidden xs:hidden" /> {/* Show one review on sm screens */}
-                                            <Reviews className="hidden xs:hidden" /> {/* Show one review on sm screens */}
+                                            {
+                                                !review?.isLoading && review?.data?.length >= 1 ?
+                                                    <>
+                                                        {
+                                                            review.data.map((item) => {
+                                                                return (
+                                                                    <Reviews item={item} />
+                                                                )
+                                                            })
+                                                        }
+                                                    </> : null
+                                            }
                                         </div>
                                     </div>
                                 </div>
