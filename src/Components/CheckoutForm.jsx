@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { buyCourse, individualCourse } from "../features/CourseSlice";
 import jwtDecode from "jwt-decode";
+import checkout from '../Images/checkout.jpg'
 
 const CheckoutForm = () => {
   const { pi, id } = useParams();
@@ -82,17 +83,17 @@ const CheckoutForm = () => {
 
   return (
     <>
-      {course.mycourses.length >= 1 && !course.isLoading ? (
+      {!course.isLoading ? (
         <div className="min-h-screen">
           <div className=" justify-center items-center mx-auto relative top-10 max-w-[500px]">
             <div className="relative mx-auto p-4 bg-white shadow-lg rounded-lg">
               <div className="flex items-center flex-col justify-center">
                 <img
                   className="h-[250px] rounded-md"
-                  src={course.mycourses[0].thumbnail}
+                  src={course?.mycourses[0]?.thumbnail ? course?.mycourses[0].thumbnail : checkout}
                   alt=""
                 />
-                <p className="font-semibold">{course.mycourses[0].title}</p>
+                <p className="font-semibold">{course?.mycourses[0]?.title}</p>
               </div>
               <div className="mt-10">
                 <form onSubmit={handleSubmit}>

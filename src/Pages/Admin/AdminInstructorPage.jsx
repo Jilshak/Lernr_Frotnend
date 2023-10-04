@@ -61,7 +61,7 @@ function AdminInstructorPage() {
                                 <div className='relative mx-10 mt-5'>
                                     <input type="text" placeholder="Search..." className="input input-sm input-bordered  w-full relative" />
                                 </div>
-                                <div className='max-h-[70vh] overflow-y-auto'>
+                                <div className='max-h-[60vh] scrollbar-none overflow-y-auto'>
                                     {
                                         users && users.length >= 1 ?
                                             <>
@@ -75,7 +75,9 @@ function AdminInstructorPage() {
                                                                     }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
                                                                         <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
                                                                         <h1 className='ms-2'>{item.email}</h1>
-                                                                        <h1 className='text-sm text-green-400 absolute right-10 me-2'>Active</h1>
+                                                                        <div className='flex items-center justify-end w-full'>
+                                                                            <h1 className='text-green-400'>Active</h1>
+                                                                        </div>
                                                                     </li>
                                                                 )
                                                             } else {

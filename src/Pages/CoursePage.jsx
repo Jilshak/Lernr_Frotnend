@@ -119,8 +119,13 @@ function CoursePage() {
                                 </div>
                                 {/* second row */}
                                 <div className='lg:col-span-4 xs:col-span-7 lg:mx-3 my-3 bg-white shadow-xl h-[270px] xs:w-full lg:w-auto'>
-                                    <div className='flex items-center justify-start'>
+                                    <div className='grid items-center justify-start'>
                                         <h1 className='text-xl font-semibold text-[#3D3D3D] my-3 mx-3'>What you'll learn</h1>
+                                        <div className='mt-2 overflow-auto mx-3 max-h-[200px] object-contain'>
+                                            <p className='object-contain'>
+                                                {courseDetails?.mycourses[0]?.what_you_learn}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className='lg:col-span-3 xs:col-span-7 lg:mx-3 my-3 bg-white shadow-xl h-[270px] w-full'>
@@ -130,7 +135,7 @@ function CoursePage() {
                                     {
                                         courseDetails?.mycourses[0]?.requirements !== '' ?
                                             <>
-                                                <h1>Prior requirements</h1>
+                                                <h1 className='mx-3'>{courseDetails.mycourses[0].requirements}</h1>
                                             </> :
                                             <div className='w-full flex items-center justify-center h-full'>
                                                 <span className='p-3 relative bottom-10 right-5 bg-[#b5b1b1] rounded-full text-[#fff] font-bold'>No Requirements</span>

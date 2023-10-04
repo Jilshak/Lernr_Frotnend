@@ -45,6 +45,7 @@ function AddCoursePage() {
         course_length: course_length,
         minor_description: minor_description,
         requirements: requirements,
+        what_you_learn: whatyoulearn,
         category: category
       };
       console.log("This is the credentials: ", credentials)

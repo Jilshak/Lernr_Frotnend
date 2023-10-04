@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../Components/Navbar'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import CartProduct from '../Components/CartProduct'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCartItems, removeCartItem } from '../features/CourseSlice'
 import jwtDecode from 'jwt-decode'
 import Rating from '../Components/Rating'
+import api from '../services/Axios'
 
 
 
@@ -14,6 +15,7 @@ function CartPage() {
 
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const cartItems = useSelector((state) => state.courses)
 
     const [items, setItems] = useState([])
@@ -42,6 +44,22 @@ function CartPage() {
         await setItems(items.filter((item) => item.id != id))
     }
 
+    const handleCheckout = async (data) => {
+        console.log("Its reaching here !!!", data)
+        try {
+            const access = await jwtDecode(localStorage.getItem('authToken'))
+            const request = await api.post(`payments/stripe_cart/`, { course_id: data, user: access.user_id })
+            const response = request.data
+            if (request.status == 200) {
+                console.log(response)
+                await navigate(`/stripe/${response.pi}`)
+            } else {
+                console.log("Something went wrong while doing the request")
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
 
     return (
         <div className='min-h-screen'>
@@ -122,8 +140,11 @@ function CartPage() {
                                         </div>
 
                                     </div>
-                                    <Link to='/checkout'>
-                                        <button className="mt-6 w-full btn text-white font-bold bg-[#A435F0] hover:bg-[#5f2c82]">CHECKOUT</button>
+                                    <Link>
+                                        <button onClick={(e) => {
+                                            const data = items.map((item) => item.id)
+                                            handleCheckout(data)
+                                        }} className="mt-6 w-full btn text-white font-bold bg-[#A435F0] hover:bg-[#5f2c82]">CHECKOUT</button>
                                     </Link>
                                 </div>
                             </div>
