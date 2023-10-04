@@ -8,6 +8,8 @@ import { addToCart, alreadyBoughtCourse, buyCourse, individualCourse, toggleButt
 import Rating from '../Components/Rating'
 import jwtDecode from 'jwt-decode'
 import ReviewRating from '../Components/ReviewRating'
+import { makePayment } from '../features/PaymentSlice'
+import api from '../services/Axios'
 
 function CoursePage() {
 
@@ -21,6 +23,7 @@ function CoursePage() {
 
     const dispatch = useDispatch()
     const courseDetails = useSelector((state) => state.courses)
+    const payment = useSelector((state) => state.payment)
 
     useEffect(() => {
         dispatch(individualCourse(id))
@@ -42,16 +45,32 @@ function CoursePage() {
         await dispatch(addToCart(credential))
     }
 
-    const handleBuyCourse = async () => {
-        const credentials = {
-            user: access.user_id,
-            course_id: id
-        }
-        await dispatch(buyCourse(credentials))
-        await navigate(`/enrolled`)
-    }
+    // const handleBuyCourse = async () => {
+    //     const credentials = {
+    //         user: access.user_id,
+    //         course_id: id
+    //     }
+    //     await dispatch(makePayment(id))
+    //     if (payment.session_id != null){
+    //         navigate('/test')
+    //     }
+    // }
 
-    //for toggling the review-rating
+    //payment
+    const handleBuyCourse = async () => {
+        try {
+            const request = await api.post(`payments/stripe/`, {course_id: id})
+            const response = request.data
+            if (request.status == 200) {
+                console.log(response)
+                await navigate(`/stripe/${response.pi}/${id}`)
+            } else {
+                console.log("Something went wrong while doing the request")
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
     
 
     return (

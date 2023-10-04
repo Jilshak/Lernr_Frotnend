@@ -50,7 +50,7 @@ function App() {
             <Route path='course_analytics/:id?' element={<CourseAnalytics />} />
             <Route path='course_view/:id?' element={<CourseViewPage />} />
             <Route path='community' element={<CommunityPage />} />
-            <Route path='test' element={<CheckoutForm />} />
+            <Route path='stripe/:pi?/:id?' element={<CheckoutForm />} />
           </Route>
           <Route path='chat/:id?' element={<ChatPage />} />
 
