@@ -4,7 +4,8 @@ import jwtDecode from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
 import { AddNewCourse, getCategories } from '../features/CourseSlice'
 import Swal from 'sweetalert2'
-
+import { storage } from '../services/firebase'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 function AddCoursePage() {
 
@@ -25,7 +26,29 @@ function AddCoursePage() {
   const [requirements, setRequirements] = useState()
   const [category, setCategory] = useState()
   const [whatyoulearn, setWhatYouLearn] = useState()
+  const [video_link, setVideoLink] = useState('')
 
+  //for video
+  const [videoUpload, setVideoUpload] = useState(null)
+
+
+  const handleVideoUpload = async () => {
+    if (videoUpload == null) return
+    const videoRef = ref(storage, `videos/user_id_${access.user_id}_${videoUpload.name}`)
+
+    await uploadBytes(videoRef, videoUpload);
+
+    const videoURL = await getDownloadURL(videoRef);
+
+    setVideoLink(videoURL);
+
+    Swal.fire({
+      background: '#fff',
+      icon: 'success',
+      title: 'Video Uploaded!',
+      text: 'The video uploading has been completed successfully',
+    });
+  }
 
   const updateThumbnail = (e) => {
     const formData = new FormData();
@@ -46,7 +69,8 @@ function AddCoursePage() {
         minor_description: minor_description,
         requirements: requirements,
         what_you_learn: whatyoulearn,
-        category: category
+        category: category,
+        video: video_link
       };
       console.log("This is the credentials: ", credentials)
       await dispatch(AddNewCourse(credentials));
@@ -122,8 +146,9 @@ function AddCoursePage() {
                       <textarea placeholder="Minor Description..." className="textarea bg-[#D9D9D9] mt-10 text-sm textarea-lg h-[130px] textarea-bordered  w-full " ></textarea>
                     </div>
                   </div>
-                  <div className='bg-[#403F3F]  w-full h-[350px]'>
-
+                  <div className='bg-[#403F3F]  w-full h-[350px] flex flex-col items-center justify-center'>
+                    <input onChange={(e) => setVideoUpload(e.target.files[0])} type="file" className="file-input w-full max-w-xs " />
+                    <button onClick={(e) => handleVideoUpload()}>Upload here</button>
                   </div>
                 </div>
 

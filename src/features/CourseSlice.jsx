@@ -278,30 +278,32 @@ export const buyCourse = createAsyncThunk('buy_course',
     }
 )
 
-//for getting the bought courses to appear on the courses enrolled and also on the community page for chat
-export const getBoughtCourses = createAsyncThunk('get_bought_course',
-    async (_id) => {
-        console.log("this is the users id: ", _id)
-        try {
-            const request = await api.get(`courses/bought_courses`)
-            const response = request.data
-            if (request.status == 200) {
-                const courseID = response.filter((item) => item.user == _id).map((item) => item.course_id)
-                console.log("This is the course id: ", courseID)
-                const courseDetails = courseID.map(async (id) => {
-                    const courseResponse = await api.get(`courses/course/${id}`)
-                    return courseResponse.data
-                })
+export const getBoughtCourses = createAsyncThunk('get_bought_course', async (_id) => {
+    try {
+        const request = await api.get(`courses/bought_courses`);
+        const response = request.data;
 
-                const data = await Promise.all(courseDetails);
-                console.log("This is all the data: ", data)
-                return data
-            }
-        } catch (error) {
-            console.log("Error: ", error)
+        if (request.status === 200) {
+            const filteredData = response.filter((item) => item.user === _id);
+
+            const courseDetailsWithProgress = await Promise.all(
+                filteredData.map(async (item) => {
+                    const courseResponse = await api.get(`courses/course/${item.course_id}`);
+                    return {
+                        ...courseResponse.data,
+                        progress: item.progress, // Include progress in course details
+                    };
+                })
+            );
+
+            console.log("Bought Courses with Progress and Details: ", courseDetailsWithProgress);
+            return courseDetailsWithProgress;
         }
+    } catch (error) {
+        console.log("Error: ", error);
     }
-)
+});
+
 
 //for the navbar--> i.e; if anyone has bought any course the community navitem to appear
 export const hasBoughtAnyCourse = createAsyncThunk('has_bought_any_course',
@@ -338,6 +340,31 @@ export const alreadyBoughtCourse = createAsyncThunk('already_bought_course',
                     return false
                 } else {
                     return true
+                }
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+export const updateProgress = createAsyncThunk('update_progress',
+    async (credentials) => {
+        try {
+            const request = await api.get(`courses/bought_courses`)
+            const resposne = request.data
+            if (request.status == 200) {
+                const data = resposne.filter((item) => item.user == credentials.user && item.course_id == credentials.course_id)
+                console.log("This is the desired bought course!!!", data)
+                const boughtCourseId = data[0].id
+                console.log("This is the credentials: ", credentials)
+                console.log("This is the data: ", data[0])
+                if (data[0].progress < credentials.progress) {
+                    const req = await api.patch(`courses/bought_courses/${boughtCourseId}/`, { progress: credentials.progress })
+                    const res = req.data
+                    if (req.status == 200) {
+                        console.log("The bought course progress has been updated")
+                    }
                 }
             }
         } catch (error) {
