@@ -13,7 +13,7 @@ function MyCoursesCard(props) {
                                 <h2 class="text-md font-bold ">{item?.title}</h2>
                                 <p class="mt-1 text-xs ">{item?.username}</p>
                                 <div className='flex z-0'>
-                                    <Rating />
+                                    <Rating  rating={item.rating} bottom={0} top={1} left={1} right={1}/>
                                     <p className='text-xs relative bottom-0.5 ms-2'>({item.reviews ? item.reviews : 0})</p>
                                 </div>
                                 <p className='text-xs flex'>Course length: <p className='font-semibold ms-1'>{item.course_length}hr</p></p>

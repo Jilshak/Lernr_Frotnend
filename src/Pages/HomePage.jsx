@@ -30,7 +30,7 @@ function HomePage() {
                                 {
                                     [...course.data].reverse()?.map((item) => {
                                         return (
-                                            <CoursesCards key={item.id} item={item} />
+                                            <CoursesCards key={item.id} item={item} top={3}/>
                                         )
                                     })
                                 }
