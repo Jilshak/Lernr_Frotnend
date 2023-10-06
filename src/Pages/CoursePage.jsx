@@ -3,7 +3,7 @@ import Reviews from '../Components/Reviews'
 import Footer from '../Components/Footer'
 import image1 from '../Images/image1.avif'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { addToCart, alreadyBoughtCourse, buyCourse, individualCourse, toggleButton } from '../features/CourseSlice'
 import Rating from '../Components/Rating'
 import jwtDecode from 'jwt-decode'
@@ -112,7 +112,12 @@ function CoursePage() {
                                                     <button onClick={handleAddToCart} className="min-h-[40px] mx-3 w-[190px] font-semibold rounded-lg bg-[#D6BF45] text-white">ADD TO CART</button>
                                                 </>
                                                 :
-                                                <button onClick={(e) => dispatch(toggleButton())} className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#A435F0] text-white">LEAVE A REVIEW</button>
+                                                <div>
+                                                    <button onClick={(e) => dispatch(toggleButton())} className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#A435F0] text-white">LEAVE A REVIEW</button>
+                                                    <Link to={`/enrolled/`}>
+                                                        <button className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#ebbe37] text-white">Go To Enrolled</button>
+                                                    </Link>
+                                                </div>
                                         }
                                     </div>
 

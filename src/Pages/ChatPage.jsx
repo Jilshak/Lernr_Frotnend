@@ -143,7 +143,7 @@ function ChatPage() {
                                         return (
                                             <div className='flex items-center justify-end'>
                                                 <p className=' font-bold text-2xl relative me-10'>{item.title}</p>
-                                                
+
                                             </div>
                                         )
                                     })
@@ -175,7 +175,7 @@ function ChatPage() {
                                                     {
                                                         decode.user_id == item.sender || item.senderUsername == decode.user_id ?
                                                             <>
-                                                                
+
                                                             </> :
                                                             <div className='rounded-full h-8 w-8 bg-white mx-2'>
                                                                 <small className='flex items-center justify-center mt-1'>
@@ -188,8 +188,8 @@ function ChatPage() {
                                         })
                                     }
                                 </> :
-                                <div className='flex items-center justify-center h-screen'>
-                                    <div class="rounded-md h-12 w-12 border-4 border-t-4 border-blue-500 animate-spin absolute"></div>
+                                <div class="flex justify-center items-center h-screen">
+                                    <div class="rounded-full lg:h-20 lg:w-20 bg-[#534cdb] animate-ping"></div>
                                 </div>
                         }
                     </div>
@@ -208,19 +208,19 @@ function ChatPage() {
                             value={input}
                         />
                         {
-                            // socket ?
-                            <>
-                                <button
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        handleSendMessage()
-                                    }}
-                                    className="bg-[#fff] hover:bg-[#b6b6b6]  text-white px-5 me-0 relative right-0 py-3 rounded-e-lg"
-                                >
-                                    <img className='h-5 min-w-[15px]' src={send} alt="" />
-                                </button>
-                            </>
-                            // : null
+                            socket ?
+                                <>
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            handleSendMessage()
+                                        }}
+                                        className="bg-[#fff] hover:bg-[#b6b6b6]  text-white px-5 me-0 relative right-0 py-3 rounded-e-lg"
+                                    >
+                                        <img className='h-5 min-w-[15px]' src={send} alt="" />
+                                    </button>
+                                </>
+                                : null
                         }
                     </div>
                 </div>

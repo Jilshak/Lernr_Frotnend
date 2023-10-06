@@ -3,7 +3,7 @@ import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto'
 
 function LineChart(props) {
-    const { title } = props;
+    const { title, count } = props;
     const [isYearly, setIsYearly] = useState(false);
 
     const monthlyLineColors = 'rgba(75, 192, 192, 1)';
@@ -17,23 +17,23 @@ function LineChart(props) {
         datasets: [
             {
                 label: `${title} (Monthly)`,
-                borderColor: monthlyLineColors, // Use monthly line color
+                borderColor: monthlyLineColors,
                 borderWidth: 2,
-                fill: false, // Do not fill the area under the line
-                data: [200, 300, 400, 350, 500, 600, 700, 800, 750, 900, 1000, 1100],
+                fill: false, 
+                data: count.monthlyCounts,
             },
         ],
     };
 
     const yearlyData = {
-        labels: ['2021', '2022', '2023'],
+        labels: ['2023', '2022', '2021'],
         datasets: [
             {
                 label: `${title} (Yearly)`,
                 borderColor: yearlyLineColors, 
                 borderWidth: 2,
                 fill: false,
-                data: [5000, 6000, 7000],
+                data: count.yearlyCounts,
             },
         ],
     };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
 function ProfitChart(props) {
-  const { title } = props;
+  const { title, count } = props;
   const [isYearly, setIsYearly] = useState(false);
 
   const monthlyLineColors = 'rgba(75, 192, 192, 1)';
@@ -20,7 +20,7 @@ function ProfitChart(props) {
         borderColor: monthlyLineColors,
         borderWidth: 2,
         fill: false,
-        data: [200, 300, 400, 350, 500, 600, 700, 800, 750, 900, 1000, 1100],
+        data: count.monthlyProfits,
       },
     ],
   };
@@ -34,7 +34,7 @@ function ProfitChart(props) {
         borderColor: yearlyLineColors,
         borderWidth: 2,
         fill: false,
-        data: [5000, 6000, 7000],
+        data: count.yearlyProfits,
       },
     ],
   };

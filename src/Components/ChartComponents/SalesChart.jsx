@@ -3,7 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
 
 function SalesChart(props) {
-  const { title } = props;
+  const { title, count } = props;
   const [isYearly, setIsYearly] = useState(false);
 
   const monthlyBarColors = [
@@ -44,23 +44,23 @@ function SalesChart(props) {
     datasets: [
       {
         label: `${title} (Monthly)`,
-        backgroundColor: monthlyBarColors, // Use monthly colors
+        backgroundColor: monthlyBarColors,
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
-        data: [200, 300, 400, 350, 500, 600, 700, 800, 750, 900, 1000, 1100],
+        data: count.monthlyCounts,
       },
     ],
   };
 
   const yearlyData = {
-    labels: ['2021', '2022', '2023'],
+    labels: ['2023', '2022', '2021'],
     datasets: [
       {
         label: `${title} (Yearly)`,
         backgroundColor: yearlyBarColors,
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
-        data: [5000, 6000, 7000],
+        data: count.yearlyCounts,
       },
     ],
   };

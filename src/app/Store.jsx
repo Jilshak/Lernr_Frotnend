@@ -4,6 +4,7 @@ import CourseSlice from '../features/CourseSlice'
 import ChatSlice from '../features/ChatSlice'
 import PaymentSlice from '../features/PaymentSlice'
 import ReviewSlice from '../features/ReviewSlice'
+import ChartSlice from '../features/ChartSlice'
 
 export const store = configureStore({
     reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
         chat: ChatSlice,
         payment: PaymentSlice,
         reviews: ReviewSlice,
+        chart: ChartSlice,
     }
 })

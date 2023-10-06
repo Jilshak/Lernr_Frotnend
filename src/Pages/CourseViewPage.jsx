@@ -43,8 +43,6 @@ function CourseViewPage() {
   const [threshold4, setThreshold4] = useState(false)
 
   useEffect(() => {
-    
-
     if (videoProgress >= 25 && !threshold1) {
       let credentials = {
         user: access.user_id,
@@ -82,7 +80,7 @@ function CourseViewPage() {
 
   return (
     <div className='min-h-screen mx-[100px]'>
-      {!video.isLoading && video.mycourses.length >= 1 && (
+      {!video.isLoading && video.mycourses.length >= 1 ?
         <>
           <div className='relative top-28'>
             <video
@@ -99,8 +97,8 @@ function CourseViewPage() {
           <div>
             Video progress: {videoProgress.toFixed(2)}%
           </div>
-        </>
-      )}
+        </> : null
+      }
     </div>
   );
 }

@@ -111,9 +111,7 @@ function AddCategoryPage() {
                         </div>
                 }
             </div>
-            <div className='mt-10 bg-white w-full h-[280px]'>
-                <h1></h1>
-            </div>
+            
             <div className='mt-10 h-[80px]'>
 
             </div>
