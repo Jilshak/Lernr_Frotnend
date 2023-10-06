@@ -38,13 +38,35 @@ function AddCoursePage() {
     if (videoUpload == null) return
     const videoRef = ref(storage, `videos/user_id_${access.user_id}_${videoUpload.name}`)
 
+    let timerInterval
+    Swal.fire({
+      title: 'HEY!!!',
+      html: 'The video is being uploaded You will be informed once its done<br> </br> </b> milliseconds.',
+      timer: 5000,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading()
+        const b = Swal.getHtmlContainer().querySelector('b')
+        timerInterval = setInterval(() => {
+          b.textContent = Swal.getTimerLeft()
+        }, 100)
+      },
+      willClose: () => {
+        clearInterval(timerInterval)
+      }
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer')
+      }
+    })
+
     await uploadBytes(videoRef, videoUpload);
 
     const videoURL = await getDownloadURL(videoRef);
 
-    setVideoLink(videoURL);
+    await setVideoLink(videoURL);
 
-    Swal.fire({
+    await Swal.fire({
       background: '#fff',
       icon: 'success',
       title: 'Video Uploaded!',
