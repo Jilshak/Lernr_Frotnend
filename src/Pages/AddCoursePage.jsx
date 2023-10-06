@@ -13,6 +13,8 @@ function AddCoursePage() {
   const dispatch = useDispatch()
   const categoryAvailable = useSelector((state) => state.courses)
 
+  const [toggle, setToggle] = useState(false)
+
   //TOKEN
   const access = jwtDecode(localStorage.getItem('authToken'))
 
@@ -147,12 +149,23 @@ function AddCoursePage() {
                     </div>
                   </div>
                   <div className='bg-[#403F3F]  w-full h-[350px] flex flex-col items-center justify-center'>
-                    <input onChange={(e) => setVideoUpload(e.target.files[0])} type="file" className="file-input w-full max-w-xs " />
-                    <button onClick={(e) => handleVideoUpload()}>Upload here</button>
+                    <input onChange={(e) => {
+                      setVideoUpload(e.target.files[0])
+                      setToggle(true)
+                    }} type="file" className="file-input w-full max-w-xs " />
+                    {
+                      toggle ?
+                        <>
+                          <button className="btn glass mt-5" onClick={(e) => {
+                            handleVideoUpload()
+                            setToggle(false)
+                          }}>Upload</button>
+                        </> : null
+                    }
                   </div>
                 </div>
 
-                <div className='my-10 grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:gap-x-10 xs:gap-y-10 '>
+                {/* <div className='my-10 grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:gap-x-10 xs:gap-y-10 '>
                   <div className='bg-white h-full min-h-[290px]'>
                     <h1 className='text-xl font-bold text-[#4D4848] my-6 mx-[30px]'>ADD TIME STAMPS</h1>
 
@@ -168,7 +181,7 @@ function AddCoursePage() {
                   <div className='bg-white h-full min-h-[300px]'>
                     <h1 className='text-xl font-bold text-[#4D4848] my-6 mx-[30px]'>TIME STAMPS ADDED</h1>
                   </div>
-                </div>
+                </div> */}
 
 
 

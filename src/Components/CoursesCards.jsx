@@ -9,7 +9,7 @@ function CoursesCards(props) {
         <Link to={`/coursepage/${item?.id}`}>
             <div className='relative my-6 mx-7 group cursor-pointer carousal-item '>
                 <div className='relative h-[180px] transition-transform transform scale-100 group-hover:scale-105'>
-                    <img className='h-full w-full object-cover min-w-[230px]' src={item?.thumbnail ? item?.thumbnail : image1} alt="" />
+                    <img className='h-full w-full object-cover min-w-[240px]' src={item?.thumbnail ? item?.thumbnail : image1} alt="" />
                 </div>
                 <h1 className='font-bold text-md'>{item?.title}</h1>
                 <div className='relative bottom-2'>

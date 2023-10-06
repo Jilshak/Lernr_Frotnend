@@ -1,0 +1,98 @@
+import React, { useState } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS } from 'chart.js/auto';
+
+function SalesChart(props) {
+  const { title } = props;
+  const [isYearly, setIsYearly] = useState(false);
+
+  const monthlyBarColors = [
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(75, 192, 192, 0.4)',
+    'rgba(75, 192, 192, 0.6)',
+    'rgba(75, 192, 192, 0.8)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(0, 0, 255, 0.2)',
+    'rgba(255, 0, 0, 0.2)',
+    'rgba(255, 165, 0, 0.2)',
+    'rgba(255, 255, 0, 0.2)',
+    'rgba(0, 128, 0, 0.2)',
+    'rgba(0, 0, 255, 0.4)',
+    'rgba(128, 0, 128, 0.2)',
+  ];
+
+  const yearlyBarColors = [
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(75, 192, 192, 0.4)',
+    'rgba(75, 192, 192, 0.6)',
+    'rgba(75, 192, 192, 0.8)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(0, 0, 255, 0.2)',
+    'rgba(255, 0, 0, 0.2)',
+    'rgba(255, 165, 0, 0.2)',
+    'rgba(255, 255, 0, 0.2)',
+    'rgba(0, 128, 0, 0.2)',
+    'rgba(0, 0, 255, 0.4)',
+    'rgba(128, 0, 128, 0.2)',
+  ];
+
+  const monthlyData = {
+    labels: [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ],
+    datasets: [
+      {
+        label: `${title} (Monthly)`,
+        backgroundColor: monthlyBarColors, // Use monthly colors
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+        data: [200, 300, 400, 350, 500, 600, 700, 800, 750, 900, 1000, 1100],
+      },
+    ],
+  };
+
+  const yearlyData = {
+    labels: ['2021', '2022', '2023'],
+    datasets: [
+      {
+        label: `${title} (Yearly)`,
+        backgroundColor: yearlyBarColors,
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+        data: [5000, 6000, 7000],
+      },
+    ],
+  };
+
+  const data = isYearly ? yearlyData : monthlyData;
+
+  const options = {
+    indexAxis: 'y',
+    scales: {
+      x: {
+        beginAtZero: true,
+        stacked: true,
+      },
+      y: {
+        title: {
+          display: true,
+          text: isYearly ? 'Year' : 'Month',
+        },
+      },
+    },
+  };
+
+  return (
+    <div>
+      <div className='flex items-center justify-end'>
+        <button onClick={() => setIsYearly(!isYearly)} className="badge badge-outline mx-3 relative bottom-8">
+          {isYearly ? 'Monthly' : 'Yearly'}
+        </button>
+      </div>
+      <Bar data={data} options={options} />
+    </div>
+  );
+}
+
+export default SalesChart;

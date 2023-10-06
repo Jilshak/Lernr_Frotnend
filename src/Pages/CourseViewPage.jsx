@@ -26,7 +26,7 @@ function CourseViewPage() {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(updateVideoProgress, 5000);
+    const intervalId = setInterval(updateVideoProgress, 3000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -53,7 +53,7 @@ function CourseViewPage() {
       }
       dispatch(updateProgress(credentials))
       setThreshold1(true)
-    } else if (videoProgress >= 50 && !threshold2) {
+    } else if (videoProgress >= 50 && videoProgress <= 55 && !threshold2) {
       let credentials = {
         user: access.user_id,
         course_id: id,
@@ -61,7 +61,7 @@ function CourseViewPage() {
       }
       dispatch(updateProgress(credentials))
       setThreshold2(true)
-    } else if (videoProgress >= 75 && !threshold3) {
+    } else if (videoProgress >= 75 && videoProgress <= 80 && !threshold3) {
       let credentials = {
         user: access.user_id,
         course_id: id,
@@ -69,7 +69,7 @@ function CourseViewPage() {
       }
       dispatch(updateProgress(credentials))
       setThreshold3(true)
-    } else if (videoProgress >= 95 && !threshold4) {
+    } else if (videoProgress >= 95 && videoProgress <= 100 && !threshold4) {
       let credentials = {
         user: access.user_id,
         course_id: id,

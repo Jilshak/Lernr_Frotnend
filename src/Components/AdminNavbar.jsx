@@ -32,9 +32,6 @@ function AdminNavbar() {
                     <Link to='admin_instructors'>
                         <li className='mx-3 font-semibold cursor-pointer'>INSTRUCTORS</li>
                     </Link>
-                    <Link to='admin_reports'>
-                        <li className='mx-3 font-semibold cursor-pointer lg:block md:block sm:hidden xs:hidden'>REPORTS</li>
-                    </Link>
                     <Link to='add_category'>
                         <li className='mx-3 font-semibold cursor-pointer lg:block md:block sm:hidden xs:hidden'>ADD CATEGORY</li>
                     </Link>
@@ -60,13 +57,6 @@ function AdminNavbar() {
                                     </li>
                                 </> : null
                        }
-                        <li className='lg:hidden md:hidden sm:block xs:block'>
-                            <Link to='admin_reports'>
-                                <span className="justify-between">
-                                    Reports
-                                </span>
-                            </Link>
-                        </li>
                         <li className='lg:hidden md:hidden sm:block xs:block'>
                             <Link to='add_category'>
                                 <span className="justify-between">
