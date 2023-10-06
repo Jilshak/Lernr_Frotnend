@@ -58,7 +58,7 @@ export const getReview = createAsyncThunk('get_reviews',
                 }
                 return item
                }))
-               console.log(data)
+               console.log("This is the get reviw fucntion: ", data)
                return data
 
             }

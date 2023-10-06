@@ -7,6 +7,7 @@ import { getCartItems, removeCartItem } from '../features/CourseSlice'
 import jwtDecode from 'jwt-decode'
 import Rating from '../Components/Rating'
 import api from '../services/Axios'
+import nothing from '../Images/nothing1.png'
 
 
 
@@ -150,10 +151,8 @@ function CartPage() {
                             </div>
                         </div>
                     </> :
-                    <div className='h-screen w-full flex items-center justify-center'>
-                        <span className='p-3 bg-white rounded-3xl'>
-                            <h1 className='font-bold text-3xl'>CART IS EMPTY</h1>
-                        </span>
+                    <div className='h-full w-full flex items-center justify-center'>
+                        <img src={nothing} alt="" />
                     </div>
             }
         </div>

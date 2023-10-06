@@ -48,7 +48,7 @@ function Barchart(props) {
                 backgroundColor: monthlyBarColors, 
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
-                data: count.monthlyCounts,
+                data: count?.monthlyCounts,
             },
         ],
     };
@@ -61,7 +61,7 @@ function Barchart(props) {
                 backgroundColor: yearlyBarColors, 
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
-                data: count.yearlyCounts,
+                data: count?.yearlyCounts,
             },
         ],
     };

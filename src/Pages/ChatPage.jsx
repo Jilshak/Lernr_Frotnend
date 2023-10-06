@@ -156,7 +156,7 @@ function ChatPage() {
                 <div className="w-full h-[88vh] px-5 flex flex-col justify-between">
                     <div className="flex flex-col mt-5 overflow-x-auto scrollbar-none">
                         {
-                            !message.isLoading && message.messages.length >= 1 ?
+                            !message.isLoading && message.messages.length >= 0 ?
                                 <>
                                     {
                                         messages?.map((item, index) => {
@@ -189,7 +189,7 @@ function ChatPage() {
                                     }
                                 </> :
                                 <div class="flex justify-center items-center h-screen">
-                                    <div class="rounded-full lg:h-20 lg:w-20 bg-[#534cdb] animate-ping"></div>
+                                    <div class="rounded-full h-20 w-20 bg-blue-400 animate-ping"></div>
                                 </div>
                         }
                     </div>

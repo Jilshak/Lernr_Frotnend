@@ -80,6 +80,20 @@ export const AddCategory = createAsyncThunk('add_category',
     }
 )
 
+export const getCategoryName = createAsyncThunk('category_name',
+    async (id) => {
+        try{
+            const request = await api.get(`courses/category/${id}`)
+            const response = request.data
+            if (request.status == 200){
+                return response.title
+            }
+        }catch(error){
+            console.log("Error: ", error)
+        }
+    }
+)
+
 export const categoryCourse = createAsyncThunk('category_course',
     async (id) => {
         try {
@@ -381,6 +395,8 @@ const initialState = {
     data: [],
     cart: [],
     category: [],
+    categoryCourse: [],
+    categoryTitle: [],
     bought: [],
     mycourses: [],
     msg: 'is still loading'
@@ -437,7 +453,7 @@ const CoursesSlice = createSlice({
         },
         [categoryCourse.fulfilled]: (state, action) => {
             state.isLoading = false
-            state.category = action.payload
+            state.categoryCourse = action.payload
             state.msg = "The state has been loaded"
         },
         [categoryCourse.rejected]: (state) => {
@@ -531,6 +547,21 @@ const CoursesSlice = createSlice({
             state.msg = "The state has been loaded"
         },
         [alreadyBoughtCourse.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the state has been finished with some problem.'
+        },
+
+
+        [getCategoryName.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The state is still loading!!"
+        },
+        [getCategoryName.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.categoryTitle = action.payload
+            state.msg = "The state has been loaded"
+        },
+        [getCategoryName.rejected]: (state) => {
             state.isLoading = false
             state.msg = 'The loading of the state has been finished with some problem.'
         },
