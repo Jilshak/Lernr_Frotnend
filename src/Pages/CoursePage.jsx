@@ -25,10 +25,18 @@ function CoursePage() {
     const courseDetails = useSelector((state) => state.courses)
     const review = useSelector((state) => state.reviews)
 
+    const [reviews, setReviews] = useState()
+
     useEffect(() => {
         dispatch(individualCourse(id))
         dispatch(getReview(id))
     }, [])
+
+    useEffect(() => {
+        if (review.data.length >= 1){
+            setReviews(review.data)
+        }
+    },[review.data])
 
     useEffect(() => {
         const credentials = {
@@ -180,7 +188,7 @@ function CoursePage() {
                                                 !review?.isLoading && review?.data?.length >= 1 ?
                                                     <>
                                                         {
-                                                            review.data.map((item) => {
+                                                            reviews?.map((item) => {
                                                                 return (
                                                                     <Reviews item={item} />
                                                                 )

@@ -11,7 +11,6 @@ export const addReview = createAsyncThunk('add_review', async (credentials) => {
             stars: credentials.no_of_stars,
         }
         const request = await api.post(`courses/review/`, credential)
-        const response = request.data
         if (request.status == 201) {
             const courseRequest = await api.get(`courses/course/${credentials.course}`)
             const courseData = courseRequest.data

@@ -50,6 +50,21 @@ function AdminInstructorPage() {
         setToggle(false)
     }
 
+    //Search option
+    const [find, setFind] = useState();
+    const searchItem = async (e) => {
+        if (!find) {
+            setFind(users);
+        }
+        if (e.target.value === '') {
+            setUsers(find);
+        } else {
+            setUsers(await users.filter((item) => {
+                return item.email.startsWith(e.target.value);
+            }));
+        }
+    }
+
 
     return (
         <>
@@ -59,7 +74,7 @@ function AdminInstructorPage() {
                         <div className='grid lg:grid-cols-2 xs:grid-cols-1 gap-0 items-center justify-center min-h-screen'>
                             <div className='bg-[#ffff] object-contain min-h-[150px] max-w-[450px] relative lg:bottom-48 lg:top-[-130px] xs:top-6 lg:left-36 rounded-2xl mx-10'>
                                 <div className='relative mx-10 mt-5'>
-                                    <input type="text" placeholder="Search..." className="input input-sm input-bordered  w-full relative" />
+                                    <input onChange={(e) => searchItem(e)} type="text" placeholder="Search..." className="input input-sm input-bordered  w-full relative" />
                                 </div>
                                 {
                                     !toggle1 ?
@@ -88,10 +103,6 @@ function AdminInstructorPage() {
                                                         </>
                                                         : null
                                                 }
-                                                <div className='grid grid-cols-2 relative'>
-                                                    <button onClick={(e) => setToggle1(false)} className="btn rounded-none ">Authorized</button>
-                                                    <button onClick={(e) => setToggle1(true)} className="btn rounded-none ">UnAuthorized</button>
-                                                </div>
                                             </div>
                                         </> : null
                                 }
@@ -114,7 +125,7 @@ function AdminInstructorPage() {
                                                                                     <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
                                                                                     <h1 className='ms-2'>{item.email}</h1>
                                                                                     <div className='flex items-center justify-end w-full'>
-                                                                                        <h1 className='text-orange-400 text-xs mx-3'>UnAuthorized</h1>
+                                                                                        <h1 className='text-red-400 text-xs mx-3'>Delete</h1>
                                                                                     </div>
                                                                                 </li>
                                                                             )
@@ -126,10 +137,6 @@ function AdminInstructorPage() {
                                                         : null
                                                 }
 
-                                                <div className='grid grid-cols-2 absolute w-full bottom-0 mt-5'>
-                                                    <button onClick={(e) => setToggle1(false)} className="btn rounded-none ">Authorized</button>
-                                                    <button onClick={(e) => setToggle1(true)} className="btn rounded-none ">UnAuthorized</button>
-                                                </div>
                                             </div>
                                         </> : null
                                 }
@@ -162,18 +169,12 @@ function AdminInstructorPage() {
                                                         <p className="mt-8 text-gray-500">Solution Manager - Creative Tim Officer</p>
                                                         <p className="mt-2 text-gray-500">University of Computer Science</p>
                                                     </div>
-                                                    <div className='grid grid-cols-2 relative top-0.5 rounded-b-2xl'>
+                                                    <div className='grid  relative top-0.5 '>
                                                         {
                                                             !userdetails[0].is_blocked ?
                                                                 <>
                                                                     <button onClick={(e) => handleBlock(userdetails[0].id)} className="btn rounded-none hover:btn-warning">Block</button>
                                                                 </> : <button onClick={(e) => handleUnblock(userdetails[0].id)} className="btn rounded-none hover:btn-success">Unblock</button>
-                                                        }
-                                                        {
-                                                            !userdetails[0].is_authorized ?
-                                                                <>
-                                                                    <button className="btn  hover:btn-warning rounded-none">UnAuthorize</button>
-                                                                </> : <button className="btn  hover:btn-warning rounded-none">Authorize</button>
                                                         }
                                                     </div>
                                                 </div>

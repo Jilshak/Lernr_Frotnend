@@ -50,6 +50,21 @@ function AdminUsers() {
     setToggle(false)
   }
 
+  //Search option
+  const [find, setFind] = useState();
+  const searchItem = async (e) => {
+      if (!find) {
+          setFind(users);
+      }
+      if (e.target.value === '') {
+          setUsers(find);
+      } else {
+          setUsers(await users.filter((item) => {
+              return item.email.startsWith(e.target.value);
+          }));
+      }
+  }
+
 
   return (
     <>
@@ -59,7 +74,7 @@ function AdminUsers() {
             <div className='grid lg:grid-cols-2 xs:grid-cols-1 gap-0 items-center justify-center min-h-screen'>
               <div className='bg-[#ffff] object-contain min-h-[150px] min-w-[430px] bottom-10 mb-5 relative mx-auto  rounded-2xl'>
                 <div className='relative mx-10 mt-5'>
-                  <input type="text" placeholder="Search..." className="input input-sm input-bordered  w-full relative" />
+                  <input onChange={(e) => searchItem(e)} type="text" placeholder="Search..." className="input input-sm input-bordered  w-full relative" />
                 </div>
                 <div className='max-h-[60vh] mt-5 scrollbar-thin overflow-y-auto'>
                   {
@@ -86,7 +101,7 @@ function AdminUsers() {
                                     <li key={item.id} onClick={(e) => {
                                       displayUser(item.id)
                                     }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
-                                      <img className='h-12 ms-2' src={item.profile_image ? item.profile_image : noprofile} alt="" />
+                                      <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
                                       <h1 className='ms-2'>{item.email}</h1>
                                       <h1 className='text-sm text-orange-400 absolute right-10 me-2'>Blocked</h1>
                                     </li>

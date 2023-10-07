@@ -38,13 +38,38 @@ function AddCategoryPage() {
         await dispatch(AddCategory(credentials))
     }
 
+    const [category, setCategory] = useState()
+
+    useEffect(() => {
+        if (items.category.length >= 1) {
+            setCategory(items.category)
+        }
+    }, [items.category])
+
+    //Search option
+    const [find, setFind] = useState();
+    const searchItem = async (e) => {
+        if (!find) {
+            setFind(category);
+        }
+        const searchTerm = e.target.value.toLowerCase();
+
+        if (searchTerm === '') {
+            setCategory(find);
+        } else {
+            setCategory(await category.filter((item) => {
+                return item.title.toLowerCase().startsWith(searchTerm);
+            }));
+        }
+    }
+
     return (
         <div className='min-h-screen mx-[50px]'>
             <div className='grid lg:grid-cols-9 w-full gap-10 mt-10'>
                 <div className='lg:col-span-3 xs:col-span-1 rounded-xl bg-white min-h-[450px]'>
                     <div className='mx-12'>
                         <div className='relative mx-5 mt-5'>
-                            <input type="text" placeholder="Search..." className="input input-sm input-bordered w-full relative" />
+                            <input onChange={(e) => searchItem(e)} type="text" placeholder="Search..." className="input input-sm input-bordered w-full relative" />
                         </div>
                         <div>
                             {
@@ -52,7 +77,7 @@ function AddCategoryPage() {
                                     <>
                                         <ul className='mx-5 mt-3 max-h-[350px] overflow-y-auto scrollbar-none'>
                                             {
-                                                items.category.map((item) => {
+                                                category?.map((item) => {
                                                     return (
                                                         <li key={item.id} className='flex cursor-pointer items-center p-2 w-full my-5 rounded-lg bg-[#e8e8e8] hover:bg-[#bec0c2]'>
                                                             <h1>{item.title}</h1>
@@ -62,8 +87,8 @@ function AddCategoryPage() {
                                             }
                                         </ul>
                                     </> :
-                                    <div className='flex relative top-44 justify-center h-screen'>
-                                        <div className="rounded-md h-8 w-8 border-4 border-t-4 border-blue-500 animate-spin absolute"></div>
+                                    <div class="flex justify-center relative top-44  h-screen">
+                                        <div class="rounded-full h-12 w-12 bg-blue-400 animate-ping"></div>
                                     </div>
                             }
                         </div>
@@ -111,7 +136,7 @@ function AddCategoryPage() {
                         </div>
                 }
             </div>
-            
+
             <div className='mt-10 h-[80px]'>
 
             </div>

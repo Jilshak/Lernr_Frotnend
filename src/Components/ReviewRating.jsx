@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { closeButton } from '../features/CourseSlice';
 import jwtDecode from 'jwt-decode';
-import { addReview } from '../features/ReviewSlice';
+import { addReview, getReview } from '../features/ReviewSlice';
 
 function ReviewRating(props) {
 
@@ -30,6 +30,7 @@ function ReviewRating(props) {
             no_of_stars: rating
         }
         await dispatch(addReview(credential))
+        await dispatch(getReview(id))
         await dispatch(closeButton())
     }
 
@@ -52,21 +53,10 @@ function ReviewRating(props) {
                                         setRating(value);
                                         setToggle(true);
                                     }}
-                                    type="radio"
-                                    name="rating-10"
-                                    className="rating-hidden"
-                                    value={value}
-                                    checked={rating === value}
-                                />
-                                <input
-                                    onClick={(e) => {
-                                        setRating(value);
-                                        setToggle(true);
-                                    }}
                                     value={value}
                                     type="radio"
                                     name="rating-10"
-                                    className={getStarClass(value)}
+                                    className={getStarClass(value) }
                                 />
                             </div>
                         ))}
