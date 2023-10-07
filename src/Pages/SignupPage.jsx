@@ -17,24 +17,35 @@ function SignupPage() {
     const [username, setUsername] = useState('')
 
     const handleRegister = async () => {
-        if (password == password1) {
-            const credentials = {
-                email: email,
-                password: password,
-                first_name: firstName,
-                last_name: lastName,
-                username: username
+        if (email != '' && password != '' && username != '') {
+            if (password == password1) {
+                const credentials = {
+                    email: email,
+                    password: password,
+                    first_name: firstName,
+                    last_name: lastName,
+                    username: username
+                }
+                await dispatch(Register(credentials))
+                navigate('/login')
+
+            } else {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'error',
+                        title: 'Passwrod!!!!',
+                        text: "Passwrods doesn't match one another",
+                    }
+                )
             }
-            await dispatch(Register(credentials))
-            navigate('/login')
-            
         } else {
             await Swal.fire(
                 {
                     background: '#fff',
                     icon: 'error',
-                    title: 'Passwrod!!!!',
-                    text: "Passwrods doesn't match one another",
+                    title: 'INCOMPLETE!!!!',
+                    text: "Some of the required fields are not filled",
                 }
             )
         }

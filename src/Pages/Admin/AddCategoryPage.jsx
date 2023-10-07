@@ -14,9 +14,11 @@ function AddCategoryPage() {
 
     //for toggleing the screen
     const [toggle, setToggle] = useState(false)
+    const [displayToggle, setDisplayToggle] = useState(false)
 
     const [title, setTitle] = useState('')
     const [image, setImage] = useState()
+    const [description, setDescription] = useState('')
 
     const handleAddCategory = async () => {
         await setToggle(true)
@@ -35,7 +37,15 @@ function AddCategoryPage() {
             title: title,
             image: await image.get('image'),
         }
-        await dispatch(AddCategory(credentials))
+        // await dispatch(AddCategory(credentials))
+        clearfields()
+    }
+
+    const clearfields = () => {
+        setTitle('')
+        setImage('')
+        setDescription('')
+        setDisplayToggle(true)
     }
 
     const [category, setCategory] = useState()
@@ -117,17 +127,31 @@ function AddCategoryPage() {
                                 <div className='grid lg:grid-cols-2 mx-[40px] my-10'>
                                     <div className='grid relative bottom-5'>
                                         <small>Title</small>
-                                        <input onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Title for Category" className="input input-bordered w-full max-w-sm" />
+                                        <input onChange={(e) => setTitle(e.target.value)} value={title} type="text" placeholder="Title for Category" className="input input-bordered w-full max-w-sm" />
                                     </div>
-                                    <div className='grid xs:mt-5 lg:mt-0 relative bottom-5'>
-                                        <small>Image</small>
-                                        <input onChange={(e) => {
-                                            updateImage(e)
-                                        }} type="file" name='image' accept='image/*' id='image' className="file-input  file-input-bordered w-full " />
-                                    </div>
+                                    {
+                                        !displayToggle ?
+                                            <>
+                                                <div className='grid xs:mt-5 lg:mt-0 relative bottom-5'>
+                                                    <small>Image</small>
+                                                    <input onChange={(e) => {
+                                                        updateImage(e)
+                                                    }} type="file" name='image' accept='image/*' id='image' className="file-input  file-input-bordered w-full " />
+                                                </div>
+                                            </> :
+                                            <>
+                                                <div className='grid xs:mt-5 lg:mt-0 relative bottom-5'>
+                                                    <small>Image</small>
+                                                    <input onChange={(e) => {
+                                                        setDisplayToggle(false)
+                                                        updateImage(e)
+                                                    }} value={''} type="file" name='image' accept='image/*' id='image' className="file-input  file-input-bordered w-full " />
+                                                </div>
+                                            </>
+                                    }
                                 </div>
                                 <div className='grid lg:h-[180px] xs:h-[100px] relative bottom-10 mx-[40px]'>
-                                    <textarea className="textarea textarea-bordered" placeholder="Description of the Cateogry (optional...)"></textarea>
+                                    <textarea onChange={(e) => setDescription(e.target.value)} value={description} className="textarea textarea-bordered" placeholder="Description of the Cateogry (optional...)"></textarea>
                                 </div>
                                 <div className='flex items-center justify-center'>
                                     <button onClick={handleAddNewCateogory} className="btn font-bold btn-wide btn-outline">ADD</button>

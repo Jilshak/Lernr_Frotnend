@@ -121,9 +121,9 @@ function ProfilePage() {
                 </div>
               </div>
 
-              <div className="mt-16 text-center  pb-12">
+              <div className="mt-16 relative top-2 text-center  pb-12">
                 <h1 className="text-2xl font-medium text-[#6B7280]">
-                  {profile.email}
+                  {profile.username ? profile.username : profile.email}
                   <span onClick={(e) => setToggle(true)} className="badge badge-outline relative left-3 cursor-pointer ">Edit</span>
                 </h1>
 

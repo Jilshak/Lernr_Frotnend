@@ -223,19 +223,31 @@ export const removeCartItem = createAsyncThunk('remove_cart_item',
 
 //for getting individual course details
 export const individualCourse = createAsyncThunk('individual_course',
-    async (id) => {
-        try {
-            const request = await api.get('courses/course')
-            const response = request.data
-            if (request.status == 200) {
-                const data = response.filter((item) => item.id == id)
-                return data
-            }
-        } catch (error) {
-            console.log("Error: ", error)
+  async (id) => {
+    try {
+      const request = await api.get(`courses/course/${id}`);
+      const response = request.data;
+      if (request.status === 200) {
+        const courseByUserId = response.course_by
+        console.log(courseByUserId)
+        const userRequest = await api.get(`user/${courseByUserId}`);
+        const userData = userRequest.data;
+        console.log(userData)
+        if (userRequest.status === 200) {
+          const username = userData.username;
+          return {
+            course: response,
+            username: username,
+          };
         }
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+      throw error;
     }
-)
+  }
+);
+
 
 //for adding an new course
 export const AddNewCourse = createAsyncThunk('add_new_course',
