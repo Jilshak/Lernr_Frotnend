@@ -3,7 +3,7 @@ import Navbar from '../Components/Navbar'
 import { Link, useNavigate } from 'react-router-dom'
 import CartProduct from '../Components/CartProduct'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCartItems, removeCartItem } from '../features/CourseSlice'
+import { getCartItems, removeCartItem, removefromCart } from '../features/CourseSlice'
 import jwtDecode from 'jwt-decode'
 import Rating from '../Components/Rating'
 import api from '../services/Axios'
@@ -46,7 +46,6 @@ function CartPage() {
     }
 
     const handleCheckout = async (data) => {
-        console.log("Its reaching here !!!", data)
         try {
             const access = await jwtDecode(localStorage.getItem('authToken'))
             const request = await api.post(`payments/stripe_cart/`, { course_id: data, user: access.user_id })
@@ -65,7 +64,7 @@ function CartPage() {
     return (
         <div className='min-h-screen'>
             {
-                items && !cartItems.isLoading && cartItems.cart.length >= 1 ?
+                items && !cartItems.isLoading && items.length >= 1 ?
                     <>
                         <div>
                             <h1 class="mb-10 text-center text-2xl font-bold relative top-10">Cart Items</h1>
@@ -91,7 +90,6 @@ function CartPage() {
                                                         </div>
                                                         <div>
                                                             <button onClick={() => {
-                                                                console.log(items)
                                                                 handleRemoveCartItem(item.id)
                                                             }} className="btn btn-xs absolute right-0 lg:top-[-12px] md:top-[-12px] sm:top-[-12px] btn-circle btn-outline ">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>

@@ -37,7 +37,7 @@ function AllCoursesPage() {
       filteredCourses = filteredCourses.filter((item) => item.category == categoryFilter);
     }
 
-    if (courseLengthFilter){
+    if (courseLengthFilter) {
       console.log(courseLengthFilter)
       filteredCourses = filteredCourses.filter((item) => parseFloat(item.course_length) < parseFloat(courseLengthFilter))
     }
@@ -52,10 +52,30 @@ function AllCoursesPage() {
     setCourseLengthFilter('')
   }
 
+  const [find, setFind] = useState();
+  const searchItem = async (e) => {
+    if (!find) {
+      setFind(course);
+    }
+    if (e.target.value === '') {
+      setCourse(find);
+    } else {
+      setCourse(await course.filter((item) => {
+        return item.title.toLowerCase().startsWith(e.target.value.toLowerCase());
+      }));
+    }
+  }
+
   return (
     <div className='min-h-screen'>
-      <span className='font-bold text-2xl relative left-14 top-[68px]'>All Courses</span>
-      <div className=' h-[40px] grid items-center justify-end mt-10 me-14'>
+      <div className='flex items-center '>
+        <span className='font-bold text-2xl relative left-14 top-[68px]'>All Courses</span>
+        <input onChange={(e) => searchItem(e)} type="text" placeholder="Search for a course" className="input input-bordered w-full lg:block md:block sm:hidden xs:hidden max-w-sm ms-5 relative left-24 top-[68px] z-10" />
+      </div>
+      <div className='sm:hidden md:hidden lg:hidden xs:block my-10'>
+        <input onChange={(e) => searchItem(e)} type="text" placeholder="Search for a course" className="input input-bordered w-full max-w-xs ms-5 relative left-10 top-[68px] z-10" />
+      </div>
+      <div className=' h-[40px] grid items-center justify-end my-5 relative lg:top-3 md:top-3 sm:top-3 xs:bottom-24 me-14'>
         <div className="drawer relative z-10">
           <input id="my-drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">

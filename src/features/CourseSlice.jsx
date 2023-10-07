@@ -82,13 +82,13 @@ export const AddCategory = createAsyncThunk('add_category',
 
 export const getCategoryName = createAsyncThunk('category_name',
     async (id) => {
-        try{
+        try {
             const request = await api.get(`courses/category/${id}`)
             const response = request.data
-            if (request.status == 200){
+            if (request.status == 200) {
                 return response.title
             }
-        }catch(error){
+        } catch (error) {
             console.log("Error: ", error)
         }
     }
@@ -129,25 +129,42 @@ export const myCourses = createAsyncThunk('my_courses',
 export const addToCart = createAsyncThunk('add_to_cart',
     async (credentials) => {
         try {
-            const request = await api.post('courses/cartItem/', credentials)
-            if (request.status === 201) {
-                await Swal.fire(
-                    {
-                        background: '#fff',
-                        icon: 'success',
-                        title: 'ADDED!',
-                        text: "The Course has been added to Cart!!",
+            const req = await api.get('courses/cartItem')
+            const res = req.data
+            if (req.status == 200) {
+                const final = res.filter((item) => item.user == credentials.user && item.on_course == credentials.on_course)
+                if (!final.length >= 1) {
+                    const request = await api.post('courses/cartItem/', credentials)
+                    if (request.status === 201) {
+                        await Swal.fire(
+                            {
+                                background: '#fff',
+                                icon: 'success',
+                                title: 'ADDED!',
+                                text: "The Course has been added to Cart!!",
+                            }
+                        )
+                    } else {
+                        await Swal.fire(
+                            {
+                                background: '#fff',
+                                icon: 'error',
+                                title: 'FAILED!',
+                                text: "Something went wrong while adding the Course try again!!",
+                            }
+                        )
                     }
-                )
-            } else {
-                await Swal.fire(
-                    {
-                        background: '#fff',
-                        icon: 'error',
-                        title: 'FAILED!',
-                        text: "Something went wrong while adding the Course try again!!",
-                    }
-                )
+                } else {
+                    await Swal.fire(
+                        {
+                            background: '#fff',
+                            icon: 'error',
+                            title: 'FAILED!',
+                            text: "You Already have the same course in your cart!!",
+                        }
+                    )
+                }
+
             }
         } catch (error) {
             console.log("Error: ", error)
@@ -392,6 +409,7 @@ const initialState = {
     community: false,
     alreadybought: false,
     toggle: false,
+    cart_count: 0,
     data: [],
     cart: [],
     category: [],
@@ -414,7 +432,17 @@ const CoursesSlice = createSlice({
         closeButton(state, action) {
             state.toggle = false
             console.log('this is the closeButton: ', state.toggle)
-        }
+        },
+        addtoCart(state, action) {
+            state.cart.push(action.payload);
+            state.cart_count += 1;
+        },
+        removefromCart(state, action) {
+            console.log("This is being called here: ", action.payload)
+            const productIdToRemove = action.payload;
+            state.cart = state.cart.filter((product) => product.id !== productIdToRemove);
+            state.cart_count -= 1;
+        },
     },
     extraReducers: {
         [getCourses.pending]: (state) => {
@@ -568,5 +596,5 @@ const CoursesSlice = createSlice({
     }
 })
 
-export const { toggleButton, closeButton } = CoursesSlice.actions
+export const { toggleButton, closeButton, addtoCart, removefromCart } = CoursesSlice.actions
 export default CoursesSlice.reducer
