@@ -15,7 +15,8 @@ function CourseViewPage() {
 
   useEffect(() => {
     dispatch(individualCourse(id));
-  }, [id]);
+  }, [dispatch,id]);
+  
 
   const updateVideoProgress = async () => {
     const videoElement = document.querySelector('video');

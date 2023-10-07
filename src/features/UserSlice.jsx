@@ -236,6 +236,16 @@ export const UnblockUser = createAsyncThunk('unblock_user',
     }
 )
 
+export const editProfile = createAsyncThunk('edit_profile', async (credentials) => {
+    try {
+        const filteredCredentials = Object.fromEntries(
+            Object.entries(credentials).filter(([_, value]) => value !== null && value !== '')
+        );
+        const request = await api.patch(`user/${filteredCredentials.id}/`, filteredCredentials);
+    } catch (error) {
+        console.log("Error: ", error);
+    }
+});
 
 const initialState = {
     isLoading: true,
