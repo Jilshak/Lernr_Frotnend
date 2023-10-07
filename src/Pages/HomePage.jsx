@@ -5,14 +5,18 @@ import CategoriesCards from '../Components/CategoriesCards'
 import Footer from '../Components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCategories, getCourses } from '../features/CourseSlice'
+import jwtDecode from 'jwt-decode'
 
 function HomePage() {
 
     const dispatch = useDispatch()
     const course = useSelector((state) => state.courses)
 
+    const access = jwtDecode(localStorage.getItem('authToken'))
+
+
     useEffect(() => {
-        dispatch(getCourses())
+        dispatch(getCourses(access.user_id))
         dispatch(getCategories())
     }, [])
 
@@ -30,7 +34,7 @@ function HomePage() {
                                 {
                                     [...course.data].reverse()?.map((item) => {
                                         return (
-                                            <CoursesCards key={item.id} item={item} top={3}/>
+                                            <CoursesCards key={item.id} item={item} top={3} />
                                         )
                                     })
                                 }
@@ -46,18 +50,18 @@ function HomePage() {
                         <div className='mx-[30px]'>
                             <h1 className='text-2xl font-bold text-[#3D3D3D] '>Top Categories</h1>
                             <div className='grid lg:grid-cols-4 md:grid-cols-3 justify-center sm:grid-cols-2 gap-20 my-8'>
-                               {
-                                course.category.map((item) => {
-                                    return (
-                                        <CategoriesCards key={item.id} item={item} />
-                                    )
-                                })
-                               }
-                                
+                                {
+                                    course.category.map((item) => {
+                                        return (
+                                            <CategoriesCards key={item.id} item={item} />
+                                        )
+                                    })
+                                }
+
                             </div>
                         </div>
                     </> : null
-           }
+            }
             <div>
                 <Footer />
             </div>

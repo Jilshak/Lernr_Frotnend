@@ -4,32 +4,36 @@ import { categoryCourse, getCategories, getCategoryName } from '../features/Cour
 import { Link, useParams } from 'react-router-dom';
 import MyCoursesCard from '../Components/MyCoursesCard';
 import nothing from '../Images/nothing1.png'
+import jwtDecode from 'jwt-decode';
 
 function CategoryPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.courses);
+  const access = jwtDecode(localStorage.getItem('authToken'))
 
   const [categories, setCategories] = useState([]);
-  const [categoryTitle, setCategoryTitle] = useState([]);
 
   useEffect(() => {
+    const credentials = {
+      user: access.user_id,
+      id: id
+    }
     Promise.resolve(dispatch(getCategories()))
-    Promise.resolve(dispatch(categoryCourse(id)))
+    Promise.resolve(dispatch(categoryCourse(credentials)))
     dispatch(getCategoryName(id))
   }, [dispatch, id]);
 
   useEffect(() => {
     if (data.categoryCourse.length >= 1) {
       Promise.resolve(setCategories(data.categoryCourse))
-      Promise.resolve(setCategoryTitle(categories?.filter((item) => item.id == id)))
     }
   }, [data.categoryCourse, id]);
 
   return (
     <div className='min-h-[90vh] relative'>
       {
-        !data.isLoading && data.categoryCourse.length >= 1 && categoryTitle ?
+        !data.isLoading && data.categoryCourse.length >= 1 ?
           <>
             <div className='flex items-center justify-start mx-[40px] mt-10'>
               <h1 className='text-2xl font-bold text-[#3D3D3D]'>{data.categoryTitle}</h1>

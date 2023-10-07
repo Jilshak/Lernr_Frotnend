@@ -3,14 +3,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCategories, getCourses } from '../features/CourseSlice'
 import MyCoursesCard from '../Components/MyCoursesCard'
 import { Link } from 'react-router-dom'
+import jwtDecode from 'jwt-decode'
+import nothing from '../Images/nothing1.png'
+
 
 function AllCoursesPage() {
 
   const dispatch = useDispatch()
   const all = useSelector((state) => state.courses)
+  const access = jwtDecode(localStorage.getItem('authToken'))
+
+
 
   useEffect(() => {
-    dispatch(getCourses())
+    dispatch(getCourses(access.user_id))
     dispatch(getCategories())
   }, [])
 
@@ -138,7 +144,10 @@ function AllCoursesPage() {
                 )
               })
             }
-          </div> : null
+          </div> :
+          <div className='h-full w-full flex items-center justify-center'>
+            <img src={nothing} alt="" />
+          </div>
       }
     </div>
   )

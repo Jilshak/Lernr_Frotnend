@@ -4,14 +4,16 @@ import Swal from 'sweetalert2'
 
 
 export const getCourses = createAsyncThunk('get_course',
-    async () => {
+    async (id) => {
         try {
             const courseRequest = await api.get('courses/course');
             const courseResponse = courseRequest.data;
 
+            const final = courseResponse.filter((item) => item.course_by != id)
+
             if (courseRequest.status === 200) {
                 // Create an array of promises for fetching usernames
-                const usernamePromises = courseResponse.map(async (course) => {
+                const usernamePromises = final.map(async (course) => {
                     const userRequest = await api.get(`user/${course.course_by}`);
                     const userResponse = userRequest.data;
                     return {
@@ -95,12 +97,12 @@ export const getCategoryName = createAsyncThunk('category_name',
 )
 
 export const categoryCourse = createAsyncThunk('category_course',
-    async (id) => {
+    async (credentials) => {
         try {
             const request = await api.get('courses/course')
             const response = request.data
             if (request.status == 200) {
-                const data = response.filter((item) => item.category == id)
+                const data = response.filter((item) => item.category == credentials.id && item.course_by != credentials.user)
                 return data
             }
         } catch (error) {
