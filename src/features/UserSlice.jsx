@@ -247,6 +247,43 @@ export const editProfile = createAsyncThunk('edit_profile', async (credentials) 
     }
 });
 
+
+export const updatePassword = createAsyncThunk('update_password',
+    async (credentials) => {
+        try {
+
+            console.log(localStorage.getItem('authToken'))
+
+            const headers = {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                'Content-Type': 'application/json',
+            }
+            const request = await api.patch(`change-password/`, credentials, { headers })
+            if (request.status == 200) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'success',
+                        title: 'UPDATED!!',
+                        text: "Your password has been Updated!!",
+                    }
+                )
+            } else {
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+            await Swal.fire(
+                {
+                    background: '#fff',
+                    icon: 'error',
+                    title: 'FAILED!!',
+                    text: "Password updation failed are you sure you entered the right old password ?",
+                }
+            )
+        }
+    });
+
+
 const initialState = {
     isLoading: true,
     data: [],

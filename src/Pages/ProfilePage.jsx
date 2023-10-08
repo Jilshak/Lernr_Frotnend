@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { editProfile, getMyProfile, profileImage } from '../features/UserSlice';
+import { editProfile, getMyProfile, profileImage, updatePassword } from '../features/UserSlice';
 import jwtDecode from 'jwt-decode';
 
 function ProfilePage() {
@@ -79,6 +79,28 @@ function ProfilePage() {
     }
 
   }
+
+  //display account
+  const [displayToggle, setDisplayToggle] = useState(false)
+
+  //password fields
+  const [oldPassword, setOldPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+
+  const cleanState = () => {
+    setOldPassword('')
+    setNewPassword('')
+  }
+
+  const handleUpdatePassword = async () => {
+    const credentials = {
+      old_password: oldPassword,
+      new_password: newPassword
+    }
+    await dispatch(updatePassword(credentials))
+    cleanState()
+  }
+
   return (
     <>
       {!profileDetails.isLoading && profile ? (
@@ -97,7 +119,7 @@ function ProfilePage() {
                         <input onChange={(e) => setFirstName(e.target.value)} type="text" placeholder="first name" className="input input-bordered w-full max-w-sm " />
                         <input onChange={(e) => setLastName(e.target.value)} type="text" placeholder="last name" className="input input-bordered w-full max-w-sm " />
                         <input onChange={(e) => handlePhoneChange(e)} type="number" placeholder="Phone" className={validPhone ? 'input input-bordered w-full max-w-sm ' : 'input input-bordered input-error w-full max-w-sm '} />
-                        
+
                         <input onChange={(e) => setEmail(e.target.value)} type="text" placeholder="email" className="input input-bordered w-full max-w-sm " />
                       </div>
                       <div className='flex flex-col gap-y-4 items-center justify-center mt-5'>
@@ -144,36 +166,53 @@ function ProfilePage() {
                   {profile.username ? profile.username : profile.email}
                   <span onClick={(e) => setToggle(true)} className="badge badge-outline relative left-3 cursor-pointer ">Edit</span>
                 </h1>
-
+                <div className='flex items-center justify-center relative top-8  gap-x-14 font-bold'>
+                  <span onClick={(e) => setDisplayToggle(false)} className={!displayToggle ? 'underline underline-offset-8 cursor-pointer' : 'cursor-pointer'}>General</span>
+                  <span onClick={(e) => setDisplayToggle(true)} className={displayToggle ? 'underline underline-offset-8 cursor-pointer' : 'cursor-pointer'}>Password</span>
+                </div>
                 <div className="flex items-center justify-center mt-10 ">
                   <div className="w-[1000px] lg:h-[300px] rounded-xl bg-[#f0f0f0]">
-                    <div className='grid lg:grid-cols-2'>
-                      <div className='h-[250px] my-5 flex flex-col text-start mx-10 '>
-                        <h1 className='text-xs'>First name</h1>
-                        <div className='h-[40px] rounded-xl bg-white my-2'>
-                          <h1 className='my-1.5 mx-4 text-[#6B7280] font-semibold'>{firstName != '' ? firstName : (profile.first_name ? profile.first_name : 'Not Provided')}</h1>
-                        </div>
-                        <h1 className='text-xs mt-2'>Last name</h1>
-                        <div className='h-[40px] rounded-xl bg-white my-2'>
-                          <h1 className='my-1.5 mx-4 text-[#6B7280] font-semibold'>{lastName != '' ? lastName : (profile.last_name ? profile.last_name : 'Not Provided')}</h1>
-                        </div>
-                        <h1 className='text-xs mt-3'>Email</h1>
-                        <div className='h-[40px] rounded-xl bg-white my-2'>
-                          <h1 className='my-1.5 mx-4 text-[#6B7280] font-semibold'>{profile.email}</h1>
-                        </div>
-                      </div>
-                      <div className='h-[250px] relative lg:bottom-0 md:bottom-0 sm:bottom-0 xs:bottom-10 my-5 flex flex-col text-start mx-10 '>
-                        <h1 className='text-xs'>Username</h1>
-                        <div className='h-[40px] rounded-xl bg-white my-2'>
-                          <h1 className='my-1.5 mx-4 text-[#6B7280] font-semibold'>{username != '' ? username : (profile.username ? profile.username : 'not given')}</h1>
-                        </div>
-                        <h1 className='text-xs mt-2'>Phone</h1>
-                        <div className='h-[40px] rounded-xl bg-white my-2'>
-                          <h1 className='my-1.5 mx-4 text-[#6B7280] font-semibold'>{phone != '' ? phone : (profile.phone_number ? profile.phone_number : 'not provided')}</h1>
-                        </div>
-                      </div>
+                    {
+                      !displayToggle ?
+                        <>
+                          <div className='grid lg:grid-cols-2'>
+                            <div className='h-[250px] my-5 flex flex-col text-start mx-10 '>
+                              <h1 className='text-xs'>First name</h1>
+                              <div className='h-[40px] rounded-xl bg-white my-2'>
+                                <h1 className='my-1.5 mx-4 text-[#6B7280] font-semibold'>{firstName != '' ? firstName : (profile.first_name ? profile.first_name : 'Not Provided')}</h1>
+                              </div>
+                              <h1 className='text-xs mt-2'>Last name</h1>
+                              <div className='h-[40px] rounded-xl bg-white my-2'>
+                                <h1 className='my-1.5 mx-4 text-[#6B7280] font-semibold'>{lastName != '' ? lastName : (profile.last_name ? profile.last_name : 'Not Provided')}</h1>
+                              </div>
+                              <h1 className='text-xs mt-3'>Email</h1>
+                              <div className='h-[40px] rounded-xl bg-white my-2'>
+                                <h1 className='my-1.5 mx-4 text-[#6B7280] font-semibold'>{profile.email}</h1>
+                              </div>
+                            </div>
+                            <div className='h-[250px] relative lg:bottom-0 md:bottom-0 sm:bottom-0 xs:bottom-10 my-5 flex flex-col text-start mx-10 '>
+                              <h1 className='text-xs'>Username</h1>
+                              <div className='h-[40px] rounded-xl bg-white my-2'>
+                                <h1 className='my-1.5 mx-4 text-[#6B7280] font-semibold'>{username != '' ? username : (profile.username ? profile.username : 'not given')}</h1>
+                              </div>
+                              <h1 className='text-xs mt-2'>Phone</h1>
+                              <div className='h-[40px] rounded-xl bg-white my-2'>
+                                <h1 className='my-1.5 mx-4 text-[#6B7280] font-semibold'>{phone != '' ? phone : (profile.phone_number ? profile.phone_number : 'not provided')}</h1>
+                              </div>
+                            </div>
 
-                    </div>
+                          </div>
+                        </>
+                        :
+                        <div className='flex gap-y-5 flex-col items-center justify-center mt-7 mx-[30px]'>
+                          <h1 className='font-semibold text-lg'>UPDATE PASSWORD</h1>
+                          <div className=' flex flex-col gap-y-5 w-full items-center justify-center'>
+                            <input onChange={(e) => setOldPassword(e.target.value)} value={oldPassword} type="text" placeholder="old password" className="input input-bordered w-full max-w-sm" />
+                            <input onChange={(e) => setNewPassword(e.target.value)} value={newPassword} type="text" placeholder="new password" className="input input-bordered w-full max-w-sm" />
+                            <button onClick={handleUpdatePassword} className="btn btn-outline xs:w-full lg:w-[380px]">UPDATE</button>
+                          </div>
+                        </div>
+                    }
                   </div>
                 </div>
               </div>
