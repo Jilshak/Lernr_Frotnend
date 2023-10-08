@@ -137,11 +137,13 @@ function AllCoursesPage() {
           <div className='mx-[50px] mt-10 grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 gap-x-4'>
             {
               course?.map((item) => {
-                return (
-                  <Link to={`/coursepage/${item.id}`}>
-                    <MyCoursesCard key={item.id} item={item} />
-                  </Link>
-                )
+                if (!item.unlist_course) {
+                  return (
+                    <Link to={`/coursepage/${item.id}`}>
+                      <MyCoursesCard key={item.id} item={item} />
+                    </Link>
+                  )
+                }
               })
             }
           </div> :

@@ -5,6 +5,7 @@ import CategoriesCards from '../Components/CategoriesCards'
 import Footer from '../Components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCategories, getCourses } from '../features/CourseSlice'
+import jwtDecode from 'jwt-decode'
 
 
 
@@ -12,6 +13,7 @@ function HomePage() {
 
     const dispatch = useDispatch()
     const course = useSelector((state) => state.courses)
+    const access = jwtDecode(localStorage.getItem('authToken'))
 
     useEffect(() => {
         dispatch(getCourses(access.user_id))
@@ -32,9 +34,11 @@ function HomePage() {
                                 <div className='h-[300px] flex carousel carousel-center rounded-box bg-white relative top-5  overflow-x-auto overflow-y-hidden' style={{ maxWidth: '100%' }}>
                                     {
                                         [...course.data].reverse()?.map((item) => {
-                                            return (
-                                                <CoursesCards key={item.id} item={item} top={3} />
-                                            )
+                                            if (!item.unlist_course) {
+                                                return (
+                                                    <CoursesCards key={item.id} item={item} top={3} />
+                                                )
+                                            }
                                         })
                                     }
 

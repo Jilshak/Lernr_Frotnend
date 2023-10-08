@@ -25,6 +25,7 @@ import CourseViewPage from './Pages/CourseViewPage'
 import CommunityPage from './Pages/CommunityPage'
 import ChatPage from './Pages/ChatPage'
 import CheckoutForm from './Components/CheckoutForm'
+import AdminCourses from './Pages/Admin/AdminCourses'
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
             <Route path='admin_reports' element={<AdminReports />} />
             <Route path='admin_instructors' element={<AdminInstructorPage />} />
             <Route path='add_category' element={<AddCategoryPage />} />
+            <Route path='admin_courses' element={<AdminCourses />} />
           </Route>
         </>
       </Route>

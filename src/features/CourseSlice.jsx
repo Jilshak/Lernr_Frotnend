@@ -223,29 +223,29 @@ export const removeCartItem = createAsyncThunk('remove_cart_item',
 
 //for getting individual course details
 export const individualCourse = createAsyncThunk('individual_course',
-  async (id) => {
-    try {
-      const request = await api.get(`courses/course/${id}`);
-      const response = request.data;
-      if (request.status === 200) {
-        const courseByUserId = response.course_by
-        console.log(courseByUserId)
-        const userRequest = await api.get(`user/${courseByUserId}`);
-        const userData = userRequest.data;
-        console.log(userData)
-        if (userRequest.status === 200) {
-          const username = userData.username;
-          return {
-            course: response,
-            username: username,
-          };
+    async (id) => {
+        try {
+            const request = await api.get(`courses/course/${id}`);
+            const response = request.data;
+            if (request.status === 200) {
+                const courseByUserId = response.course_by
+                console.log(courseByUserId)
+                const userRequest = await api.get(`user/${courseByUserId}`);
+                const userData = userRequest.data;
+                console.log(userData)
+                if (userRequest.status === 200) {
+                    const username = userData.username;
+                    return {
+                        course: response,
+                        username: username,
+                    };
+                }
+            }
+        } catch (error) {
+            console.log("Error: ", error);
+            throw error;
         }
-      }
-    } catch (error) {
-      console.log("Error: ", error);
-      throw error;
     }
-  }
 );
 
 
@@ -417,6 +417,96 @@ export const updateProgress = createAsyncThunk('update_progress',
         }
     }
 )
+
+export const deleteCourse = createAsyncThunk('delete_course',
+    async (id) => {
+        try {
+            const request = await api.delete(`courses/course/${id}/`)
+            if (request.status == 204) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'success',
+                        title: 'DELETED!',
+                        text: "The course has been deleted !!",
+                    }
+                )
+            } else {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'error',
+                        title: 'FAILED',
+                        text: "Something went wrong while trying to delete this please try again!!",
+                    }
+                )
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+
+export const unlistCourse = createAsyncThunk('unlist_course',
+    async (id) => {
+        try {
+            const request = await api.patch(`courses/course/${id}/`, {unlist_course: true})
+            if (request.status == 200) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'success',
+                        title: 'UNLISTED!',
+                        text: "The course has been unlisted !!",
+                    }
+                )
+            } else {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'error',
+                        title: 'FAILED',
+                        text: "Something went wrong while trying to unlist course please try again!!",
+                    }
+                )
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+export const relistCourse = createAsyncThunk('relist_course',
+    async (id) => {
+        try {
+            const request = await api.patch(`courses/course/${id}/`, {unlist_course: false})
+            if (request.status == 200) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'success',
+                        title: 'RELISTED!',
+                        text: "The course has been relisted !!",
+                    }
+                )
+            } else {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'error',
+                        title: 'FAILED',
+                        text: "Something went wrong while trying to relist course please try again!!",
+                    }
+                )
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+
 
 const initialState = {
     isLoading: true,

@@ -77,7 +77,7 @@ function AddCategoryPage() {
         <div className='min-h-screen mx-[50px]'>
             <div className='grid lg:grid-cols-9 w-full gap-10 mt-10'>
                 <div className='lg:col-span-3 xs:col-span-1 rounded-xl bg-white min-h-[450px]'>
-                    <div className='mx-12'>
+                    <div className='mx-12 relative min-h-[500px]'>
                         <div className='relative mx-5 mt-5'>
                             <input onChange={(e) => searchItem(e)} type="text" placeholder="Search..." className="input input-sm input-bordered w-full relative" />
                         </div>
@@ -102,8 +102,8 @@ function AddCategoryPage() {
                                     </div>
                             }
                         </div>
-                        <div className='my-5'>
-                            <button onClick={handleAddCategory} className="btn btn-md w-[310px] btn-outline mx-5">ADD CATEGORY</button>
+                        <div className='my-5 absolute lg:bottom-0 md:bottom-0 sm:bottom-0 xs:bottom-5'>
+                            <button onClick={handleAddCategory} className="btn btn-md w-[310px] btn-outline relative lg:left-4 mx-auto">ADD CATEGORY</button>
                         </div>
                     </div>
                 </div>

@@ -102,7 +102,7 @@ function AdminUsers() {
                                       displayUser(item.id)
                                     }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
                                       <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
-                                      <h1 className='ms-2'>{item.email}</h1>
+                                      <h1 className='ms-2'>{item.username ? item.username : item.email}</h1>
                                       <h1 className='text-sm text-orange-400 absolute right-10 me-2'>Blocked</h1>
                                     </li>
                                   )
