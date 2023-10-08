@@ -5,12 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { buyCourse, individualCourse } from "../features/CourseSlice";
 import jwtDecode from "jwt-decode";
 import checkout from '../Images/checkout.jpg'
+import { getMyProfile } from "../features/UserSlice";
 
 const CheckoutForm = () => {
   const { pi, id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const course = useSelector((state) => state.courses);
+  const mydata = useSelector((state) => state.users);
+
+  const access = jwtDecode(localStorage.getItem('authToken'))
 
   const [error, setError] = useState(null);
   const [email, setEmail] = useState("");
@@ -25,7 +29,12 @@ const CheckoutForm = () => {
 
   useEffect(() => {
     dispatch(individualCourse(id));
+    dispatch(getMyProfile(access.user_id))
   }, []);
+
+  useEffect(() => {
+      setEmail(mydata.profile.email)
+  },[mydata.profile])
 
   const handleChange = (event) => {
     if (event.error) {
@@ -65,10 +74,10 @@ const CheckoutForm = () => {
       } else if (result.paymentIntent.status === "succeeded") {
         await setPaymentStatus("success")
 
-        let user =  await jwtDecode(localStorage.getItem('authToken'))
+        let user = await jwtDecode(localStorage.getItem('authToken'))
         const credentials = {
-            user: user.user_id,
-            course_id: id
+          user: user.user_id,
+          course_id: id
         }
         await dispatch(buyCourse(credentials))
         await navigate("/enrolled");
@@ -102,6 +111,7 @@ const CheckoutForm = () => {
                       Email Address
                     </label>
                     <input
+                      defaultValue={email}
                       id="email"
                       name="email"
                       type="email"
