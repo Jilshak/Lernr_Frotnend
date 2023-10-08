@@ -43,6 +43,8 @@ function ProfilePage() {
   const [toggle, setToggle] = useState(false)
 
 
+
+
   const [username, setUsername] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -62,7 +64,21 @@ function ProfilePage() {
     await setToggle(false)
   }
 
+  //phone validation
+  const [validPhone, setValidPhone] = useState(true)
 
+  const handlePhoneChange = (e) => {
+    const phoneNumber = e.target.value
+    setPhone(phoneNumber)
+
+    const phoneRegex = /^(?!([0-9])\1{9}$)\d{10}$/;
+    if (phoneRegex.test(phoneNumber)) {
+      setValidPhone(true);
+    } else {
+      setValidPhone(false);
+    }
+
+  }
   return (
     <>
       {!profileDetails.isLoading && profile ? (
@@ -80,7 +96,8 @@ function ProfilePage() {
                         <input onChange={(e) => setUsername(e.target.value)} type="text" placeholder="username" className="input input-bordered w-full max-w-sm " />
                         <input onChange={(e) => setFirstName(e.target.value)} type="text" placeholder="first name" className="input input-bordered w-full max-w-sm " />
                         <input onChange={(e) => setLastName(e.target.value)} type="text" placeholder="last name" className="input input-bordered w-full max-w-sm " />
-                        <input onChange={(e) => setPhone(e.target.value)} type="text" placeholder="Phone" className="input input-bordered w-full max-w-sm " />
+                        <input onChange={(e) => handlePhoneChange(e)} type="number" placeholder="Phone" className={validPhone ? 'input input-bordered w-full max-w-sm ' : 'input input-bordered input-error w-full max-w-sm '} />
+                        
                         <input onChange={(e) => setEmail(e.target.value)} type="text" placeholder="email" className="input input-bordered w-full max-w-sm " />
                       </div>
                       <div className='flex flex-col gap-y-4 items-center justify-center mt-5'>
@@ -91,12 +108,13 @@ function ProfilePage() {
                           setFirstName('')
                           setLastName('')
                           setPhone('')
+                          setValidPhone(true)
                         }} className="btn btn-wide hover:bg-red-300">Cancel</button>
                       </div>
                     </div>
                   </div>
                 </> : null
-           }
+            }
             <div className="p-8  bg-white mt-12 min-h-[]">
               <div className="">
                 <div className="relative ">
