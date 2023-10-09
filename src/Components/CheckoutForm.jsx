@@ -99,10 +99,10 @@ const CheckoutForm = () => {
               <div className="flex items-center flex-col justify-center">
                 <img
                   className="h-[250px] rounded-md"
-                  src={course?.mycourses[0]?.thumbnail ? course?.mycourses[0].thumbnail : checkout}
+                  src={course?.mycourses.course?.thumbnail ? course?.mycourses.course.thumbnail : checkout}
                   alt=""
                 />
-                <p className="font-semibold">{course?.mycourses[0]?.title}</p>
+                <p className="font-semibold">{course?.mycourses.course?.title}</p>
               </div>
               <div className="mt-10">
                 <form onSubmit={handleSubmit}>

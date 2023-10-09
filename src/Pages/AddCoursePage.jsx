@@ -45,7 +45,7 @@ function AddCoursePage() {
     let timerInterval
     Swal.fire({
       title: 'HEY!!!',
-      html: 'The video is being uploaded You will be informed once its done<br> </br> </b> milliseconds.',
+      html: 'The video is being uploaded You will be informed once its done<b></b> milliseconds.',
       timer: 5000,
       timerProgressBar: true,
       didOpen: () => {
@@ -221,7 +221,7 @@ function AddCoursePage() {
                     <input onChange={(e) => {
                       setVideoUpload(e.target.files[0])
                       setToggle(true)
-                    }} value={video_link} type="file" className="file-input w-full max-w-xs " />
+                    }} type="file" className="file-input w-full max-w-xs " />
                     {
                       toggle ?
                         <>

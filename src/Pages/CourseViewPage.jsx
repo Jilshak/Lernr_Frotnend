@@ -15,8 +15,8 @@ function CourseViewPage() {
 
   useEffect(() => {
     dispatch(individualCourse(id));
-  }, [dispatch,id]);
-  
+  }, [dispatch, id]);
+
 
   const updateVideoProgress = async () => {
     const videoElement = document.querySelector('video');
@@ -80,25 +80,20 @@ function CourseViewPage() {
   }, [videoProgress]);
 
   return (
-    <div className='min-h-screen mx-[100px]'>
-      {!video.isLoading && video.mycourses.length >= 1 ?
-        <>
+    <div className='min-h-screen mx-[40px]'>
+      {!video.isLoading && video.mycourses.course ?
+        <div className='min-h-screen'>
           <div className='relative top-28'>
-            <video
-              className='h-[550px] w-screen'
-              controls
-              onLoadedMetadata={handleMetadataLoaded}
-            >
-              <source src={video.mycourses[0].video} type="video/mp4" />
+            <video className='h-[550px]' controls onLoadedMetadata={handleMetadataLoaded}>
+              <source src={video?.mycourses.course.video} type="video/mp4" />
               <source src="video.webm" type="video/webm" />
               Your browser does not support the video tag.
             </video>
           </div>
-
-          <div>
-            Video progress: {videoProgress.toFixed(2)}%
+          <div className='col-span-2'>
+            <h1 className='text-white'>Hello world!!</h1>
           </div>
-        </> : null
+        </div> : null
       }
     </div>
   );
