@@ -83,15 +83,20 @@ function CourseViewPage() {
     <div className='min-h-screen mx-[40px]'>
       {!video.isLoading && video.mycourses.course ?
         <div className='min-h-screen'>
-          <div className='relative top-28'>
-            <video className='h-[550px]' controls onLoadedMetadata={handleMetadataLoaded}>
-              <source src={video?.mycourses.course.video} type="video/mp4" />
+          <div className='relative top-24 grid grid-cols-9 gap-x-7'>
+            <video className='h-[550px] col-span-7 w-full hover:shadow-2xl' controls onLoadedMetadata={handleMetadataLoaded}>
+              <source src={video.mycourses.course.video} type="video/mp4" />
               <source src="video.webm" type="video/webm" />
               Your browser does not support the video tag.
             </video>
-          </div>
-          <div className='col-span-2'>
-            <h1 className='text-white'>Hello world!!</h1>
+            <div className='col-span-2 h-[550px] shadow-md hover:shadow-2xl bg-white relative'>
+              <div className='flex mx-5 flex-col items-center justify-center my-5'>
+                <h1 className='font-semibold text-lg text-[#4D4848]'>LESSONS</h1>
+                <div className='w-full mt-5 rounded-xl flex items-center justify-start h-[45px] bg-[#ececec] hover:bg-[#ddd]'>
+                  <p className='ms-3'>Lesson Name</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div> : null
       }

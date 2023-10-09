@@ -249,7 +249,6 @@ export const individualCourse = createAsyncThunk('individual_course',
 );
 
 
-//for adding an new course
 export const AddNewCourse = createAsyncThunk('add_new_course',
     async (credentials) => {
         console.log("This is the credentials from the instructor: ", credentials)
@@ -259,15 +258,25 @@ export const AddNewCourse = createAsyncThunk('add_new_course',
                     'Content-Type': 'multipart/form-data',
                 },
             })
+            const response = request.data
             if (request.status === 201) {
-                await Swal.fire(
-                    {
-                        background: '#fff',
-                        icon: 'success',
-                        title: 'ADDED!',
-                        text: "Your new Course has been added!!",
-                    }
-                )
+                let data = {
+                    title: response.title,
+                    course: response.id,
+                    video_url: credentials.video
+                }
+                const req = await api.post('courses/course_video/', data)
+                if (req.status == 201) {
+                    await Swal.fire(
+                        {
+                            background: '#fff',
+                            icon: 'success',
+                            title: 'ADDED!',
+                            text: "Your new Course has been added!!",
+                        }
+                    )
+                }
+
             } else {
                 await Swal.fire(
                     {
@@ -451,7 +460,7 @@ export const deleteCourse = createAsyncThunk('delete_course',
 export const unlistCourse = createAsyncThunk('unlist_course',
     async (id) => {
         try {
-            const request = await api.patch(`courses/course/${id}/`, {unlist_course: true})
+            const request = await api.patch(`courses/course/${id}/`, { unlist_course: true })
             if (request.status == 200) {
                 await Swal.fire(
                     {
@@ -480,7 +489,7 @@ export const unlistCourse = createAsyncThunk('unlist_course',
 export const relistCourse = createAsyncThunk('relist_course',
     async (id) => {
         try {
-            const request = await api.patch(`courses/course/${id}/`, {unlist_course: false})
+            const request = await api.patch(`courses/course/${id}/`, { unlist_course: false })
             if (request.status == 200) {
                 await Swal.fire(
                     {
@@ -500,6 +509,16 @@ export const relistCourse = createAsyncThunk('relist_course',
                     }
                 )
             }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+export const CourseVideos = createAsyncThunk('course_videos',
+    async (id) => {
+        try {
+            const request = await api.get()
         } catch (error) {
             console.log("Error: ", error)
         }

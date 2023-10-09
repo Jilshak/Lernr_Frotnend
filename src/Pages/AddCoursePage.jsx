@@ -46,7 +46,7 @@ function AddCoursePage() {
     Swal.fire({
       title: 'HEY!!!',
       html: 'The video is being uploaded You will be informed once its done<b></b> milliseconds.',
-      timer: 5000,
+      timer: 60000,
       timerProgressBar: true,
       didOpen: () => {
         Swal.showLoading()
