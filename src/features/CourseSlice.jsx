@@ -293,6 +293,52 @@ export const AddNewCourse = createAsyncThunk('add_new_course',
     }
 )
 
+//for adding new lessons to the course
+export const addNewLessons = createAsyncThunk('add_new_lessons',
+    async (credentials) => {
+        console.log("This is the credentials while adding new lesson: ", credentials)
+        try {
+            const request = await api.post('courses/course_video/', credentials)
+            if (request.status == 201) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'success',
+                        title: 'ADDED!',
+                        text: "Your new Lesson has been added!!",
+                    }
+                )
+            }
+        } catch (error) {
+            await Swal.fire(
+                {
+                    background: '#fff',
+                    icon: 'error',
+                    title: 'FAILED!',
+                    text: "Something went wrong while adding your new Lesson please try again!!",
+                }
+            )
+            console.log("Error: ", error)
+        }
+    }
+)
+
+export const getLessons = createAsyncThunk('get_lessons',
+    async (id) => {
+        console.log("This is the id: ", id)
+        try{
+            const request = await api.get('courses/course_video') 
+            const respone = request.data
+            if (request.status == 200){
+                const final = respone.filter((item) => item.course == id)
+                return final
+            }
+        }catch(error){
+            console.log("Error: ", error)
+        }
+    }
+)   
+
 
 //for buying an course
 export const buyCourse = createAsyncThunk('buy_course',
@@ -535,6 +581,8 @@ const initialState = {
     cart_count: 0,
     data: [],
     cart: [],
+    video: [],
+    lessons: [],
     category: [],
     categoryCourse: [],
     categoryTitle: [],
@@ -715,6 +763,35 @@ const CoursesSlice = createSlice({
         [getCategoryName.rejected]: (state) => {
             state.isLoading = false
             state.msg = 'The loading of the state has been finished with some problem.'
+        },
+
+
+        [addNewLessons.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The videos is still loading!!"
+        },
+        [addNewLessons.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.video = action.payload
+            state.msg = "The videos has been loaded"
+        },
+        [addNewLessons.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the videos has been finished with some problem.'
+        },
+        
+        [getLessons.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The videos is still loading!!"
+        },
+        [getLessons.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.lessons = action.payload
+            state.msg = "The videos has been loaded"
+        },
+        [getLessons.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the videos has been finished with some problem.'
         },
     }
 })
