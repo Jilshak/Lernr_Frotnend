@@ -52,47 +52,6 @@ function CourseAnalytics() {
     }
   };
 
-  const [threshold1, setThreshold1] = useState(false)
-  const [threshold2, setThreshold2] = useState(false)
-  const [threshold3, setThreshold3] = useState(false)
-  const [threshold4, setThreshold4] = useState(false)
-
-  useEffect(() => {
-    if (videoProgress >= 25 && !threshold1) {
-      let credentials = {
-        user: access.user_id,
-        course_id: id,
-        progress: 25
-      }
-      dispatch(updateProgress(credentials))
-      setThreshold1(true)
-    } else if (videoProgress >= 50 && videoProgress <= 55 && !threshold2) {
-      let credentials = {
-        user: access.user_id,
-        course_id: id,
-        progress: 50
-      }
-      dispatch(updateProgress(credentials))
-      setThreshold2(true)
-    } else if (videoProgress >= 75 && videoProgress <= 80 && !threshold3) {
-      let credentials = {
-        user: access.user_id,
-        course_id: id,
-        progress: 75
-      }
-      dispatch(updateProgress(credentials))
-      setThreshold3(true)
-    } else if (videoProgress >= 95 && videoProgress <= 100 && !threshold4) {
-      let credentials = {
-        user: access.user_id,
-        course_id: id,
-        progress: 100
-      }
-      dispatch(updateProgress(credentials))
-      setThreshold4(true)
-    }
-  }, [videoProgress]);
-
   const analytics = useSelector((state) => state.chart)
 
   const [toggle, setToggle] = useState(1)
@@ -194,6 +153,24 @@ function CourseAnalytics() {
     await setToggleVideoUpload(false)
   }
 
+  const [lessonId, setLessonId] = useState()
+
+  useEffect(() => {
+    if (videoData && videoData.length > 0) {
+      setLessonId(videoData[0].lesson_id);
+    }
+  }, [videoData]);
+
+  useEffect(() => {
+    if (videoProgress == 100) {
+      let credential = {
+        id: lessonId,
+        progress: 100
+      }
+      dispatch(updateProgress(credential))
+      dispatch(getLessons(id))
+    }
+  }, [videoProgress])
 
   return (
     <>
@@ -238,8 +215,8 @@ function CourseAnalytics() {
                       title != '' && video_url != undefined ?
                         <>
                           <button onClick={(e) => handleAddLesson()} className="btn btn-sm w-[300px] btn-outline absolute bottom-16 left-14">ADD LESSON</button>
-                        </>:
-                         <button disabled className="btn btn-sm w-[300px] btn-outline absolute bottom-16 left-14">ADD LESSON</button>
+                        </> :
+                        <button disabled className="btn btn-sm w-[300px] btn-outline absolute bottom-16 left-14">ADD LESSON</button>
                     }
                     <button onClick={(e) => setToggleVideoUpload(false)} className="btn btn-sm w-[300px] btn-outline absolute hover:bg-red-300 bottom-5 left-14">CANCEL</button>
                   </div>
@@ -314,20 +291,35 @@ function CourseAnalytics() {
                         Your browser does not support the video tag.
                       </video>
                       <div className='lg:col-span-2  h-[550px] overflow-y-auto shadow-md hover:shadow-2xl bg-white relative'>
-                        <div className='flex mx-5 flex-col items-center justify-center my-5'>
-                          <h1 className='font-semibold text-lg text-[#4D4848]'>LESSONS</h1>
-                          {
-                            videoData?.map((item, index) => {
-                              return (
-                                <div onClick={async (e) => {
-                                  await setSelectedVideo(item.video_url)
-                                  console.log(selectVideo)
-                                }} key={item.id} className='w-full cursor-pointer mt-5 rounded-xl flex items-center justify-start h-[45px] bg-[#ececec] hover:bg-[#ddd]'>
-                                  <p className='ms-3'>{index + 1}. {item.title}</p>
-                                </div>
-                              )
-                            })
-                          }
+                        <div className='flex mx-5 flex-col items-center max-h-[500px] justify-center my-5'>
+                          <h1 className='font-semibold sticky top-0  text-lg text-[#4D4848]'>LESSONS</h1>
+                          <div className='w-full max-h-[430px] scrollbar-thin my-2 overflow-y-auto'>
+                            {videoData?.map((item, index) => (
+
+                              <>
+                                <button
+                                  onClick={async (e) => {
+                                    if (index === 0 || videoData[index - 1].progress === 100) {
+                                      await setSelectedVideo(item.video_url);
+                                      await setLessonId(item.lesson_id)
+                                    }
+                                  }}
+                                  key={item.id}
+                                  className={`w-full cursor-pointer mt-5 rounded-xl flex items-center justify-start h-[45px] bg-[#ececec] hover:bg-[#ddd] ${(index > 0 && videoData[index - 1].progress !== 100) ? 'cursor-not-allowed opacity-60' : ''
+                                    }`}
+                                  disabled={(index > 0 && videoData[index - 1].progress !== 100)}
+                                >
+                                  <div className='grid items-center grid-cols-7'>
+                                    <span className='col-span-6 w-full'>
+                                      <p className='ms-3'>{index + 1}. {item.title}</p>
+                                    </span>
+                                  </div>
+                                </button>
+                              </>
+                            ))}
+                          </div>
+
+
                         </div>
                         <button onClick={(e) => setToggleVideoUpload(true)} className="btn btn-sm w-[200px] btn-outline absolute bottom-4 left-14">ADD NEW LESSON</button>
                       </div>

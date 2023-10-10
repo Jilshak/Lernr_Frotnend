@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import api from '../services/Axios'
 import Swal from 'sweetalert2'
+import jwtDecode from 'jwt-decode';
 
 
 export const getCourses = createAsyncThunk('get_course',
@@ -299,15 +300,24 @@ export const addNewLessons = createAsyncThunk('add_new_lessons',
         console.log("This is the credentials while adding new lesson: ", credentials)
         try {
             const request = await api.post('courses/course_video/', credentials)
+            const access = await jwtDecode(localStorage.getItem('authToken'))
+            const response = request.data
             if (request.status == 201) {
-                await Swal.fire(
-                    {
-                        background: '#fff',
-                        icon: 'success',
-                        title: 'ADDED!',
-                        text: "Your new Lesson has been added!!",
-                    }
-                )
+                const data = {
+                    lesson: response.id,
+                    student: access.user_id
+                }
+                const req = await api.post(`courses/course_lessons/`, data)
+                if (req.status == 201) {
+                    await Swal.fire(
+                        {
+                            background: '#fff',
+                            icon: 'success',
+                            title: 'ADDED!',
+                            text: "Your new Lesson has been added!!",
+                        }
+                    )
+                }
             }
         } catch (error) {
             await Swal.fire(
@@ -323,21 +333,53 @@ export const addNewLessons = createAsyncThunk('add_new_lessons',
     }
 )
 
-export const getLessons = createAsyncThunk('get_lessons',
-    async (id) => {
-        console.log("This is the id: ", id)
-        try{
-            const request = await api.get('courses/course_video') 
-            const respone = request.data
-            if (request.status == 200){
-                const final = respone.filter((item) => item.course == id)
-                return final
+export const getLessons = createAsyncThunk('get_lessons', async (id) => {
+    try {
+        const request = await api.get('courses/course_video');
+        const response = request.data;
+        if (request.status === 200) {
+            const final = response.filter((item) => item.course == id);
+
+            const lessonRequest = await api.get('courses/course_lessons/');
+            const lessonResponse = lessonRequest.data;
+            const access = jwtDecode(localStorage.getItem('authToken'))
+            const finalWithProgress = final.map((video) => {
+                const lesson = lessonResponse.find((lesson) => lesson.lesson == video.id && lesson.student == access.user_id);
+                if (lesson) {
+                    return {
+                        ...video,
+                        progress: lesson.progress,
+                        lesson_id: lesson.id,
+                    };
+                }
+                return video;
+            });
+
+            console.log("This is the final progress: ", finalWithProgress)
+
+            return finalWithProgress;
+        }
+    } catch (error) {
+        console.log("Error: ", error);
+    }
+});
+
+
+
+export const updateProgress = createAsyncThunk('update_progress',
+    async (credentials) => {
+        try {
+            const request = await api.patch(`courses/course_lessons/${credentials.id}/`, { progress: credentials.progress })
+            if (request.status == 204) {
+                console.log("The progress has been updated!!!")
             }
-        }catch(error){
+        } catch (error) {
             console.log("Error: ", error)
         }
     }
-)   
+)
+
+
 
 
 //for buying an course
@@ -440,31 +482,6 @@ export const alreadyBoughtCourse = createAsyncThunk('already_bought_course',
                     return false
                 } else {
                     return true
-                }
-            }
-        } catch (error) {
-            console.log("Error: ", error)
-        }
-    }
-)
-
-export const updateProgress = createAsyncThunk('update_progress',
-    async (credentials) => {
-        try {
-            const request = await api.get(`courses/bought_courses`)
-            const resposne = request.data
-            if (request.status == 200) {
-                const data = resposne.filter((item) => item.user == credentials.user && item.course_id == credentials.course_id)
-                console.log("This is the desired bought course!!!", data)
-                const boughtCourseId = data[0].id
-                console.log("This is the credentials: ", credentials)
-                console.log("This is the data: ", data[0])
-                if (data[0].progress < credentials.progress) {
-                    const req = await api.patch(`courses/bought_courses/${boughtCourseId}/`, { progress: credentials.progress })
-                    const res = req.data
-                    if (req.status == 200) {
-                        console.log("The bought course progress has been updated")
-                    }
                 }
             }
         } catch (error) {
@@ -779,7 +796,7 @@ const CoursesSlice = createSlice({
             state.isLoading = false
             state.msg = 'The loading of the videos has been finished with some problem.'
         },
-        
+
         [getLessons.pending]: (state) => {
             state.isLoading = true
             state.msg = "The videos is still loading!!"
