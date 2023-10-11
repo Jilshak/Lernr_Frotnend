@@ -60,7 +60,11 @@ function CourseViewPage() {
 
   useEffect(() => {
     const overallUpdateFunction = async () => {
-      if (videoProgress == 100) {
+      console.log("This is the lesson id: ", lessonId)
+      console.log("This is the videoData: ", videoData)
+      const lesson = await videoData.find((item) => item.lesson_id == lessonId);
+      console.log("This is the lesson: ", lesson)
+      if (videoProgress == 100 && lesson.progress != 100) {
         let credential = {
           id: lessonId,
           progress: 100
@@ -76,7 +80,7 @@ function CourseViewPage() {
       }
     }
     overallUpdateFunction()
-  }, [videoProgress])
+  }, [videoProgress, lessonId])
 
 
 

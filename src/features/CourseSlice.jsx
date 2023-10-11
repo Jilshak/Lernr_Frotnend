@@ -333,6 +333,8 @@ export const addNewLessons = createAsyncThunk('add_new_lessons',
     }
 )
 
+
+//for getting all the lesson related to that course for particual students
 export const getLessons = createAsyncThunk('get_lessons', async (id) => {
     try {
         const request = await api.get('courses/course_video');
@@ -439,6 +441,8 @@ export const buyCourse = createAsyncThunk('buy_course',
     }
 )
 
+
+//for getting the bought courses
 export const getBoughtCourses = createAsyncThunk('get_bought_course', async (_id) => {
     try {
         const request = await api.get(`courses/bought_courses`);

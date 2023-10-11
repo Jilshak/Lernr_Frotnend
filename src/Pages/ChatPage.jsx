@@ -136,17 +136,24 @@ function ChatPage() {
                 </div>
                 <div className='absolute w-full right-0'>
                     {
-                        title.mycourses && title.mycourses.length >= 1 ?
+                        title.mycourses.course ?
                             <>
                                 {
-                                    title?.mycourses.map((item) => {
-                                        return (
-                                            <div className='flex items-center justify-end'>
-                                                <p className=' font-bold text-2xl relative me-10'>{item.title}</p>
-
-                                            </div>
-                                        )
-                                    })
+                                    title?.mycourses.course.length >= 2 ?
+                                        <>
+                                            {
+                                                title.mycourses.course.map((item) => {
+                                                    return (
+                                                        <div className='flex items-center justify-end'>
+                                                            <p className=' font-bold text-2xl relative me-10'>{item.title}</p>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </> :
+                                        <div className='flex items-center justify-end'>
+                                            <p className=' font-bold text-2xl relative me-10'>{title.mycourses.course.title}</p>
+                                        </div>
                                 }
                             </> : null
                     }
