@@ -153,24 +153,6 @@ function CourseAnalytics() {
     await setToggleVideoUpload(false)
   }
 
-  const [lessonId, setLessonId] = useState()
-
-  useEffect(() => {
-    if (videoData && videoData.length > 0) {
-      setLessonId(videoData[0].lesson_id);
-    }
-  }, [videoData]);
-
-  useEffect(() => {
-    if (videoProgress == 100) {
-      let credential = {
-        id: lessonId,
-        progress: 100
-      }
-      dispatch(updateProgress(credential))
-      dispatch(getLessons(id))
-    }
-  }, [videoProgress])
 
   return (
     <>
@@ -293,25 +275,22 @@ function CourseAnalytics() {
                       <div className='lg:col-span-2  h-[550px] overflow-y-auto shadow-md hover:shadow-2xl bg-white relative'>
                         <div className='flex mx-5 flex-col items-center max-h-[500px] justify-center my-5'>
                           <h1 className='font-semibold sticky top-0  text-lg text-[#4D4848]'>LESSONS</h1>
-                          <div className='w-full max-h-[430px] scrollbar-thin my-2 overflow-y-auto'>
+                          <div className='w-full min-h-[400px] max-h-[430px] scrollbar-thin my-2 overflow-y-auto'>
                             {videoData?.map((item, index) => (
 
                               <>
                                 <button
                                   onClick={async (e) => {
-                                    if (index === 0 || videoData[index - 1].progress === 100) {
-                                      await setSelectedVideo(item.video_url);
-                                      await setLessonId(item.lesson_id)
-                                    }
+                                    await setSelectedVideo(item.video_url);
                                   }}
                                   key={item.id}
-                                  className={`w-full cursor-pointer mt-5 rounded-xl flex items-center justify-start h-[45px] bg-[#ececec] hover:bg-[#ddd] ${(index > 0 && videoData[index - 1].progress !== 100) ? 'cursor-not-allowed opacity-60' : ''
-                                    }`}
-                                  disabled={(index > 0 && videoData[index - 1].progress !== 100)}
-                                >
-                                  <div className='grid items-center grid-cols-7'>
-                                    <span className='col-span-6 w-full'>
-                                      <p className='ms-3'>{index + 1}. {item.title}</p>
+                                  className={`w-full cursor-pointer mt-5 rounded-xl flex items-center justify-start h-[45px] bg-[#ececec] hover:bg-[#ddd] `}>
+                                  <div className='group grid items-center grid-cols-7'>
+                                    <span className='col-span-6 w-full relative '>
+                                      <p className='ms-3 truncate'>{index + 1}. {item.title}</p>
+                                      <div className="absolute hidden z-20 group-hover:block bg-gray-800 text-white text-xs py-1 px-2 mt-2 rounded-lg shadow-md whitespace-nowrap">
+                                        {item.title}
+                                      </div>
                                     </span>
                                   </div>
                                 </button>

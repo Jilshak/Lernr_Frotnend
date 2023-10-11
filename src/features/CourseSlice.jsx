@@ -365,13 +365,32 @@ export const getLessons = createAsyncThunk('get_lessons', async (id) => {
 });
 
 
-
+//updating of course lesson progress for individual students
 export const updateProgress = createAsyncThunk('update_progress',
     async (credentials) => {
         try {
             const request = await api.patch(`courses/course_lessons/${credentials.id}/`, { progress: credentials.progress })
             if (request.status == 204) {
                 console.log("The progress has been updated!!!")
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+//updating of the course for the entire course altogether
+export const updateOverallProgress = createAsyncThunk('update_overall_progress',
+    async (credentials) => {
+        try {
+            const request = await api.get('courses/bought_courses')
+            const response = request.data
+            if (request.status == 200) {
+                const final = response.filter((item) => item.user == credentials.user && item.course_id == credentials.course_id)
+                const req = await api.patch(`courses/bought_courses/${final[0].id}/`, { progress: Number(final[0].progress) + Number(credentials.progress) });
+                if (req.status == 204) {
+                    console.log("The overall progress has been updated")
+                }
             }
         } catch (error) {
             console.log("Error: ", error)
