@@ -26,6 +26,7 @@ import CommunityPage from './Pages/CommunityPage'
 import ChatPage from './Pages/ChatPage'
 import CheckoutForm from './Components/CheckoutForm'
 import AdminCourses from './Pages/Admin/AdminCourses'
+import AddQuizPage from './Pages/AddQuizPage'
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
             <Route path='course_view/:id?' element={<CourseViewPage />} />
             <Route path='community' element={<CommunityPage />} />
             <Route path='stripe/:pi?/:id?' element={<CheckoutForm />} />
+            <Route path='quiz/:id?' element={<AddQuizPage />} />
           </Route>
           <Route path='chat/:id?' element={<ChatPage />} />
 

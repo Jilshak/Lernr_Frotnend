@@ -10,7 +10,7 @@ export const getCourses = createAsyncThunk('get_course',
             const courseRequest = await api.get('courses/course');
             const courseResponse = courseRequest.data;
 
-            const final = courseResponse.filter((item) => item.course_by != id)
+            const final = courseResponse.filter((item) => item.course_by != id && item.finished == true)
 
             if (courseRequest.status === 200) {
                 // Create an array of promises for fetching usernames
@@ -249,10 +249,9 @@ export const individualCourse = createAsyncThunk('individual_course',
     }
 );
 
-
+//for getting new course
 export const AddNewCourse = createAsyncThunk('add_new_course',
     async (credentials) => {
-        console.log("This is the credentials from the instructor: ", credentials)
         try {
             const request = await api.post(`courses/course/`, credentials, {
                 headers: {
@@ -297,7 +296,6 @@ export const AddNewCourse = createAsyncThunk('add_new_course',
 //for adding new lessons to the course
 export const addNewLessons = createAsyncThunk('add_new_lessons',
     async (credentials) => {
-        console.log("This is the credentials while adding new lesson: ", credentials)
         try {
             const request = await api.post('courses/course_video/', credentials)
             const access = await jwtDecode(localStorage.getItem('authToken'))
@@ -601,12 +599,16 @@ export const relistCourse = createAsyncThunk('relist_course',
     }
 )
 
-export const CourseVideos = createAsyncThunk('course_videos',
+export const finishCourse = createAsyncThunk('finish_course',
     async (id) => {
-        try {
-            const request = await api.get()
-        } catch (error) {
-            console.log("Error: ", error)
+        const request = await api.patch(`courses/course/${id}/`, { finished: true })
+        if (request.status == 200) {
+            await Swal.fire(
+                'Finished!',
+                'Your Course has been uploaded.',
+                'success'
+            )
+            console.log("The course has been completed and published")
         }
     }
 )

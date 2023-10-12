@@ -4,8 +4,8 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import Footer from '../Components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseAnalyticsProfit, courseAnalyticsRating, courseAnalyticsReviews, courseAnalyticsStudents } from '../features/ChartSlice'
-import { addNewLessons, getLessons, individualCourse, updateProgress } from '../features/CourseSlice';
-import { useParams } from 'react-router-dom'
+import { addNewLessons, finishCourse, getLessons, individualCourse, updateProgress } from '../features/CourseSlice';
+import { Link, useParams } from 'react-router-dom'
 import Barchart from '../Components/ChartComponents/Barchart'
 import LineChart from '../Components/ChartComponents/LineChart'
 import InstructorProfitChart from '../Components/ChartComponents/InstructorProfitChart'
@@ -22,10 +22,6 @@ function CourseAnalytics() {
 
   const video = useSelector((state) => state.courses);
   const access = jwtDecode(localStorage.getItem('authToken'));
-
-
-  const [videoTime, setVideoTime] = useState(0);
-  const [videoProgress, setVideoProgress] = useState(0);
 
   useEffect(() => {
     dispatch(individualCourse(id));
@@ -151,6 +147,23 @@ function CourseAnalytics() {
       });
     }
     await setToggleVideoUpload(false)
+  }
+
+  //to handle the finish course
+  const handleFinish = async () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to add any more lessons or add an quiz after this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Finish It!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(finishCourse(id))
+      }
+    })
   }
 
 
@@ -300,7 +313,30 @@ function CourseAnalytics() {
 
 
                         </div>
-                        <button onClick={(e) => setToggleVideoUpload(true)} className="btn btn-sm w-[200px] btn-outline absolute bottom-4 left-14">ADD NEW LESSON</button>
+                        {
+                          video.mycourses.course.finished ?
+                            <>
+                              <div className='flex items-center justify-center absolute bottom-2 lg:mx-4 xs:mx-[75px]'>
+                                <button onClick={(e) => setToggleVideoUpload(true)} className="btn btn-disabled btn-sm btn-wide btn-outline  ">CREATE A QUIZ</button>
+                              </div>
+                              <div className='flex items-center justify-center relative bottom-4'>
+                                <button onClick={(e) => setToggleVideoUpload(true)} className="btn btn-disabled btn-sm btn-outline ">ADD NEW LESSON</button>
+                                <button onClick={(e) => handleFinish()} className="btn w-[100px] btn-disabled btn-sm btn-outline mx-2">FINISH</button>
+                              </div>
+                            </> :
+                            <>
+                              <div className='flex items-center justify-center absolute bottom-2 lg:mx-4 xs:mx-[75px]'>
+                                <Link to={`/quiz/${id}`}>
+                                  <button className="btn btn-sm btn-wide btn-outline  ">CREATE A QUIZ</button>
+                                </Link>
+                              </div>
+                              <div className='flex items-center justify-center relative bottom-4'>
+                                <button onClick={(e) => setToggleVideoUpload(true)} className="btn  btn-sm btn-outline ">ADD NEW LESSON</button>
+                                <button onClick={(e) => handleFinish()} className="btn w-[100px] btn-sm btn-outline mx-2">FINISH</button>
+                              </div>
+                            </>
+                        }
+
                       </div>
                     </div>
                   </div> : null
