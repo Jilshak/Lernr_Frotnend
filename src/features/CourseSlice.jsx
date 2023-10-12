@@ -339,7 +339,7 @@ export const addQuiz = createAsyncThunk('add_quiz',
             for (const credential of credentials) {
                 const request = await api.post(`courses/quiz/`, credential)
                 if (request.status == 201) {
-                    if (time == false){
+                    if (time == false) {
                         await Swal.fire(
                             {
                                 background: '#fff',
@@ -389,6 +389,49 @@ export const deleteQuizQuestions = createAsyncThunk('delete_quiz_questions',
                     heightAuto: false
                 })
                 console.log("You have deleted the question")
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+//submitting the quiz and evaluation
+export const submitQuiz = createAsyncThunk('submit_quiz',
+    async (credentials) => {
+        try {
+            const request = await api.get(`courses/bought_courses/`)
+            const response = request.data
+            if (request.status == 200) {
+                const final = await response.filter((item) => item.course_id == credentials.course_id && item.user == credentials.user)
+                const req = await api.patch(`courses/bought_courses/${final[0].id}/`, { marks_obtained: credentials.marks, got_certificate: true })
+                if (req.status == 200) {
+                    await Swal.fire(
+                        {
+                            background: '#fff',
+                            icon: 'success',
+                            title: 'CONGRATS!',
+                            text: "Your Hardwork and Persistance Paid off!!",
+                        }
+                    )
+                    console.log("The certificate has been obtained")
+                }
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+
+export const getCourseProgress = createAsyncThunk('get_course_progress',
+    async (credentials) => {
+        try {
+            const request = await api.get(`courses/bought_courses/`)
+            const response = request.data
+            if (request.status == 200) {
+                const final = response.filter((item) => item.course_id == credentials.course_id && item.user == credentials.user)
+                return final[0].progress
             }
         } catch (error) {
             console.log("Error: ", error)
@@ -686,6 +729,7 @@ const initialState = {
     alreadybought: false,
     toggle: false,
     cart_count: 0,
+    progress: 0,
     data: [],
     cart: [],
     video: [],
@@ -915,6 +959,21 @@ const CoursesSlice = createSlice({
         [getQuiz.rejected]: (state) => {
             state.isLoading = false
             state.msg = 'The loading of the quiz has been finished with some problem.'
+        },
+
+
+        [getCourseProgress.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The course progress is still loading!!"
+        },
+        [getCourseProgress.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.progress = action.payload
+            state.msg = "The course progress has been loaded"
+        },
+        [getCourseProgress.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the course progress has been finished with some problem.'
         },
     }
 })

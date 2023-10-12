@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { getLessons, individualCourse, updateOverallProgress, updateProgress } from '../features/CourseSlice';
+import { getCourseProgress, getLessons, individualCourse, updateOverallProgress, updateProgress } from '../features/CourseSlice';
 import jwtDecode from 'jwt-decode';
 
 function CourseViewPage() {
@@ -18,6 +18,11 @@ function CourseViewPage() {
   useEffect(() => {
     dispatch(individualCourse(id));
     dispatch(getLessons(id))
+    const credentials = {
+      course_id: id,
+      user: access.user_id
+    }
+    dispatch(getCourseProgress(credentials))
   }, [dispatch, id]);
 
 
@@ -126,9 +131,15 @@ function CourseViewPage() {
                         </button>
                       </>
                     ))}
-                    <Link to={`/take_quiz/${id}`}>
-                      <button className="btn absolute lg:left-5 xs:left-14 bottom-3 btn-sm btn-outline btn-wide">GET CERTIFICATE</button>
-                    </Link>
+                    {
+                      video.progress == 100 ?
+                        <>
+                          <Link to={`/take_quiz/${id}`}>
+                            <button className="btn absolute lg:left-5 xs:left-14 bottom-3 btn-sm btn-outline btn-wide">GET CERTIFICATE</button>
+                          </Link>
+                        </> :
+                        <button disabled className="btn absolute lg:left-5 xs:left-14 bottom-3 btn-sm btn-outline btn-wide">GET CERTIFICATE</button>
+                    }
                   </div>
                 </div>
               </div>

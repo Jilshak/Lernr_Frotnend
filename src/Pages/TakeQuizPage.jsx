@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getQuiz } from '../features/CourseSlice';
-import { useParams } from 'react-router-dom';
+import { getQuiz, submitQuiz } from '../features/CourseSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import jwtDecode from 'jwt-decode';
+
 
 function TakeQuizPage() {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const questions = useSelector((state) => state.courses);
     const { id } = useParams();
+    const access = jwtDecode(localStorage.getItem('authToken'))
 
     useEffect(() => {
         dispatch(getQuiz(id));
@@ -31,11 +36,31 @@ function TakeQuizPage() {
     };
 
 
-    const handleSubmitQuiz = () => {
-        const score = quizQuestions.reduce((totalScore, question, index) => {
+    const handleSubmitQuiz = async () => {
+        const score = await quizQuestions.reduce((totalScore, question, index) => {
             return totalScore + (selectedAnswers[index] === question.correct_anwer ? 1 : 0);
         }, 0);
-        alert(`Your score: ${score}/${quizQuestions.length}`);
+        if (score >= 7) {
+            const credentials = {
+                marks: score,
+                course_id: id,
+                user: access.user_id,
+                questions: quizQuestions.length
+            }
+            console.log("This is the credentials: ", credentials)
+            await dispatch(submitQuiz(credentials))
+            await navigate('/enrolled')
+        } else {
+            await Swal.fire(
+                {
+                    background: '#fff',
+                    icon: 'warning',
+                    title: 'OOPS...BETTER LUCK NEXT TIME!',
+                    text: `You Scored ${score}/${quizQuestions.length} Take some time off and try again!!`,
+                }
+            )
+            await navigate(`/course_view/${id}`)
+        }
     };
 
     return (
