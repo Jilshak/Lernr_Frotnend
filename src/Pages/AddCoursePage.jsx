@@ -6,11 +6,13 @@ import { AddNewCourse, getCategories } from '../features/CourseSlice'
 import Swal from 'sweetalert2'
 import { storage } from '../services/firebase'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { useNavigate } from 'react-router-dom'
 
 function AddCoursePage() {
 
   //redux
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const categoryAvailable = useSelector((state) => state.courses)
 
   const [toggle, setToggle] = useState(false)
@@ -113,6 +115,7 @@ function AddCoursePage() {
       await dispatch(AddNewCourse(credentials));
       await setToggleField(true)
       await removeState()
+      navigate(`/enrolled/${id}`)
     } else {
       await Swal.fire({
         background: '#fff',

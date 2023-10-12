@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getLessons, individualCourse, updateOverallProgress, updateProgress } from '../features/CourseSlice';
 import jwtDecode from 'jwt-decode';
 
@@ -95,7 +95,7 @@ function CourseViewPage() {
                 <source src="video.webm" type="video/webm" />
                 Your browser does not support the video tag.
               </video>
-              <div className='lg:col-span-2  h-[550px] overflow-y-auto shadow-md hover:shadow-2xl bg-white relative'>
+              <div className='lg:col-span-2 lg:my-0 xs:my-5  h-[550px] overflow-y-auto shadow-md hover:shadow-2xl bg-white relative'>
                 <div className='flex mx-5 flex-col items-center max-h-[500px] justify-center my-5'>
                   <h1 className='font-semibold sticky top-0  text-lg text-[#4D4848]'>LESSONS</h1>
                   <div className='w-full max-h-[430px] min-h-[400px] scrollbar-thin my-2 overflow-y-auto'>
@@ -115,7 +115,7 @@ function CourseViewPage() {
                           disabled={(index > 0 && videoData[index - 1].progress != 100)}
                         >
                           <div className='group grid items-center grid-cols-7'>
-                            <span className='col-span-6 w-full relative '>
+                            <span className='col-span-7 w-full relative '>
                               <p className='ms-3 truncate'>{index + 1}. {item.title}</p>
                               <div className="absolute hidden z-20 group-hover:block bg-gray-800 text-white text-xs py-1 px-2 mt-2 rounded-lg shadow-md whitespace-nowrap">
                                 {item.title}
@@ -126,6 +126,9 @@ function CourseViewPage() {
                         </button>
                       </>
                     ))}
+                    <Link to={`/take_quiz/${id}`}>
+                      <button className="btn absolute lg:left-5 xs:left-14 bottom-3 btn-sm btn-outline btn-wide">GET CERTIFICATE</button>
+                    </Link>
                   </div>
                 </div>
               </div>

@@ -162,6 +162,7 @@ function CourseAnalytics() {
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(finishCourse(id))
+        dispatch(getLessons(id))
       }
     })
   }

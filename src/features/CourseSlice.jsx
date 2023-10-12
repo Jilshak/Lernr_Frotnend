@@ -331,6 +331,71 @@ export const addNewLessons = createAsyncThunk('add_new_lessons',
     }
 )
 
+//for adding the relevant quiz questions for the user
+export const addQuiz = createAsyncThunk('add_quiz',
+    async (credentials) => {
+        let time = false
+        try {
+            for (const credential of credentials) {
+                const request = await api.post(`courses/quiz/`, credential)
+                if (request.status == 201) {
+                    if (time == false){
+                        await Swal.fire(
+                            {
+                                background: '#fff',
+                                icon: 'success',
+                                title: 'ADDED!',
+                                text: "Your new Questions have been added!!",
+                            }
+                        )
+                        time = true
+                    }
+                }
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+//for taking the quiz
+export const getQuiz = createAsyncThunk('get_quiz',
+    async (course) => {
+        try {
+            const request = await api.get(`courses/quiz/`)
+            const response = request.data
+            if (request.status == 200) {
+                const final = response.filter((item) => item.course == course)
+                return final
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
+//for deleting quiz questions
+export const deleteQuizQuestions = createAsyncThunk('delete_quiz_questions',
+    async (id) => {
+        try {
+            const request = await api.delete(`courses/quiz/${id}`)
+            if (request.status == 204) {
+                await Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'The question has been deleted',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    heightAuto: false
+                })
+                console.log("You have deleted the question")
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
 
 //for getting all the lesson related to that course for particual students
 export const getLessons = createAsyncThunk('get_lessons', async (id) => {
@@ -624,6 +689,7 @@ const initialState = {
     data: [],
     cart: [],
     video: [],
+    quiz: [],
     lessons: [],
     category: [],
     categoryCourse: [],
@@ -834,6 +900,21 @@ const CoursesSlice = createSlice({
         [getLessons.rejected]: (state) => {
             state.isLoading = false
             state.msg = 'The loading of the videos has been finished with some problem.'
+        },
+
+
+        [getQuiz.pending]: (state) => {
+            state.isLoading = true
+            state.msg = "The quiz is still loading!!"
+        },
+        [getQuiz.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.quiz = action.payload
+            state.msg = "The quiz has been loaded"
+        },
+        [getQuiz.rejected]: (state) => {
+            state.isLoading = false
+            state.msg = 'The loading of the quiz has been finished with some problem.'
         },
     }
 })

@@ -72,7 +72,7 @@ function Navbar() {
                         !token?.is_instructor && cartItemCount.community ?
                             <>
                                 <Link to='/community'>
-                                    <li className='mx-3 font-semibold cursor-pointer'>Communities</li>
+                                    <li className='mx-3 font-semibold lg:block md:block sm:block xs:hidden cursor-pointer'>Communities</li>
                                 </Link>
                             </> : null
                     }
@@ -130,6 +130,13 @@ function Navbar() {
                                         <Link to='/profile'>
                                             <span className="justify-between">
                                                 Profile
+                                            </span>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to='/community'>
+                                            <span className="justify-between">
+                                                <li className='lg:hidden md:hidden sm:block xs:block'>Communities</li>
                                             </span>
                                         </Link>
                                     </li>
