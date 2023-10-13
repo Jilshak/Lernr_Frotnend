@@ -5,6 +5,7 @@ import MyCoursesCard from '../Components/MyCoursesCard'
 import { Link } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 import nothing from '../Images/nothing1.png'
+import Footer from '../Components/Footer'
 
 
 function AllCoursesPage() {
@@ -151,6 +152,7 @@ function AllCoursesPage() {
             <img src={nothing} alt="" />
           </div>
       }
+      <Footer />
     </div>
   )
 }

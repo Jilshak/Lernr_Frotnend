@@ -28,6 +28,7 @@ import CheckoutForm from './Components/CheckoutForm'
 import AdminCourses from './Pages/Admin/AdminCourses'
 import AddQuizPage from './Pages/AddQuizPage'
 import TakeQuizPage from './Pages/TakeQuizPage'
+import CertificatePage from './Pages/CertificatePage'
 
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
             <Route path='stripe/:pi?/:id?' element={<CheckoutForm />} />
             <Route path='quiz/:id?' element={<AddQuizPage />} />
             <Route path='take_quiz/:id?' element={<TakeQuizPage />} />
+            <Route path='certificate/:id?/:user?' element={<CertificatePage />} />
           </Route>
           <Route path='chat/:id?' element={<ChatPage />} />
 

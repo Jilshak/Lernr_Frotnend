@@ -40,27 +40,27 @@ function TakeQuizPage() {
         const score = await quizQuestions.reduce((totalScore, question, index) => {
             return totalScore + (selectedAnswers[index] === question.correct_anwer ? 1 : 0);
         }, 0);
-        if (score >= 7) {
+        if (score) {
             const credentials = {
                 marks: score,
                 course_id: id,
                 user: access.user_id,
                 questions: quizQuestions.length
             }
-            console.log("This is the credentials: ", credentials)
-            await dispatch(submitQuiz(credentials))
-            await navigate('/enrolled')
-        } else {
-            await Swal.fire(
-                {
-                    background: '#fff',
-                    icon: 'warning',
-                    title: 'OOPS...BETTER LUCK NEXT TIME!',
-                    text: `You Scored ${score}/${quizQuestions.length} Take some time off and try again!!`,
-                }
-            )
-            await navigate(`/course_view/${id}`)
+            // await dispatch(submitQuiz(credentials))
+            await navigate(`/certificate/${id}/${access.user_id}`)
         }
+        // } else {
+        //     await Swal.fire(
+        //         {
+        //             background: '#fff',
+        //             icon: 'warning',
+        //             title: 'OOPS...BETTER LUCK NEXT TIME!',
+        //             text: `You Scored ${score}/${quizQuestions.length} Take some time off and try again!!`,
+        //         }
+        //     )
+        //     await navigate(`/course_view/${id}`)
+        // }
     };
 
     return (

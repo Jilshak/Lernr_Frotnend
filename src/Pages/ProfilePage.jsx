@@ -3,6 +3,7 @@ import Navbar from '../Components/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { editProfile, getMyProfile, profileImage, updatePassword } from '../features/UserSlice';
 import jwtDecode from 'jwt-decode';
+import Footer from '../Components/Footer';
 
 function ProfilePage() {
   const dispatch = useDispatch();
@@ -110,7 +111,7 @@ function ProfilePage() {
               toggle ?
                 <>
                   <div className='w-full  flex justify-center'>
-                    <div className='h-[550px] w-[450px] z-50 shadow-xl bg-white absolute'>
+                    <div className='h-[500px]  w-[450px] z-50 shadow-xl bg-white absolute'>
                       <div className='flex items-center justify-center'>
                         <h1 className='font-bold text-2xl mx-2 my-4'>Edit Profile</h1>
                       </div>
@@ -137,7 +138,7 @@ function ProfilePage() {
                   </div>
                 </> : null
             }
-            <div className="p-8  bg-white mt-12 min-h-[]">
+            <div className="p-8  bg-white mt-12">
               <div className="">
                 <div className="relative ">
                   <button type="button" className="w-40 shadow-md shadow-[#c3c1c1] h-40  mx-auto rounded-full bg-[#b2b5b7] absolute inset-x-0 top-0 -mt-24 flex items-center justify-center" aria-expanded="false" data-dropdown-toggle="dropdown-user">
@@ -220,6 +221,7 @@ function ProfilePage() {
           </div>
         </>
       ) : null}
+      <Footer />
     </>
   );
 }
