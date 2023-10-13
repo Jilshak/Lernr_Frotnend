@@ -3,8 +3,8 @@ import React from 'react'
 function CommunityCard(props) {
     const {item} = props
     return (
-        <div className='bg-[#D8D8D8] cursor-pointer mx-2 h-[80px]  max-w-[300px] mt-5 rounded-lg shadow-black hover:shadow-lg flex items-center '>
-            <img className='h-12 rounded-md min-w-[90px] ms-3' src={item?.thumbnail} alt="" />
+        <div className='bg-[#e6e6e6] cursor-pointer mx-2 h-[80px]  max-w-[300px] mt-10 rounded-lg  shadow-lg hover:shadow-2xl flex items-center '>
+            <img className='h-full rounded-l-md min-w-[90px] max-w-[100px] ' src={item?.thumbnail} alt="" />
             <p className='font-semibold mx-2'>{item?.title}</p>
         </div>
     )

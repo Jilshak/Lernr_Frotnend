@@ -48,6 +48,7 @@ function CartPage() {
 
     const handleCheckout = async (data) => {
         try {
+            console.log("This is being called here!!", data)
             const access = await jwtDecode(localStorage.getItem('authToken'))
             const request = await api.post(`payments/stripe_cart/`, { course_id: data, user: access.user_id })
             const response = request.data

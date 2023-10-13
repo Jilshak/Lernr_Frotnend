@@ -103,7 +103,7 @@ export const categoryCourse = createAsyncThunk('category_course',
             const request = await api.get('courses/course')
             const response = request.data
             if (request.status == 200) {
-                const data = response.filter((item) => item.category == credentials.id && item.course_by != credentials.user)
+                const data = response.filter((item) => item.category == credentials.id && item.course_by != credentials.user && item.finished)
                 return data
             }
         } catch (error) {
@@ -236,9 +236,11 @@ export const individualCourse = createAsyncThunk('individual_course',
                 console.log(userData)
                 if (userRequest.status === 200) {
                     const username = userData.username;
+                    const profile_image = userData.profile_image
                     return {
                         course: response,
                         username: username,
+                        image: profile_image,
                     };
                 }
             }
@@ -495,7 +497,7 @@ export const updateOverallProgress = createAsyncThunk('update_overall_progress',
             const response = request.data
             if (request.status == 200) {
                 const final = response.filter((item) => item.user == credentials.user && item.course_id == credentials.course_id)
-                const req = await api.patch(`courses/bought_courses/${final[0].id}/`, { progress: Number(final[0].progress) + Number(credentials.progress) });
+                const req = await api.patch(`courses/bought_courses/${final[0].id}/`, { progress: parseInt(final[0].progress) + parseInt(credentials.progress) });
                 if (req.status == 204) {
                     console.log("The overall progress has been updated")
                 }

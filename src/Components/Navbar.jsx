@@ -140,13 +140,18 @@ function Navbar() {
                                             </span>
                                         </Link>
                                     </li>
-                                    <li>
-                                        <Link to='/add_course'>
-                                            <span className="justify-between">
-                                                <li className='lg:hidden md:hidden sm:block xs:block'>Add Course</li>
-                                            </span>
-                                        </Link>
-                                    </li>
+                                    {
+                                        token?.is_instructor ?
+                                            <>
+                                                <li>
+                                                    <Link to='/add_course'>
+                                                        <span className="justify-between">
+                                                            <li className='lg:hidden md:hidden sm:block xs:block'>Add Course</li>
+                                                        </span>
+                                                    </Link>
+                                                </li>
+                                            </> : null
+                                   }
 
                                     <li onClick={handleLogout}><span className='text-red-400'>Logout</span></li>
                                 </>

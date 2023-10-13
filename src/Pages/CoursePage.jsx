@@ -33,10 +33,10 @@ function CoursePage() {
     }, [])
 
     useEffect(() => {
-        if (review.data.length >= 1){
+        if (review.data.length >= 1) {
             setReviews(review.data)
         }
-    },[review.data])
+    }, [review.data])
 
     useEffect(() => {
         const credentials = {
@@ -159,11 +159,12 @@ function CoursePage() {
                                 <div className='col-span-7 lg:mx-3 my-3 bg-white shadow-xl lg:h-[300px] sm:h-[680px] xs:h-[680px] w-full '>
                                     <div className='grid grid-cols-8 gap-x-10 lg:mt-0 xs:mt-5 mx-10'>
                                         <div className='lg:col-span-2 sm:col-span-8 xs:col-span-8 h-[250px] my-5 lg:mx-0 sm:mx-[50px] xs:mx-[50px] rounded-lg bg-[#D9D9D9]'>
-                                            <div className='flex flex-col items-center justify-center my-5'>
-                                                <div className='rounded-full h-[70px] w-[70px] bg-white'></div>
-                                                <h1 className='mt-1 font-semibold'>{courseDetails?.mycourses?.username}</h1>
-                                                <h1>4.9 Instructor rating</h1>
-                                                <h1>73462 reviewes</h1>
+                                            <div className='flex items-center justify-center relative top-7'>
+                                                <h1 className='absolute text-lg font-bold mx-5 my-2 underline'>COURSE BY </h1>
+                                            </div>
+                                            <div className='flex flex-col h-full items-center justify-center'>
+                                                <img className='rounded-full h-[100px] w-[100px]' src={courseDetails?.mycourses?.image} alt="" />
+                                                <h1 className='mt-1 text-lg font-semibold'>{courseDetails?.mycourses?.username}</h1>
                                             </div>
                                         </div>
                                         <div className='lg:col-span-6 sm:col-span-8 xs:col-span-8 h-[250px] my-5 bg-[#D9D9D9]'>

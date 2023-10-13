@@ -23,10 +23,10 @@ function CommunityPage() {
         <div className='bg-white rounded-lg min-h-[500px] shadow-2xl w-full'>
           <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 mx-[40px]'>
             {
-              !chats.isLoading && chats.bought.length >= 1 ?
+              !chats.isLoading && chats?.bought.length >= 1 ?
                 <>
                   {
-                    chats.bought.map((item) => {
+                    chats?.bought.map((item) => {
                       return (
                         <Link to={`/chat/${item.id}`}>
                           <CommunityCard item={item} />

@@ -163,6 +163,7 @@ function CourseAnalytics() {
       if (result.isConfirmed) {
         dispatch(finishCourse(id))
         dispatch(getLessons(id))
+        dispatch(individualCourse(id));
       }
     })
   }
@@ -289,7 +290,7 @@ function CourseAnalytics() {
                       <div className='lg:col-span-2  h-[550px] overflow-y-auto shadow-md hover:shadow-2xl bg-white relative'>
                         <div className='flex mx-5 flex-col items-center max-h-[500px] justify-center my-5'>
                           <h1 className='font-semibold sticky top-0  text-lg text-[#4D4848]'>LESSONS</h1>
-                          <div className='w-full min-h-[400px] max-h-[430px] scrollbar-thin my-2 overflow-y-auto'>
+                          <div className='w-full min-h-[400px] max-h-[390px] scrollbar-thin my-2 overflow-y-auto'>
                             {videoData?.map((item, index) => (
 
                               <>
@@ -303,7 +304,7 @@ function CourseAnalytics() {
                                     <span className='col-span-6 w-full relative '>
                                       <p className='ms-3 truncate'>{index + 1}. {item.title}</p>
                                       <div className="absolute hidden z-20 group-hover:block bg-gray-800 text-white text-xs py-1 px-2 mt-2 rounded-lg shadow-md whitespace-nowrap">
-                                        {item.title}
+                                        <p>{item.title}</p>
                                       </div>
                                     </span>
                                   </div>
@@ -325,7 +326,7 @@ function CourseAnalytics() {
                                 <button onClick={(e) => handleFinish()} className="btn w-[100px] btn-disabled btn-sm btn-outline mx-2">FINISH</button>
                               </div>
                             </> :
-                            <>
+                            <div>
                               <div className='flex items-center justify-center absolute bottom-2 lg:mx-4 xs:mx-[75px]'>
                                 <Link to={`/quiz/${id}`}>
                                   <button className="btn btn-sm btn-wide btn-outline  ">CREATE A QUIZ</button>
@@ -335,7 +336,7 @@ function CourseAnalytics() {
                                 <button onClick={(e) => setToggleVideoUpload(true)} className="btn  btn-sm btn-outline ">ADD NEW LESSON</button>
                                 <button onClick={(e) => handleFinish()} className="btn w-[100px] btn-sm btn-outline mx-2">FINISH</button>
                               </div>
-                            </>
+                            </div>
                         }
 
                       </div>

@@ -82,6 +82,13 @@ function CourseViewPage() {
         await dispatch(updateProgress(credential))
         await dispatch(getLessons(id))
         await dispatch(updateOverallProgress(credential1))
+        
+        //for getting the progress
+        const credentials = {
+          course_id: id,
+          user: access.user_id
+        }
+        await dispatch(getCourseProgress(credentials))
       }
     }
     overallUpdateFunction()
