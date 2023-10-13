@@ -497,7 +497,11 @@ export const updateOverallProgress = createAsyncThunk('update_overall_progress',
             const response = request.data
             if (request.status == 200) {
                 const final = response.filter((item) => item.user == credentials.user && item.course_id == credentials.course_id)
-                const req = await api.patch(`courses/bought_courses/${final[0].id}/`, { progress: parseInt(final[0].progress) + parseInt(credentials.progress) });
+                if (parseInt(final[0].progress) + parseInt(credentials.progress) >= 100) {
+                    const req = await api.patch(`courses/bought_courses/${final[0].id}/`, { progress: 100 });
+                }else{
+                    const req = await api.patch(`courses/bought_courses/${final[0].id}/`, { progress: parseInt(final[0].progress) + parseInt(credentials.progress) });
+                }
                 if (req.status == 204) {
                     console.log("The overall progress has been updated")
                 }

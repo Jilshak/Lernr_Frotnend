@@ -41,7 +41,7 @@ const PDFGenerator = (props) => {
             <BlobProvider document={<MyPDF details={details} user={user} />}>
               {({ blob, url, loading, error }) => {
                 if (loading) {
-                  return 'Loading...';
+                  return null;
                 }
                 if (error) {
                   return `Error: ${error}`;
@@ -65,7 +65,7 @@ const PDFGenerator = (props) => {
                 return null;
               }}
             </BlobProvider>
-          </> : <h1>still loading....</h1>
+          </> : null
       }
     </div>
   );

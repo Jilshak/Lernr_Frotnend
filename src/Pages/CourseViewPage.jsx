@@ -77,18 +77,19 @@ function CourseViewPage() {
         let credential1 = {
           user: access.user_id,
           course_id: id,
-          progress: (100 / videoData.length).toFixed(2)
-        }
+          progress: Math.ceil(100 / videoData.length)
+        };
         await dispatch(updateProgress(credential))
         await dispatch(getLessons(id))
         await dispatch(updateOverallProgress(credential1))
-        
+
         //for getting the progress
         const credentials = {
           course_id: id,
           user: access.user_id
         }
         await dispatch(getCourseProgress(credentials))
+        await setVideoProgress(0)
       }
     }
     overallUpdateFunction()

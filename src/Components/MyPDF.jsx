@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     textAlign: 'center',
     position: 'relative',
+    bottom: 10,
     left: '50px',
     color: 'white',
     margin: '5px',
@@ -48,8 +49,10 @@ const styles = StyleSheet.create({
   },
   courseName: {
     fontWeight: 'extrabold',
+    position: 'relative',
+    bottom: '5px',
     left: '40px',
-    color: 'red',
+    color: '#F1BB63',
     textAlign: 'center',
   },
   lernr: {
