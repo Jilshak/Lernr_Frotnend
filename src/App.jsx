@@ -29,6 +29,7 @@ import AdminCourses from './Pages/Admin/AdminCourses'
 import AddQuizPage from './Pages/AddQuizPage'
 import TakeQuizPage from './Pages/TakeQuizPage'
 import CertificatePage from './Pages/CertificatePage'
+import ResetPasswordPage from './Pages/ResetPasswordPage'
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
     <Routes>
       <Route path='/login' element={<LoginPage />} />
       <Route path='/signup' element={<SignupPage />} />
+      <Route path='/reset_password/:token' element={<ResetPasswordPage />} />
       <Route path='/signup_instructor' element={<SignupInstructorPage />} />
 
       <Route element={<ProtectedRoutes />}>

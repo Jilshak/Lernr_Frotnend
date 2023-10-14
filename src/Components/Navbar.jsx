@@ -136,8 +136,8 @@ function Navbar() {
                                     </li>
                                     <li>
                                         <Link to='/community'>
-                                            <span className="justify-between">
-                                                <li className='lg:hidden md:hidden sm:block xs:block'>Communities</li>
+                                            <span className="justify-between lg:hidden md:hidden sm:block xs:block">
+                                                Communities
                                             </span>
                                         </Link>
                                     </li>

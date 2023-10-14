@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { Login } from '../features/UserSlice'
+import { Login, requestResetPassword } from '../features/UserSlice'
 import jwtDecode from 'jwt-decode'
 
 
@@ -49,10 +49,30 @@ function LoginPage() {
         await navigate('/')
     }
 
+    const [toggleForgotPassword, setToggleForgotPassword] = useState(false)
+
+    const handleForgotPassword = async () => {
+        await dispatch(requestResetPassword(email))
+        await setToggleForgotPassword(false)
+    }
+
 
     return (
         <div className="hero min-h-screen bg-base-200">
             <div className="hero-content flex-col lg:flex-row-reverse min-w-[450px]">
+                {
+                    toggleForgotPassword ?
+                        <>
+                            <div className='absolute h-[320px] w-[400px] bg-white hover:shadow-2xl hover:shadow-red-300 shadow-2xl z-50'>
+                                <div className='w-full  flex flex-col items-center justify-center'>
+                                    <h1 className='my-5 text-xl font-bold text-[#535050]'>Forgot Your Password ?</h1>
+                                    <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Your accounts email here" className="input input-bordered w-full max-w-xs mt-5" />
+                                    <button onClick={handleForgotPassword} className="btn btn-wide btn-outline btn-sm  my-5">SEND RESET TOKEN</button>
+                                    <button onClick={(e) => setToggleForgotPassword(false)} className="btn btn-wide btn-outline btn-sm">CANCEL</button>
+                                </div>
+                            </div>
+                        </> : null
+                }
                 <div className="card flex-shrink-0 w-full max-w-sm  hover:shadow-lg hover:shadow-[#555454] shadow-[#e5e4e4] bg-base-100">
                     <div className="card-body">
                         <div className="form-control">
@@ -71,7 +91,7 @@ function LoginPage() {
                         </div>
                         <div className='flex items-center justify-center'>
                             <label className="label">
-                                <span className="label-text-alt link link-hover link-accent text-sm">Forgot password?</span>
+                                <span onClick={(e) => setToggleForgotPassword(true)} className="label-text-alt link link-hover link-accent text-sm">Forgot password?</span>
                             </label>
                         </div>
                         <span className='flex justify-center '>

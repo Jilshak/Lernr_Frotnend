@@ -284,6 +284,65 @@ export const updatePassword = createAsyncThunk('update_password',
     });
 
 
+export const requestResetPassword = createAsyncThunk('reset_forgot_password',
+    async (email) => {
+        try {
+            console.log("Thsi is being called here: ", email)
+            const request = await api.post(`request-password-reset/`, {email: email})
+            if (request.status == 200) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'success',
+                        title: 'Email has been send!!',
+                        text: "A link has been send to your email for resetting your password!!",
+                    }
+                )
+            } else {
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+            await Swal.fire(
+                {
+                    background: '#fff',
+                    icon: 'error',
+                    title: 'FAILED!!',
+                    text: "Password updation failed!!",
+                }
+            )
+        }
+    });
+
+
+export const confirmResetPassword = createAsyncThunk('confirm_reset_password',
+    async (credentials) => {
+        try {
+            const request = await api.post(`confirm-password-reset/`, credentials)
+            if (request.status == 200) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'success',
+                        title: 'RESETTED!!',
+                        text: "Your password has been Reset!!",
+                    }
+                )
+            } else {
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+            await Swal.fire(
+                {
+                    background: '#fff',
+                    icon: 'error',
+                    title: 'FAILED!!',
+                    text: "Password updation failed are you sure you entered the right old password ?",
+                }
+            )
+        }
+    });
+
+
 const initialState = {
     isLoading: true,
     data: [],
