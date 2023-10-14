@@ -13,10 +13,10 @@ function EnrolledPage() {
     const [courses, setCourses] = useState([])
 
     useEffect(() => {
-        if (course.bought.length >= 1){
+        if (course.bought.length >= 1) {
             setCourses(course.bought)
         }
-    },[course.bought])
+    }, [course.bought])
 
     useEffect(() => {
         const access = jwtDecode(localStorage.getItem('authToken'))
@@ -36,9 +36,11 @@ function EnrolledPage() {
                                 {
                                     [...courses].reverse().map((item) => {
                                         return (
-                                            <Link to={`/course_view/${item.id}`}>
-                                                <EnrolledCourses item={item} />
-                                            </Link>
+                                            <div>
+                                                <Link to={`/course_view/${item.id}`}>
+                                                    <EnrolledCourses item={item} />
+                                                </Link>
+                                            </div>
                                         )
                                     })
                                 }

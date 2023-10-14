@@ -7,8 +7,8 @@ function EnrolledCourses(props) {
 
 
     return (
-        <div class="justify-between mb-6 rounded-lg w-[600px]  p-6 shadow-md hover:shadow-2xl cursor-pointer  sm:flex sm:justify-start bg-white">
-            <img src={item.thumbnail ? item.thumbnail : `https://source.unsplash.com/vpOeXr5wmR4/`} alt="product-image" class="w-full max-h-[110px] rounded-lg sm:w-40" />
+        <div class="justify-between mb-6 rounded-lg lg:w-[600px]  p-6 shadow-md hover:shadow-2xl cursor-pointer  sm:flex sm:justify-start bg-white">
+            <img src={item.thumbnail ? item.thumbnail : `https://source.unsplash.com/vpOeXr5wmR4/`} alt="product-image" class="w-full max-h-[110px] rounded-lg sm:w-40 xs:w-40" />
             <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                 <div class="mt-5 sm:mt-0">
                     <h2 class="text-md font-bold ">{item.title}</h2>
