@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import EnrolledCourses from '../Components/EnrolledCourses'
 import { useDispatch, useSelector } from 'react-redux'
 import { getBoughtCourses } from '../features/CourseSlice'
@@ -9,6 +9,14 @@ function EnrolledPage() {
 
     const dispatch = useDispatch()
     const course = useSelector((state) => state.courses)
+
+    const [courses, setCourses] = useState([])
+
+    useEffect(() => {
+        if (course.bought.length >= 1){
+            setCourses(course.bought)
+        }
+    },[course.bought])
 
     useEffect(() => {
         const access = jwtDecode(localStorage.getItem('authToken'))
@@ -26,7 +34,7 @@ function EnrolledPage() {
                         !course.isLoading && course.bought.length >= 1 ?
                             <>
                                 {
-                                    course.bought.map((item) => {
+                                    [...courses].reverse().map((item) => {
                                         return (
                                             <Link to={`/course_view/${item.id}`}>
                                                 <EnrolledCourses item={item} />
