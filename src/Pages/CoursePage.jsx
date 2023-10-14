@@ -4,7 +4,7 @@ import Footer from '../Components/Footer'
 import image1 from '../Images/image1.avif'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { addToCart, addtoCart, alreadyBoughtCourse, buyCourse, individualCourse, toggleButton } from '../features/CourseSlice'
+import { addToCart, addtoCartCount, alreadyBoughtCourse, individualCourse, toggleButton } from '../features/CourseSlice'
 import Rating from '../Components/Rating'
 import jwtDecode from 'jwt-decode'
 import ReviewRating from '../Components/ReviewRating'
@@ -20,6 +20,7 @@ function CoursePage() {
     const access = jwtDecode(token)
 
     const navigate = useNavigate()
+    
 
     const dispatch = useDispatch()
     const courseDetails = useSelector((state) => state.courses)
@@ -52,6 +53,7 @@ function CoursePage() {
             on_course: id
         }
         await dispatch(addToCart(credential))
+        await dispatch(addtoCartCount())
     }
 
     const handleBuyCourse = async () => {

@@ -3,7 +3,7 @@ import Navbar from '../Components/Navbar'
 import { Link, useNavigate } from 'react-router-dom'
 import CartProduct from '../Components/CartProduct'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCartItems, removeCartItem, removefromCart } from '../features/CourseSlice'
+import { getCartItems, removeCartItem, removefromCartCount } from '../features/CourseSlice'
 import jwtDecode from 'jwt-decode'
 import Rating from '../Components/Rating'
 import api from '../services/Axios'
@@ -43,6 +43,7 @@ function CartPage() {
             on_course: id
         }
         await dispatch(removeCartItem(credentials))
+        await dispatch(removefromCartCount())
         await setItems(items.filter((item) => item.id != id))
     }
 
@@ -67,7 +68,7 @@ function CartPage() {
         <>
             <div className='min-h-screen'>
                 {
-                    items && !cartItems.isLoading && items.length >= 1 ?
+                    items && !cartItems.isLoading && cartItems.cart.length >= 1 && items.length >= 1 ?
                         <>
                             <div>
                                 <h1 class="mb-10 text-center text-2xl font-bold relative top-10">Cart Items</h1>

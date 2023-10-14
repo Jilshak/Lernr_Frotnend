@@ -147,6 +147,7 @@ export const addToCart = createAsyncThunk('add_to_cart',
                                 text: "The Course has been added to Cart!!",
                             }
                         )
+                        
                     } else {
                         await Swal.fire(
                             {
@@ -762,14 +763,10 @@ const CoursesSlice = createSlice({
             state.toggle = false
             console.log('this is the closeButton: ', state.toggle)
         },
-        addtoCart(state, action) {
-            state.cart.push(action.payload);
+        addtoCartCount(state, action) {
             state.cart_count += 1;
         },
-        removefromCart(state, action) {
-            console.log("This is being called here: ", action.payload)
-            const productIdToRemove = action.payload;
-            state.cart = state.cart.filter((product) => product.id !== productIdToRemove);
+        removefromCartCount(state, action) {
             state.cart_count -= 1;
         },
     },
@@ -984,5 +981,5 @@ const CoursesSlice = createSlice({
     }
 })
 
-export const { toggleButton, closeButton, addtoCart, removefromCart } = CoursesSlice.actions
+export const { toggleButton, closeButton, addtoCartCount, removefromCartCount } = CoursesSlice.actions
 export default CoursesSlice.reducer
