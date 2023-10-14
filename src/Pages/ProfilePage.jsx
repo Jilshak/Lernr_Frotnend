@@ -111,7 +111,7 @@ function ProfilePage() {
               toggle ?
                 <>
                   <div className='w-full  flex justify-center'>
-                    <div className='h-[500px]  w-[450px] z-50 shadow-xl bg-white absolute'>
+                    <div className='h-[550px]  w-[450px] z-50 shadow-xl bg-white absolute'>
                       <div className='flex items-center justify-center'>
                         <h1 className='font-bold text-2xl mx-2 my-4'>Edit Profile</h1>
                       </div>

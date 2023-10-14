@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { addQuiz, deleteQuizQuestions, getQuiz } from '../features/CourseSlice'
 import delete1 from '../icons/delete1.png'
+import Swal from 'sweetalert2'
 
 function AddQuizPage() {
 
@@ -45,23 +46,45 @@ function AddQuizPage() {
   }
 
   const handleAddQuestion = async () => {
-    const data = {
-      question: question,
-      course: id,
-      option1: option1,
-      option2: option2,
-      option3: option3,
-      option4: option4,
-      correct_anwer: answer
-    }
-    if (allQuestion != []) {
-      setAllQuestion([...allQuestion, data])
-      console.log(allQuestion)
+    if (
+      question.trim() === '' ||
+      option1.trim() === '' ||
+      option2.trim() === '' ||
+      option3.trim() === '' ||
+      option4.trim() === '' ||
+      !answer 
+    ) {
+      await Swal.fire(
+        {
+            background: '#fff',
+            icon: 'error',
+            title: 'FAILED',
+            text: "Some of the fields are empty please fill them or you haven't selected the correct answer!!",
+        }
+    )
+      console.error('Please fill in all fields');
     } else {
-      setAllQuestion([data])
+      const data = {
+        question: question,
+        course: id,
+        option1: option1,
+        option2: option2,
+        option3: option3,
+        option4: option4,
+        correct_anwer: answer
+      };
+
+      if (allQuestion != []) {
+        setAllQuestion([...allQuestion, data]);
+        console.log(allQuestion);
+      } else {
+        setAllQuestion([data]);
+      }
+
+      await clearValues();
     }
-    await clearValues()
-  }
+  };
+
 
   const handleAddAllQuestions = async () => {
     console.log("its called")
@@ -72,10 +95,10 @@ function AddQuizPage() {
 
   //for deleting questions
   const handleDelete = async (id) => {
-    if (quiz != []){
+    if (quiz != []) {
       const filteredData = await quiz.filter((item) => item.id != id)
       await setQuiz(filteredData)
-    }else{
+    } else {
       setQuiz([])
     }
     await dispatch(deleteQuizQuestions(id))

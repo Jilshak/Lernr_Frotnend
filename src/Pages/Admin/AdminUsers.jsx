@@ -53,16 +53,16 @@ function AdminUsers() {
   //Search option
   const [find, setFind] = useState();
   const searchItem = async (e) => {
-      if (!find) {
-          setFind(users);
-      }
-      if (e.target.value === '') {
-          setUsers(find);
-      } else {
-          setUsers(await users.filter((item) => {
-              return item.email.startsWith(e.target.value);
-          }));
-      }
+    if (!find) {
+      setFind(users);
+    }
+    if (e.target.value === '') {
+      setUsers(find);
+    } else {
+      setUsers(await users.filter((item) => {
+        return item.email.startsWith(e.target.value);
+      }));
+    }
   }
 
 
@@ -80,33 +80,21 @@ function AdminUsers() {
                   {
                     users && users.length >= 1 ?
                       <>
-                        <ul className='mx-10 mt-3 scrollbar-none'>
+                        <ul className='mx-10 mt-3 '>
                           {
-                            users.map((item) => {
-                              if (!item.is_superuser && !item.is_instructor) {
-                                if (!item.is_blocked) {
-                                  return (
-                                    <li key={item.id} onClick={(e) => {
-                                      displayUser(item.id)
-                                    }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
-                                      <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
-                                      <h1 className='ms-2'>{item.username ? item.username : item.email}</h1>
-                                      <div className='flex items-center justify-end w-full'>
-                                        <h1 className='text-green-400'>Active</h1>
-                                      </div>
-                                    </li>
-                                  )
-                                } else {
-                                  return (
-                                    <li key={item.id} onClick={(e) => {
-                                      displayUser(item.id)
-                                    }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
-                                      <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
-                                      <h1 className='ms-2'>{item.username ? item.username : item.email}</h1>
-                                      <h1 className='text-sm text-orange-400 absolute right-10 me-2'>Blocked</h1>
-                                    </li>
-                                  )
-                                }
+                            users?.map((item) => {
+                              if (!item.is_instuctor && item.is_user && !item.is_superuser) {
+                                return (
+                                  <li key={item.id} onClick={(e) => {
+                                    displayUser(item.id)
+                                  }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
+                                    <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
+                                    <h1 className='ms-2 w-full'>{item.username ? item.username : item.email}</h1>
+                                    <div className='flex items-center justify-end w-full'>
+                                      {!item.is_blocked ? <h1 className='text-green-400 text-xs mx-3'>Active</h1> : <h1 className='text-red-400 text-xs'>Blocked</h1>}
+                                    </div>
+                                  </li>
+                                )
                               }
                             })
                           }

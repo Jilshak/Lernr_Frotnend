@@ -20,7 +20,7 @@ function CoursePage() {
     const access = jwtDecode(token)
 
     const navigate = useNavigate()
-    
+
 
     const dispatch = useDispatch()
     const courseDetails = useSelector((state) => state.courses)
@@ -186,14 +186,16 @@ function CoursePage() {
                                 <div className='col-span-7 lg:mx-3 my-3 bg-white shadow-xl mt-5 h-[350px] w-full '>
                                     <div className='mx-3 my-3'>
                                         <h1 className='text-2xl font-semibold ms-5 text-[#3D3D3D]'>Ratings</h1>
-                                        <div className='grid grid-flow-col lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 carousel carousel-center rounded-box'>
+                                        <div className='flex  carousel carousel-center rounded-box overflow-y-auto'>
                                             {
                                                 !review?.isLoading && review?.data?.length >= 1 ?
                                                     <>
                                                         {
                                                             reviews?.map((item) => {
                                                                 return (
-                                                                    <Reviews item={item} />
+                                                                    <div className='min-w-[300px]'>
+                                                                        <Reviews item={item} />
+                                                                    </div>
                                                                 )
                                                             })
                                                         }

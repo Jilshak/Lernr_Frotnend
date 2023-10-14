@@ -91,9 +91,9 @@ function AdminInstructorPage() {
                                                                                 displayUser(item.id)
                                                                             }} className='flex cursor-pointer items-center p-1 my-5 rounded-lg hover:bg-[#bec0c2]'>
                                                                                 <img className='h-12 w-12 ms-2 rounded-full' src={item.profile_image ? item.profile_image : noprofile} alt="" />
-                                                                                <h1 className='ms-2'>{item.username ? item.username : item.email}</h1>
+                                                                                <h1 className='ms-2 w-full'>{item.username ? item.username : item.email}</h1>
                                                                                 <div className='flex items-center justify-end w-full'>
-                                                                                    {!item.is_blocked ? <h1 className='text-green-400 text-xs mx-3'>Active</h1> : <h1 className='text-red-400'>Blocked</h1>}
+                                                                                    {!item.is_blocked ? <h1 className='text-green-400 text-xs mx-3'>Active</h1> : <h1 className='text-red-400 text-xs'>Blocked</h1>}
                                                                                 </div>
                                                                             </li>
                                                                         )

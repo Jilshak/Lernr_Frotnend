@@ -17,27 +17,37 @@ function SignupPage() {
     const [username, setUsername] = useState('')
 
     const handleRegister = async () => {
-        if (email != '' && password != '' && username != '') {
-            if (password == password1) {
+        const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+        if (email != '' && username != '' && password != '' && password1 != '') {
+            if (password !== password1) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'error',
+                        title: 'Passwords do not match',
+                        text: "Passwords entered do not match.",
+                    }
+                );
+            } else if (!password.match(passwordPattern)) {
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'error',
+                        title: 'Invalid Password',
+                        text: "Password must be at least 8 characters long and include at least one uppercase letter, one digit, and one special character (!@#$%^&*).",
+                    }
+                );
+            } else {
                 const credentials = {
                     email: email,
                     password: password,
                     first_name: firstName,
                     last_name: lastName,
                     username: username
-                }
-                await dispatch(Register(credentials))
-                navigate('/login')
-
-            } else {
-                await Swal.fire(
-                    {
-                        background: '#fff',
-                        icon: 'error',
-                        title: 'Passwrod!!!!',
-                        text: "Passwrods doesn't match one another",
-                    }
-                )
+                };
+                await dispatch(Register(credentials));
+                navigate('/login');
             }
         } else {
             await Swal.fire(
@@ -45,11 +55,12 @@ function SignupPage() {
                     background: '#fff',
                     icon: 'error',
                     title: 'INCOMPLETE!!!!',
-                    text: "Some of the required fields are not filled",
+                    text: "Some of the required fields are not filled.",
                 }
-            )
+            );
         }
-    }
+    };
+
 
     return (
         <div className="hero min-h-screen bg-base-200">
@@ -61,10 +72,10 @@ function SignupPage() {
                         </div>
                         <div className='grid grid-cols-2 gap-3'>
                             <div className="form-control my-2">
-                                <input onChange={(e) => setFirstName(e.target.value)} type="text" placeholder="first name" className="input input-bordered" />
+                                <input onChange={(e) => setFirstName(e.target.value)} type="text" placeholder="first name (optional)" className="input input-bordered" />
                             </div>
                             <div className="form-control my-2">
-                                <input onChange={(e) => setLastName(e.target.value)} type="text" placeholder="last name" className="input input-bordered" />
+                                <input onChange={(e) => setLastName(e.target.value)} type="text" placeholder="last name (optional)" className="input input-bordered" />
                             </div>
                         </div>
                         <div className="form-control">
