@@ -49,16 +49,15 @@ function ChatPage() {
 
     useEffect(() => {
         if (socket) {
-
             socket.onmessage = async (event) => {
                 const message = await JSON.parse(event.data);
 
-                setMessages(prevMessages => {
+                setMessages((prevMessages) => {
                     if (!prevMessages) {
                         return [message];
                     } else {
-                        console.log("Message received: ", message)
-                        console.log(decode)
+                        console.log("Message received: ", message);
+                        console.log(decode);
                         return [...prevMessages, message];
                     }
                 });
@@ -101,6 +100,7 @@ function ChatPage() {
 
 
     useEffect(() => {
+        setMessages()
         const decode = jwtDecode(localStorage.getItem('authToken'))
         if (message?.messages?.length >= 1 && decode?.user_id) {
             setMessages(message?.messages)
@@ -113,19 +113,17 @@ function ChatPage() {
     //logic for sending the messages
     const handleSendMessage = async () => {
         if (socket && socket.readyState === socket.OPEN && input !== '') {
-            await socket.send(JSON.stringify({ message: input, sender_username: decode?.user_id }));
+            await socket.send(JSON.stringify({ message: input, sender_id: decode?.user_id, sender_username: decode?.username }));
         } else {
-            console.log("Websocket is not open for you to send message")
+            console.log("Websocket is not open for you to send a message");
         }
-        await setInput('')
+        await setInput('');
 
-
-        //using use ref to scroll back into view of the messages
+        // Using useRef to scroll back into view of the messages
         if (lastMessageRef.current) {
-            await lastMessageRef.current.scrollIntoView({ behavior: 'smooth', target: lastMessageRef.current });
+            await lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     };
-
 
 
     return (
@@ -166,33 +164,28 @@ function ChatPage() {
                             !message.isLoading && message.messages.length >= 0 ?
                                 <>
                                     {
-                                        messages?.map((item, index) => {
-                                            const messageRef = index === messages.length - 1 ? lastMessageRef : null;
-                                            return (
-                                                <div
-                                                    key={index}
-                                                    className={`flex ${item.senderUsername == decode.user_id || item.sender == decode.user_id ? 'justify-end' : 'justify-start'} mb-4`}
-                                                    ref={messageRef}
-                                                >
-                                                    <div
-                                                        className={`py-3 px-4 ${item.senderUsername == decode.user_id || item.sender == decode.user_id ? 'bg-gray-300 rounded-br-3xl rounded-tr-3xl rounded-tl-xl' : 'bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white'}`}
-                                                    >
-                                                        {item.message}
-                                                    </div>
-                                                    {
-                                                        decode.user_id == item.sender || item.senderUsername == decode.user_id ?
-                                                            <>
-
-                                                            </> :
-                                                            <div className='rounded-full h-8 w-8 bg-white mx-2'>
-                                                                <small className='flex items-center justify-center mt-1'>
-                                                                    {item.sender || item.senderUsername}
-                                                                </small>
+                                        messages?.length >= 1 ?
+                                            <>
+                                                {
+                                                    messages?.map((item, index) => {
+                                                        const messageRef = index === messages.length - 1 ? lastMessageRef : null;
+                                                        return (
+                                                            <div
+                                                                key={index}
+                                                                className={`flex ${item.senderId == decode.user_id || item.sender == decode.user_id ? 'justify-end' : 'justify-start'} mb-4`}
+                                                                ref={messageRef}
+                                                            >
+                                                                <div
+                                                                    className={`py-3 px-4 ${item.senderId == decode.user_id || item.sender == decode.user_id ? 'bg-gray-300 rounded-br-3xl rounded-tr-3xl rounded-tl-xl' : 'bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white'}`}
+                                                                >
+                                                                    <h1 className='text-[8px] font-semibold'> {item.senderUsername || item.sender_username}</h1>
+                                                                    {item.message}
+                                                                </div>
                                                             </div>
-                                                    }
-                                                </div>
-                                            )
-                                        })
+                                                        )
+                                                    })
+                                                }
+                                            </> : null
                                     }
                                 </> :
                                 <div class="flex justify-center items-center h-screen">
