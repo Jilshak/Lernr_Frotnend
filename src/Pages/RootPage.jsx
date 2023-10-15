@@ -11,8 +11,6 @@ function RootPage() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const access = jwtDecode(localStorage.getItem('authToken'))
-
     const blocking = useSelector((state) => state.users)
 
     const handleLogout = () => {
@@ -21,14 +19,25 @@ function RootPage() {
     }
 
     useEffect(() => {
-        dispatch(getMyProfile(access.user_id))
-    },[])
+        const handleToken = async () => {
+            if (localStorage.getItem('authToken')) {
+                const access = await jwtDecode(localStorage.getItem('authToken'))
+                if (access.user_id != null) {
+                    await dispatch(getMyProfile(access.user_id))
+                }
+            } else {
+               await dispatch(getMyProfile(''))
+            }
+        }
+        handleToken()
+    }, [])
+
 
 
     return (
         <>
             {
-                blocking && !blocking.profile.is_blocked || localStorage.getItem('guestToken') ?
+                blocking && !blocking?.profile?.is_blocked || localStorage?.getItem('guestToken') ?
                     <>
                         <div className='sticky top-0 z-50'>
                             <Navbar />

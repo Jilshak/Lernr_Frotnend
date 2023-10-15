@@ -13,12 +13,24 @@ function HomePage() {
 
     const dispatch = useDispatch()
     const course = useSelector((state) => state.courses)
-    const access = jwtDecode(localStorage.getItem('authToken'))
 
     useEffect(() => {
-        dispatch(getCourses(access.user_id))
-        dispatch(getCategories())
+        const handleToken = async () => {
+            if (localStorage.getItem('authToken')) {
+                const access = await localStorage.getItem('authToken')
+                const decoded = await jwtDecode(access?.user_id)
+                if (decoded != null) {
+                    await dispatch(getCourses(decoded))
+                    await dispatch(getCategories())
+                }
+            } else {
+                await dispatch(getCourses(''))
+                await dispatch(getCategories())
+            }
+        }
+        handleToken()
     }, [])
+
 
     return (
         <>
@@ -27,7 +39,7 @@ function HomePage() {
                     <Carousal />
                 </div>
                 {
-                    course && course.data.length >= 1 ?
+                    !course.isLoading && course?.data.length >= 1 ?
                         <>
                             <div className='mt-4 h-[400px] mx-[30px]'>
                                 <h1 className='text-2xl font-bold text-[#3D3D3D] '>Popular Courses </h1>

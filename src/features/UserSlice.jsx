@@ -35,10 +35,12 @@ export const Register = createAsyncThunk('register',
 export const getMyProfile = createAsyncThunk('my_profile',
     async (id) => {
         try {
-            const request = await api.get(`user/${id}/`)
-            const response = request.data
-            if (request.status == 200) {
-                return response
+            if (id != '') {
+                const request = await api.get(`user/${id}/`)
+                const response = request.data
+                if (request.status == 200) {
+                    return response
+                }
             }
         } catch (error) {
             console.log("Error: ", error)
@@ -288,7 +290,7 @@ export const requestResetPassword = createAsyncThunk('reset_forgot_password',
     async (email) => {
         try {
             console.log("Thsi is being called here: ", email)
-            const request = await api.post(`request-password-reset/`, {email: email})
+            const request = await api.post(`request-password-reset/`, { email: email })
             if (request.status == 200) {
                 await Swal.fire(
                     {

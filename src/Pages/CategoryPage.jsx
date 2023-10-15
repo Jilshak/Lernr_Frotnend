@@ -10,19 +10,36 @@ function CategoryPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.courses);
-  const access = jwtDecode(localStorage.getItem('authToken'))
+
 
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const credentials = {
-      user: access.user_id,
-      id: id
-    }
-    Promise.resolve(dispatch(getCategories()))
-    Promise.resolve(dispatch(categoryCourse(credentials)))
-    dispatch(getCategoryName(id))
-  }, [dispatch, id]);
+    const fetchData = async () => {
+      if (localStorage.getItem('authToken')) {
+        const access = jwtDecode(localStorage.getItem('authToken'))
+        if (access.user_id) {
+          const credentials = {
+            user: access.user_id,
+            id: id,
+          };
+          await dispatch(getCategories())
+          await dispatch(categoryCourse(credentials))
+          await dispatch(getCategoryName(id));
+        }
+      } else {
+        const credentials = {
+          user: '',
+          id: id,
+        };
+        await dispatch(getCategories())
+        await dispatch(categoryCourse(credentials))
+        await dispatch(getCategoryName(id));
+      }
+    };
+    fetchData();
+  }, [id]);
+
 
   useEffect(() => {
     if (data.categoryCourse.length >= 1) {

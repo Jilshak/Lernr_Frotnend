@@ -11,7 +11,7 @@ function Rating(props) {
                     <div className='z-0  flex'>
                         {
                             Array(Math.round(rating)).fill().map((_, index) => (
-                                <div className={`rating bottom-2 mt-${top} left-0 relative rating-half`}>
+                                <div key={index} className={`rating bottom-2 mt-${top} left-0 relative rating-half`}>
                                     <input key={index} type="radio" name="rating-5" className="mask mask-star-2 bg-orange-400" />
                                 </div>
                             ))

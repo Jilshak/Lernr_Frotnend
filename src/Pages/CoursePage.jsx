@@ -15,10 +15,6 @@ function CoursePage() {
 
     const { id } = useParams()
 
-    //to get the user id
-    const token = localStorage.getItem('authToken')
-    const access = jwtDecode(token)
-
     const navigate = useNavigate()
 
 
@@ -29,42 +25,75 @@ function CoursePage() {
     const [reviews, setReviews] = useState()
 
     useEffect(() => {
-        dispatch(individualCourse(id))
-        dispatch(getReview(id))
-    }, [])
+        console.log("First console log")
+        const fetchData = async () => {
+            console.log("Its entering the fetchData function")
+            await dispatch(individualCourse(id));
+            await dispatch(getReview(id));
+        };
+        fetchData();
+    }, [id]);
 
     useEffect(() => {
-        if (review.data.length >= 1) {
-            setReviews(review.data)
-        }
-    }, [review.data])
+        console.log("seond console log")
+        const handleReviews = () => {
+            console.log("Its entering the handleReview function")
+            if (review.data.length >= 1) {
+                setReviews(review.data);
+            }
+        };
+        handleReviews();
+    }, [review.data]);
 
     useEffect(() => {
-        const credentials = {
-            user: parseInt(access.user_id),
-            course_id: parseInt(id)
-        }
-        dispatch(alreadyBoughtCourse(credentials))
-    }, [])
+        console.log("third console log")
+        const handleToken = async () => {
+            console.log("Its entering the handleToken function")
+            if (localStorage.getItem('authToken')) {
+                const access = await jwtDecode(localStorage.getItem('authToken'));
+                const credentials = {
+                    user: parseInt(access.user_id),
+                    course_id: parseInt(id),
+                };
+                await dispatch(alreadyBoughtCourse(credentials));
+            }
+        };
+        handleToken();
+    }, [id]);
 
     const handleAddToCart = async () => {
-        const credential = {
-            user: access.user_id,
-            on_course: id
+        if (localStorage.getItem('authToken')) {
+            const credential = {
+                user: access.user_id,
+                on_course: id
+            }
+            await dispatch(addToCart(credential))
+            await dispatch(addtoCartCount())
         }
-        await dispatch(addToCart(credential))
-        await dispatch(addtoCartCount())
     }
 
     const handleBuyCourse = async () => {
         try {
-            const request = await api.post(`payments/stripe/`, { course_id: id })
-            const response = request.data
-            if (request.status == 200) {
-                console.log(response)
-                await navigate(`/stripe/${response.pi}/${id}`)
+            const access = jwtDecode(localStorage.getItem('authToken'))
+            if (access.user_id) {
+                const request = await api.post(`payments/stripe/`, { course_id: id })
+                const response = request.data
+                if (request.status == 200) {
+                    console.log(response)
+                    await navigate(`/stripe/${response.pi}/${id}`)
+                } else {
+                    console.log("Something went wrong while doing the request")
+                }
             } else {
-                console.log("Something went wrong while doing the request")
+                await Swal.fire(
+                    {
+                        background: '#fff',
+                        icon: 'warning',
+                        title: 'Logged Out!',
+                        text: "It seems you are logged out please login to continue!!",
+                    }
+                )
+                await navigate('/login')
             }
         } catch (error) {
             console.log("Error: ", error)
@@ -116,7 +145,7 @@ function CoursePage() {
                                     </div>
                                     <div className='flex relative '>
                                         {
-                                            !courseDetails?.isLoading && courseDetails?.alreadybought == false ?
+                                            !courseDetails?.isLoading && courseDetails?.alreadybought == false || localStorage.getItem('guestToken') ?
                                                 <>
                                                     <button onClick={handleBuyCourse} className="min-h-[40px] mx-3 w-[260px] font-semibold rounded-lg bg-[#A435F0] text-white">BUY THIS COURSE</button>
                                                     <button onClick={handleAddToCart} className="min-h-[40px] mx-3 w-[190px] font-semibold rounded-lg bg-[#D6BF45] text-white">ADD TO CART</button>
@@ -193,7 +222,7 @@ function CoursePage() {
                                                         {
                                                             reviews?.map((item) => {
                                                                 return (
-                                                                    <div className='min-w-[300px]'>
+                                                                    <div key={item.id} className='min-w-[300px]'>
                                                                         <Reviews item={item} />
                                                                     </div>
                                                                 )

@@ -12,14 +12,23 @@ function AllCoursesPage() {
 
   const dispatch = useDispatch()
   const all = useSelector((state) => state.courses)
-  const access = jwtDecode(localStorage.getItem('authToken'))
-
-
 
   useEffect(() => {
-    dispatch(getCourses(access.user_id))
-    dispatch(getCategories())
+    const handleToken = async () => {
+      if (localStorage.getItem('authToken')) {
+        const access = await jwtDecode(localStorage.getItem('authToken'))
+        if (access.user_id != null) {
+          await dispatch(getCourses(access.user_id))
+          await dispatch(getCategories())
+        }
+      } else {
+        await dispatch(getCourses(''))
+        await dispatch(getCategories())
+      }
+    }
+    handleToken()
   }, [])
+
 
   const [course, setCourse] = useState()
 

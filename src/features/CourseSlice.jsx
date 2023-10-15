@@ -10,24 +10,45 @@ export const getCourses = createAsyncThunk('get_course',
             const courseRequest = await api.get('courses/course');
             const courseResponse = courseRequest.data;
 
-            const final = courseResponse.filter((item) => item.course_by != id && item.finished == true)
+            if (id != '') {
+                const final = courseResponse.filter((item) => item.course_by != id && item.finished == true)
+                if (courseRequest.status === 200) {
+                    // Create an array of promises for fetching usernames
+                    const usernamePromises = final.map(async (course) => {
+                        const userRequest = await api.get(`user/${course.course_by}`);
+                        const userResponse = userRequest.data;
+                        return {
+                            ...course,
+                            username: userResponse.username,
+                        };
+                    });
 
-            if (courseRequest.status === 200) {
-                // Create an array of promises for fetching usernames
-                const usernamePromises = final.map(async (course) => {
-                    const userRequest = await api.get(`user/${course.course_by}`);
-                    const userResponse = userRequest.data;
-                    return {
-                        ...course,
-                        username: userResponse.username,
-                    };
-                });
+                    // Wait for all promises to resolve
+                    const coursesWithUsername = await Promise.all(usernamePromises);
+                    console.log("This is the updated course: ", coursesWithUsername)
+                    return coursesWithUsername;
+                }
+            } else {
+                const final = courseResponse.filter((item) => item.finished == true)
+                if (courseRequest.status === 200) {
+                    // Create an array of promises for fetching usernames
+                    const usernamePromises = final.map(async (course) => {
+                        const userRequest = await api.get(`user/${course.course_by}`);
+                        const userResponse = userRequest.data;
+                        return {
+                            ...course,
+                            username: userResponse.username,
+                        };
+                    });
 
-                // Wait for all promises to resolve
-                const coursesWithUsername = await Promise.all(usernamePromises);
-                console.log("This is the updated course: ", coursesWithUsername)
-                return coursesWithUsername;
+                    // Wait for all promises to resolve
+                    const coursesWithUsername = await Promise.all(usernamePromises);
+                    console.log("This is the updated course: ", coursesWithUsername)
+                    return coursesWithUsername;
+                }
             }
+
+
         } catch (error) {
             console.log('Error: ', error);
         }
@@ -103,8 +124,15 @@ export const categoryCourse = createAsyncThunk('category_course',
             const request = await api.get('courses/course')
             const response = request.data
             if (request.status == 200) {
-                const data = response.filter((item) => item.category == credentials.id && item.course_by != credentials.user && item.finished)
-                return data
+                console.log("This is the credentials: ", credentials)
+                if (credentials.user != '') {
+                    const data = response.filter((item) => item.category == credentials.id && item.course_by != credentials.user && item.finished)
+                    return data
+                } else {
+                    const data = response.filter((item) => item.category == credentials.id && item.finished)
+                    return data
+                }
+
             }
         } catch (error) {
             console.log("Error: ", error)
@@ -147,7 +175,7 @@ export const addToCart = createAsyncThunk('add_to_cart',
                                 text: "The Course has been added to Cart!!",
                             }
                         )
-                        
+
                     } else {
                         await Swal.fire(
                             {
@@ -500,7 +528,7 @@ export const updateOverallProgress = createAsyncThunk('update_overall_progress',
                 const final = response.filter((item) => item.user == credentials.user && item.course_id == credentials.course_id)
                 if (parseInt(final[0].progress) + parseInt(credentials.progress) >= 100) {
                     const req = await api.patch(`courses/bought_courses/${final[0].id}/`, { progress: 100 });
-                }else{
+                } else {
                     const req = await api.patch(`courses/bought_courses/${final[0].id}/`, { progress: parseInt(final[0].progress) + parseInt(credentials.progress) });
                 }
                 if (req.status == 204) {
@@ -607,11 +635,9 @@ export const hasBoughtAnyCourse = createAsyncThunk('has_bought_any_course',
 export const alreadyBoughtCourse = createAsyncThunk('already_bought_course',
     async (credentials) => {
         try {
-            console.log("This is the credentials: ", credentials)
             const request = await api.get(`courses/bought_courses`)
             const response = request.data
             if (request.status == 200) {
-                console.log("This is the bought courses: ", response)
                 const data = response.filter((item) => item.user == credentials.user && item.course_id == credentials.course_id)
                 console.log("This is the data that is coming from this: ", data)
                 if (data.length == 0) {
