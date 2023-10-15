@@ -41,9 +41,9 @@ function Carousal() {
   }
 
   useEffect(() => {
-    const interval = setInterval(changeSlide, 5000); // Change slide every 5 seconds (5000 milliseconds)
+    const interval = setInterval(changeSlide, 10000);
     return () => {
-      clearInterval(interval); // Clear the interval when the component unmounts
+      clearInterval(interval);
     };
   }, [currentIndex]);
 
@@ -53,8 +53,8 @@ function Carousal() {
     height: "100%",
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    transition: 'opacity 1s', // CSS transition for the fading effect
-    opacity: 1, // Initially set to 1
+    transition: 'opacity 1s',
+    opacity: 1,
   };
 
   const gradientOverlay = {
@@ -62,12 +62,11 @@ function Carousal() {
     bottom: 0,
     left: 0,
     right: 0,
-    height: '25%', // Adjust the height for the fading effect
+    height: '25%',
     background: 'linear-gradient(to bottom, rgba(214, 214, 214, 0) 0%, rgba(214, 214, 214, 1) 100%)',
   };
 
   useEffect(() => {
-    // Set opacity to 1 after the component mounts to trigger the initial fade-in
     setTimeout(() => {
       carouselStyle.opacity = 1;
     }, 100);
@@ -75,7 +74,7 @@ function Carousal() {
 
   return (
     <Link to={`/allCourse`}>
-      <div className='w-full flex justify-center relative items-center h-[50vh] my-1 '>
+      <div className='w-full flex justify-center relative items-center h-[50vh]  '>
         <div style={carouselStyle} className='w-full cursor-pointer h-full group rounded-t-md'>
           <div style={gradientOverlay}></div>
           {/* <img onClick={prevSlide} src={leftarrow} className='hidden h-12 group-hover:block relative top-[140px] left-[10px] z-50 cursor-pointer' />
