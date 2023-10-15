@@ -12,12 +12,12 @@ function CourseViewPage() {
 
   const [videoTime, setVideoTime] = useState(0);
   const [videoProgress, setVideoProgress] = useState(0);
-  const [selectVideo, setSelectedVideo] = useState()
+  const [selectVideo, setSelectedVideo] = useState('')
   const [videoData, setVideoData] = useState()
 
   useEffect(() => {
     setVideoData()
-    setSelectedVideo()
+    setSelectedVideo('')
     dispatch(individualCourse(id));
     dispatch(getLessons(id))
     const credentials = {
@@ -25,7 +25,7 @@ function CourseViewPage() {
       user: access.user_id
     }
     dispatch(getCourseProgress(credentials))
-  }, [dispatch, id]);
+  }, [id]);
 
 
   useEffect(() => {
@@ -47,6 +47,13 @@ function CourseViewPage() {
     const intervalId = setInterval(updateVideoProgress, 3000);
     return () => clearInterval(intervalId);
   }, []);
+
+  useEffect(() => {
+    const handleSelectedVideo = async () => {
+      await setSelectedVideo(video?.lessons[0]?.video_url)
+    }
+    handleSelectedVideo()
+  },[id, video.lessons])
 
   const handleMetadataLoaded = () => {
     const videoElement = document.querySelector('video');
@@ -106,7 +113,7 @@ function CourseViewPage() {
           <div className='min-h-screen'>
             <div className='relative top-5 grid lg:grid-cols-9 gap-x-7'>
               <video key={selectVideo} className='h-[550px] lg:col-span-7 w-full hover:shadow-2xl' controls onLoadedMetadata={handleMetadataLoaded}>
-                <source src={selectVideo ? selectVideo : (videoData[0]?.video_url ? videoData[0]?.video_url : video?.lessons[0]?.video_url)} type="video/mp4" />
+                <source src={selectVideo ? selectVideo : (video?.lessons[0]?.video_url)} type="video/mp4" />
                 <source src="video.webm" type="video/webm" />
                 Your browser does not support the video tag.
               </video>
