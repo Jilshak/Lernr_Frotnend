@@ -62,15 +62,33 @@ function CoursePage() {
         handleToken();
     }, [id]);
 
+    const [toCart, setToCart] = useState(false)
+
     const handleAddToCart = async () => {
-        if (localStorage.getItem('authToken')) {
-            const access = await jwtDecode(localStorage.getItem('authToken'));
-            const credential = {
-                user: access.user_id,
-                on_course: id
+        try {
+            if (localStorage.getItem('authToken')) {
+                const access = await jwtDecode(localStorage.getItem('authToken'));
+                const credential = {
+                    user: access.user_id,
+                    on_course: id
+                }
+                if (!toCart) {
+                    await dispatch(addToCart(credential))
+                    await dispatch(addtoCartCount())
+                    setToCart(true)
+                } else {
+                    await Swal.fire(
+                        {
+                            background: '#fff',
+                            icon: 'error',
+                            title: 'Already have this item!',
+                            text: "It seems you alredy added this item to your cart before!!",
+                        }
+                    )
+                }
             }
-            await dispatch(addToCart(credential))
-            await dispatch(addtoCartCount())
+        } catch (error) {
+            console.log("Error: ", error)
         }
     }
 
