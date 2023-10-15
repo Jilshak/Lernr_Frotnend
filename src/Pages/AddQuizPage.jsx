@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { addQuiz, deleteQuizQuestions, getQuiz } from '../features/CourseSlice'
+import { addQuiz, courseHaveQuiz, deleteQuizQuestions, getQuiz } from '../features/CourseSlice'
 import delete1 from '../icons/delete1.png'
 import Swal from 'sweetalert2'
 
@@ -87,8 +87,8 @@ function AddQuizPage() {
 
 
   const handleAddAllQuestions = async () => {
-    console.log("its called")
     await dispatch(addQuiz(allQuestion))
+    await dispatch(courseHaveQuiz(id))
     await setAllQuestion([])
     await dispatch(getQuiz(id))
   }

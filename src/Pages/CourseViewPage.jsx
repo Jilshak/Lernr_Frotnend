@@ -16,6 +16,8 @@ function CourseViewPage() {
   const [videoData, setVideoData] = useState()
 
   useEffect(() => {
+    setVideoData()
+    setSelectedVideo()
     dispatch(individualCourse(id));
     dispatch(getLessons(id))
     const credentials = {
@@ -142,9 +144,17 @@ function CourseViewPage() {
                     {
                       video.progress == 100 ?
                         <>
-                          <Link to={`/take_quiz/${id}`}>
-                            <button className="btn absolute lg:left-5 xs:left-14 bottom-3 btn-sm btn-outline btn-wide">GET CERTIFICATE</button>
-                          </Link>
+                          {
+                            !video.isLoading && video.mycourses.course.have_quiz ?
+                              <>
+                                <Link to={`/take_quiz/${id}`}>
+                                  <button className="btn absolute lg:left-5 xs:left-14 bottom-3 btn-sm btn-outline btn-wide">GET CERTIFICATE</button>
+                                </Link>
+                              </> :
+                              <Link to={`/certificate/${id}/${access.user_id}`}>
+                                <button className="btn absolute lg:left-5 xs:left-14 bottom-3 btn-sm btn-outline btn-wide">GET CERTIFICATE</button>
+                              </Link>
+                          }
                         </> :
                         <button disabled className="btn absolute lg:left-5 xs:left-14 bottom-3 btn-sm btn-outline btn-wide">GET CERTIFICATE</button>
                     }

@@ -28,7 +28,7 @@ const PDFGenerator = (props) => {
                 <>
                   <div className='bg-white h-[450px] w-[480px] flex flex-col relative bottom-16 rounded-lg items-center justify-center shadow-xl hover:shadow-2xl'>
                     <div className='mx-[20px]'>
-                      <img className='rounded-md ' src={details?.course?.thumbnail} alt="" />
+                      <img className='rounded-md max-h-[250px] ' src={details?.course?.thumbnail} alt="" />
                     </div>
                     <div className='flex flex-col items-center justify-center'>
                       <p className='font-semibold text-lg my-3'>Congrats on Completing the Course</p>
@@ -50,7 +50,7 @@ const PDFGenerator = (props) => {
                   return (
                     <div className='bg-white h-[450px] w-[480px] flex flex-col relative bottom-16 rounded-lg items-center justify-center shadow-xl hover:shadow-2xl'>
                       <div className='mx-[20px]'>
-                        <img className='rounded-md ' src={details?.course?.thumbnail} alt="" />
+                        <img className='rounded-md max-h-[250px]' src={details?.course?.thumbnail} alt="" />
                       </div>
                       <div className='flex flex-col items-center justify-center'>
                         <p className='font-semibold text-lg my-3'>Congrats on Completing the Course</p>

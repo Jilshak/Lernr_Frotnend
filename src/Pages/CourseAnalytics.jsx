@@ -319,7 +319,7 @@ function CourseAnalytics() {
                           video.mycourses.course.finished ?
                             <>
                               <div className='flex items-center justify-center absolute bottom-2 lg:mx-4 xs:mx-[75px]'>
-                                <button onClick={(e) => setToggleVideoUpload(true)} className="btn btn-disabled btn-sm btn-wide btn-outline  ">CREATE A QUIZ</button>
+                                <button  className="btn btn-disabled btn-sm btn-wide btn-outline  ">CREATE A QUIZ</button>
                               </div>
                               <div className='flex items-center justify-center relative bottom-4'>
                                 <button onClick={(e) => setToggleVideoUpload(true)} className="btn btn-disabled btn-sm btn-outline ">ADD NEW LESSON</button>
