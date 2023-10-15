@@ -37,13 +37,13 @@ function HomePage() {
                 !course.isLoading ?
                     <>
                         <div className='h-full'>
-                            <div className=' z-0 '>
+                            <div className=' z-0 lg:block xs:hidden'>
                                 <Carousal />
                             </div>
                             {
                                 !course.isLoading && course?.data.length >= 1 ?
                                     <>
-                                        <div className='mt-4 h-[400px] mx-[30px] relative z-10 bottom-12'>
+                                        <div className='mt-4 h-[400px] mx-[30px] relative z-10 lg:bottom-12'>
                                             <h1 className='text-2xl ms-2 font-bold text-[#3D3D3D] '>Popular Courses </h1>
                                             <div className='h-[300px] flex carousel carousel-center rounded-box bg-white relative top-5  overflow-x-auto overflow-y-hidden' style={{ maxWidth: '100%' }}>
                                                 {
@@ -64,7 +64,7 @@ function HomePage() {
                             {
                                 course && course.category.length >= 1 ?
                                     <>
-                                        <div className='mx-[30px] bottom-14 relative'>
+                                        <div className='mx-[30px] lg:bottom-14 relative'>
                                             <h1 className='text-2xl font-bold text-[#3D3D3D] '>Top Categories</h1>
                                             <div className='grid lg:grid-cols-4 md:grid-cols-3 justify-center sm:grid-cols-2 gap-20 my-8'>
                                                 {

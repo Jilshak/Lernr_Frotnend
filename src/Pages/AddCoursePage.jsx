@@ -113,11 +113,10 @@ function AddCoursePage() {
         category: category,
         video: video_link
       };
-      console.log("This is the credentials: ", credentials)
       await dispatch(AddNewCourse(credentials));
       await setToggleField(true)
       await removeState()
-      navigate(`/enrolled/${id}`)
+      navigate(`/mycourses`)
     } else {
       await Swal.fire({
         background: '#fff',
@@ -173,7 +172,7 @@ function AddCoursePage() {
                         </> :
                         <>
                           <div className='bg-[#D9D9D9]  h-[210px] rounded-lg'>
-                            
+
                           </div>
                           <div className=' h-[50px] my-5 rounded-lg'>
                             <input onChange={(e) => {
