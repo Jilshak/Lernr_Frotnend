@@ -24,7 +24,7 @@ function CoursesCards(props) {
                     </div>
                     <div className='flex top-2 relative'>
                         <p className='font-semibold relative bottom-3'>₹ {item?.price}</p>
-                        <p className='font-semibold text-sm relative bottom-2.5 ms-3 line-through'>(₹ 543)</p>
+                        <p className='font-semibold text-sm relative bottom-2.5 ms-3 line-through'>(₹ {item?.offer_price})</p>
                     </div>
                 </div>
             </div>

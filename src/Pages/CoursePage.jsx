@@ -10,6 +10,7 @@ import jwtDecode from 'jwt-decode'
 import ReviewRating from '../Components/ReviewRating'
 import api from '../services/Axios'
 import { getReview } from '../features/ReviewSlice'
+import Swal from 'sweetalert2'
 
 function CoursePage() {
 
@@ -63,6 +64,7 @@ function CoursePage() {
 
     const handleAddToCart = async () => {
         if (localStorage.getItem('authToken')) {
+            const access = await jwtDecode(localStorage.getItem('authToken'));
             const credential = {
                 user: access.user_id,
                 on_course: id

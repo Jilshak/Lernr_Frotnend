@@ -25,6 +25,7 @@ function AddCoursePage() {
   const [thumbnail, setThumbnail] = useState()
   const [description, setDescription] = useState()
   const [price, setPrice] = useState()
+  const [offerPrice, setOfferPrice] = useState()
   const [course_length, setCourseLength] = useState()
   const [minor_description, setMinorDescription] = useState()
   const [requirements, setRequirements] = useState()
@@ -97,12 +98,13 @@ function AddCoursePage() {
 
 
   const AddCourse = async (e) => {
-    if (title && thumbnail && description && price && course_length && requirements && category && whatyoulearn) {
+    if (title && thumbnail && description && price && offerPrice && course_length && requirements && category && whatyoulearn) {
       const credentials = {
         course_by: access.user_id,
         title: title,
         description: description,
         price: price,
+        offer_price: offerPrice,
         thumbnail: await thumbnail.get('thumbnail_image'),
         course_length: course_length,
         minor_description: minor_description,
@@ -134,6 +136,7 @@ function AddCoursePage() {
     setDescription('')
     setPrice('')
     setRequirements('')
+    setOfferPrice('')
     setTitle('')
     setVideoLink('')
     setWhatYouLearn('')
@@ -187,10 +190,10 @@ function AddCoursePage() {
                     <textarea onChange={(e) => setDescription(e.target.value)} value={description} placeholder="Course Description" className="textarea bg-[#D9D9D9] text-sm textarea-lg h-[190px] textarea-bordered  w-full " ></textarea>
                   </div>
                   <div className='my-5 mx-10'>
-                    <div className='bg-[#D9D9D9] h-[50px] mb-5 rounded-lg flex'>
-                      <input onChange={(e) => setCourseLength(e.target.value)} value={course_length} type="number" placeholder="Course Length (hr)" className="input text-sm w-full h-[30px] my-auto mx-2" />
-                      <input onChange={(e) => setPrice(e.target.value)} value={price} type="number" placeholder="Price" className="input text-sm w-full h-[30px] my-auto mx-2" />
-
+                    <div className='bg-[#D9D9D9] h-[70px] mb-5 rounded-lg flex'>
+                      <input onChange={(e) => setCourseLength(e.target.value)} value={course_length} type="number" placeholder="course time" className="input text-sm  w-full h-[30px] my-auto mx-2" />
+                      <input onChange={(e) => setPrice(e.target.value)} value={price} type="number" placeholder="Price" className="input text-sm w-full h-[30px] my-auto mx-1" />
+                      <input onChange={(e) => setOfferPrice(e.target.value)} value={offerPrice} type="number" placeholder="offer price" className="input text-sm w-full h-[30px] my-auto mx-1 me-2" />
                     </div>
                     <textarea onChange={(e) => setWhatYouLearn(e.target.value)} value={whatyoulearn} placeholder="What you'll learn..." className="textarea bg-[#D9D9D9]  text-sm textarea-lg h-[90px] mb-4 textarea-bordered  w-full " ></textarea>
                     <textarea onChange={(e) => setRequirements(e.target.value)} value={requirements} placeholder="Prior Requirements if any" className="textarea bg-[#D9D9D9]  text-sm textarea-lg h-[90px] mb-4 textarea-bordered  w-full " ></textarea>

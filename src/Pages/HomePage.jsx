@@ -17,10 +17,9 @@ function HomePage() {
     useEffect(() => {
         const handleToken = async () => {
             if (localStorage.getItem('authToken')) {
-                const access = await localStorage.getItem('authToken')
-                const decoded = await jwtDecode(access?.user_id)
-                if (decoded != null) {
-                    await dispatch(getCourses(decoded))
+                const access = jwtDecode(localStorage.getItem('authToken'))
+                if (access.user_id) {
+                    await dispatch(getCourses(access.user_id))
                     await dispatch(getCategories())
                 }
             } else {
@@ -34,53 +33,58 @@ function HomePage() {
 
     return (
         <>
-            <div className='h-full'>
-                <div className='mx-[30px] mt-3 z-0'>
-                    <Carousal />
-                </div>
-                {
-                    !course.isLoading && course?.data.length >= 1 ?
-                        <>
-                            <div className='mt-4 h-[400px] mx-[30px]'>
-                                <h1 className='text-2xl font-bold text-[#3D3D3D] '>Popular Courses </h1>
-                                <div className='h-[300px] flex carousel carousel-center rounded-box bg-white relative top-5  overflow-x-auto overflow-y-hidden' style={{ maxWidth: '100%' }}>
-                                    {
-                                        [...course.data].reverse()?.map((item) => {
-                                            if (!item.unlist_course) {
-                                                return (
-                                                    <CoursesCards key={item.id} item={item} top={3} />
-                                                )
-                                            }
-                                        })
-                                    }
-
-                                </div>
+            {
+                !course.isLoading ?
+                    <>
+                        <div className='h-full'>
+                            <div className='mx-[30px] mt-3 z-0'>
+                                <Carousal />
                             </div>
-                        </> : null
-                }
+                            {
+                                !course.isLoading && course?.data.length >= 1 ?
+                                    <>
+                                        <div className='mt-4 h-[400px] mx-[30px]'>
+                                            <h1 className='text-2xl font-bold text-[#3D3D3D] '>Popular Courses </h1>
+                                            <div className='h-[300px] flex carousel carousel-center rounded-box bg-white relative top-5  overflow-x-auto overflow-y-hidden' style={{ maxWidth: '100%' }}>
+                                                {
+                                                    [...course.data].reverse()?.map((item) => {
+                                                        if (!item.unlist_course) {
+                                                            return (
+                                                                <CoursesCards key={item.id} item={item} top={3} />
+                                                            )
+                                                        }
+                                                    })
+                                                }
 
-                {
-                    course && course.category.length >= 1 ?
-                        <>
-                            <div className='mx-[30px]'>
-                                <h1 className='text-2xl font-bold text-[#3D3D3D] '>Top Categories</h1>
-                                <div className='grid lg:grid-cols-4 md:grid-cols-3 justify-center sm:grid-cols-2 gap-20 my-8'>
-                                    {
-                                        course.category.map((item) => {
-                                            return (
-                                                <CategoriesCards key={item.id} item={item} />
-                                            )
-                                        })
-                                    }
+                                            </div>
+                                        </div>
+                                    </> : null
+                            }
 
-                                </div>
+                            {
+                                course && course.category.length >= 1 ?
+                                    <>
+                                        <div className='mx-[30px]'>
+                                            <h1 className='text-2xl font-bold text-[#3D3D3D] '>Top Categories</h1>
+                                            <div className='grid lg:grid-cols-4 md:grid-cols-3 justify-center sm:grid-cols-2 gap-20 my-8'>
+                                                {
+                                                    course.category.map((item) => {
+                                                        return (
+                                                            <CategoriesCards key={item.id} item={item} />
+                                                        )
+                                                    })
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </> : null
+                            }
+                            <div>
+                                <Footer />
                             </div>
-                        </> : null
-                }
-                <div>
-                    <Footer />
-                </div>
-            </div>
+                        </div>
+                    </> : null
+            }
         </>
     )
 }
