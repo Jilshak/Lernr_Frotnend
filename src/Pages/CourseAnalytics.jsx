@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { storage } from '../services/firebase'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import delete1 from '../icons/delete1.png'
+import { ref, uploadBytes, getDownloadURL, getStorage, deleteObject } from 'firebase/storage'
 import Footer from '../Components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseAnalyticsProfit, courseAnalyticsRating, courseAnalyticsReviews, courseAnalyticsStudents } from '../features/ChartSlice'
-import { addNewLessons, finishCourse, getLessons, individualCourse, updateProgress } from '../features/CourseSlice';
-import { Link, useParams } from 'react-router-dom'
+import { addNewLessons, deleteCourse, deleteLesson, finishCourse, getLessons, individualCourse, updateProgress } from '../features/CourseSlice';
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Barchart from '../Components/ChartComponents/Barchart'
 import LineChart from '../Components/ChartComponents/LineChart'
 import InstructorProfitChart from '../Components/ChartComponents/InstructorProfitChart'
@@ -19,6 +20,7 @@ function CourseAnalytics() {
 
   const { id } = useParams()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const video = useSelector((state) => state.courses);
   const access = jwtDecode(localStorage.getItem('authToken'));
@@ -168,6 +170,44 @@ function CourseAnalytics() {
     })
   }
 
+  const deleteVideoByURL = async (videoUrl, lesson_id) => {
+    try {
+      if (videoData.length == 1) {
+
+        const storage = getStorage()
+        const deleteRef = ref(storage, videoUrl)
+
+        const result = await Swal.fire({
+          background: '#fff',
+          icon: 'warning',
+          title: 'Last video of the course!',
+          text: 'This is the last video of the course if you delete this file then the entire course will be removed!!',
+          showCancelButton: true,
+          confirmButtonText: 'DELETE',
+          cancelButtonText: 'Cancel'
+        });
+
+        if (result.isConfirmed) {
+          await dispatch(deleteLesson(lesson_id))
+          await dispatch(deleteCourse(id))
+          await deleteObject(deleteRef)
+          navigate('/add_course')
+        }
+      } else {
+        const storage = getStorage()
+        const deleteRef = ref(storage, videoUrl)
+        console.log("Thsi is the lesson id from else block: ", lesson_id)
+        console.log("Thsi is the  id from else block: ", id)
+        await dispatch(deleteLesson(lesson_id))
+        await dispatch(getLessons(parseInt(id)))
+        // await deleteObject(deleteRef)
+        await dispatch(individualCourse(parseInt(id)));
+      }
+    } catch (error) {
+      console.error('Error deleting the video:', error);
+    }
+  };
+
 
   return (
     <>
@@ -301,10 +341,12 @@ function CourseAnalytics() {
                                   key={item.id}
                                   className={`w-full cursor-pointer mt-5 rounded-xl flex items-center justify-start h-[45px] bg-[#ececec] hover:bg-[#ddd] `}>
                                   <div className='group grid items-center grid-cols-7'>
-                                    <span className='col-span-6 w-full relative '>
-                                      <p className='ms-3 truncate'>{index + 1}. {item.title}</p>
-                                      <div className="absolute hidden z-20 group-hover:block bg-gray-800 text-white text-xs py-1 px-2 mt-2 rounded-lg shadow-md whitespace-nowrap">
-                                        <p>{item.title}</p>
+                                    <span className='col-span-6 w-full relative flex items-center justify-around'>
+                                      <div className='grid grid-cols-8 grid-flow-row justify-start items-center w-[300px]'>
+                                        <div className='col-span-7 flex'>
+                                          <p className='ms-3 truncate  relative'>{index + 1}. {item.title}</p>
+                                        </div>
+                                        {!video.mycourses.course.finished ? <img onClick={(e) => deleteVideoByURL(item.video_url, item.id)} className='h-4 relative lg:left-8 xs:left-8 z-40 cursor-pointer hover:bg-[#d59e9e] w-4 rounded-full col-span-1' src={delete1} alt="" /> : null}
                                       </div>
                                     </span>
                                   </div>
@@ -319,7 +361,7 @@ function CourseAnalytics() {
                           video.mycourses.course.finished ?
                             <>
                               <div className='flex items-center justify-center absolute bottom-2 lg:mx-4 xs:mx-[75px]'>
-                                <button  className="btn btn-disabled btn-sm btn-wide btn-outline  ">CREATE A QUIZ</button>
+                                <button className="btn btn-disabled btn-sm btn-wide btn-outline  ">CREATE A QUIZ</button>
                               </div>
                               <div className='flex items-center justify-center relative bottom-4'>
                                 <button onClick={(e) => setToggleVideoUpload(true)} className="btn btn-disabled btn-sm btn-outline ">ADD NEW LESSON</button>

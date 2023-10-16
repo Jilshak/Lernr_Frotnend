@@ -284,17 +284,32 @@ export const individualCourse = createAsyncThunk('individual_course',
 export const AddNewCourse = createAsyncThunk('add_new_course',
     async (credentials) => {
         try {
-            const request = await api.post(`courses/course/`, credentials, {
+            const credential = {
+                course_by: credentials.course_by,
+                title: credentials.title,
+                description: credentials.description,
+                price: credentials.price,
+                offer_price: credentials.offer_price,
+                thumbnail: credentials.thumbnail,
+                course_length: credentials.course_length,
+                minor_description: credentials.minor_description,
+                requirements: credentials.requirements,
+                what_you_learn: credentials.what_you_learn,
+                category: credentials.category,
+                video: credentials.video,
+            };
+            const request = await api.post(`courses/course/`, credential, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
             const response = request.data
+            console.log("This is the credentials video_ref: ", credentials.video_ref)
             if (request.status === 201) {
                 let data = {
                     title: response.title,
                     course: response.id,
-                    video_url: credentials.video
+                    video_url: credentials.video,
                 }
                 const req = await api.post('courses/course_video/', data)
                 if (req.status == 201) {
@@ -361,6 +376,30 @@ export const addNewLessons = createAsyncThunk('add_new_lessons',
         }
     }
 )
+
+export const deleteLesson = createAsyncThunk('delete_lesson',
+    async (id) => {
+        try {
+            const request = await api.get(`courses/course_lessons/`)
+            const response = request.data
+            if (request.status == 200) {
+                const req1 = await api.delete(`courses/course_video/${id}/`)
+                if (req1.status == 204) {
+                    const final = response.filter((item) => item.lesson == id)
+                    console.log("This is hte final value from the deletecourse: ", final)
+                    console.log("This is hte final value from the deletecourse id: ", final[0].id)
+                    const req = await api.delete(`courses/course_lessons/${final[0]?.id}/`)
+                    if (req.status == 204) {
+                        console.log("The course has been deleted")
+                    }
+                }
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+)
+
 
 //for adding the relevant quiz questions for the user
 export const addQuiz = createAsyncThunk('add_quiz',

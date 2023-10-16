@@ -32,6 +32,7 @@ function AddCoursePage() {
   const [category, setCategory] = useState()
   const [whatyoulearn, setWhatYouLearn] = useState()
   const [video_link, setVideoLink] = useState('')
+  const [video_ref, setVideoRef] = useState('')
 
   //display
   const [displayThumbanil, SetDisplayThumbnail] = useState()
@@ -68,6 +69,9 @@ function AddCoursePage() {
     })
 
     await uploadBytes(videoRef, videoUpload);
+    
+    
+    await setVideoRef(videoRef)
 
     const videoURL = await getDownloadURL(videoRef);
 
@@ -98,7 +102,7 @@ function AddCoursePage() {
 
 
   const AddCourse = async (e) => {
-    if (title && thumbnail && description && price && offerPrice && course_length && requirements && category && whatyoulearn) {
+    if (title && thumbnail && description && price && offerPrice && course_length && requirements && category && whatyoulearn && video_ref) {
       const credentials = {
         course_by: access.user_id,
         title: title,
@@ -111,7 +115,8 @@ function AddCoursePage() {
         requirements: requirements,
         what_you_learn: whatyoulearn,
         category: category,
-        video: video_link
+        video: video_link,
+        video_ref: video_ref
       };
       await dispatch(AddNewCourse(credentials));
       await setToggleField(true)

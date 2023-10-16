@@ -77,8 +77,6 @@ function Carousal() {
       <div className='w-full flex justify-center relative items-center lg:h-[50vh]  '>
         <div style={carouselStyle} className='w-full cursor-pointer h-full group rounded-t-md'>
           <div style={gradientOverlay}></div>
-          {/* <img onClick={prevSlide} src={leftarrow} className='hidden h-12 group-hover:block relative top-[140px] left-[10px] z-50 cursor-pointer' />
-          <img onClick={nextSlide} src={rightarrow} className='hidden h-12 group-hover:block relative top-[100px] left-[-10px] z-50 float-right cursor-pointer' /> */}
         </div>
       </div>
     </Link>
