@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: `https://lernr-backend.onrender.com`
+    baseURL: `http://127.0.0.1:8000/`
 })
 
 export default api
 
-export const base = 'ws://lernr-backend.onrender.com'
+export const base = 'ws://127.0.0.1:8000'
