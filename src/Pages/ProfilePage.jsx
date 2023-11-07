@@ -50,7 +50,6 @@ function ProfilePage() {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [phone, setPhone] = useState('')
-  const [email, setEmail] = useState('')
 
   const handleEdit = async () => {
     const credentials = {
@@ -59,7 +58,6 @@ function ProfilePage() {
       first_name: firstName,
       last_name: lastName,
       phone_number: phone,
-      email: email
     }
     await dispatch(editProfile(credentials))
     await setToggle(false)
@@ -120,8 +118,6 @@ function ProfilePage() {
                         <input onChange={(e) => setFirstName(e.target.value)} type="text" placeholder="first name" className="input input-bordered w-full max-w-sm " />
                         <input onChange={(e) => setLastName(e.target.value)} type="text" placeholder="last name" className="input input-bordered w-full max-w-sm " />
                         <input onChange={(e) => handlePhoneChange(e)} type="number" placeholder="Phone" className={validPhone ? 'input input-bordered w-full max-w-sm ' : 'input input-bordered input-error w-full max-w-sm '} />
-
-                        <input onChange={(e) => setEmail(e.target.value)} type="text" placeholder="email" className="input input-bordered w-full max-w-sm " />
                       </div>
                       <div className='flex flex-col gap-y-4 items-center justify-center mt-5'>
                         <button onClick={handleEdit} className="btn btn-wide hover:bg-green-300">Apply Changes</button>

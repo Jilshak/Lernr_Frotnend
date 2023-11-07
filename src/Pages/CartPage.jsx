@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../Components/Navbar'
 import { Link, useNavigate } from 'react-router-dom'
 import CartProduct from '../Components/CartProduct'
 import { useDispatch, useSelector } from 'react-redux'
@@ -143,12 +142,10 @@ function CartPage() {
                                             </div>
 
                                         </div>
-                                        <Link>
-                                            <button onClick={(e) => {
-                                                const data = items.map((item) => item.id)
-                                                handleCheckout(data)
-                                            }} className="mt-6 w-full btn text-white font-bold bg-[#A435F0] hover:bg-[#5f2c82]">CHECKOUT</button>
-                                        </Link>
+                                        <button onClick={(e) => {
+                                            const data = items.map((item) => item.id)
+                                            handleCheckout(data)
+                                        }} className="mt-6 w-full btn text-white font-bold bg-[#A435F0] hover:bg-[#5f2c82]">CHECKOUT</button>
                                     </div>
                                 </div>
                             </div>

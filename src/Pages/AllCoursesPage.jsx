@@ -50,7 +50,11 @@ function AllCoursesPage() {
       filteredCourses.sort((a, b) => b.price - a.price);
     }
     if (categoryFilter) {
-      filteredCourses = filteredCourses.filter((item) => item.category == categoryFilter);
+      if (priceFilter == '' && courseLengthFilter == '' && categoryFilter != ''){
+        filteredCourses = all.data.filter((item) => item.category == categoryFilter);
+      }else{
+        filteredCourses = filteredCourses.filter((item) => item.category == categoryFilter);
+      }
     }
 
     if (courseLengthFilter) {

@@ -152,7 +152,7 @@ function CourseViewPage() {
                       video.progress == 100 ?
                         <>
                           {
-                            !video.isLoading && video.mycourses.course.have_quiz ?
+                            !video.isLoading && video?.mycourses.course.have_quiz ?
                               <>
                                 <Link to={`/take_quiz/${id}`}>
                                   <button className="btn absolute lg:left-5 xs:left-14 bottom-3 btn-sm btn-outline btn-wide">GET CERTIFICATE</button>

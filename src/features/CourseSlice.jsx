@@ -431,7 +431,7 @@ export const addQuiz = createAsyncThunk('add_quiz',
 export const courseHaveQuiz = createAsyncThunk('course_have_quiz',
     async (id) => {
         try {
-            const request = await api.patch(`courses/course/${id}`, { have_quiz: true })
+            const request = await api.patch(`courses/course/${id}/`, { have_quiz: true })
             if (request.status == 204) {
                 console.log("This course now have quiz")
             }

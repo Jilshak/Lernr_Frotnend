@@ -33,8 +33,8 @@ const CheckoutForm = () => {
   }, []);
 
   useEffect(() => {
-      setEmail(mydata.profile.email)
-  },[mydata.profile])
+    setEmail(mydata.profile.email)
+  }, [mydata.profile])
 
   const handleChange = (event) => {
     if (event.error) {
@@ -75,12 +75,15 @@ const CheckoutForm = () => {
         await setPaymentStatus("success")
 
         let user = await jwtDecode(localStorage.getItem('authToken'))
-        const credentials = {
+        const credentials = await {
           user: user.user_id,
           course_id: id
         }
         await dispatch(buyCourse(credentials))
         await navigate("/enrolled");
+      }else{
+        alert("the payment has been failed!!!")
+        console.log("Payment failed")
       }
     } catch (error) {
       console.error("Error:", error);
