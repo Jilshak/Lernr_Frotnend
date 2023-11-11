@@ -24,7 +24,7 @@ function LoginPage() {
             let token = await localStorage.getItem('authToken')
             let access = await jwtDecode(token)
             if (access.is_superuser) {
-                await navigate('/admin/')
+                await navigate('/admin')
             } else {
                 await navigate('/')
             }
