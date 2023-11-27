@@ -42,7 +42,6 @@ export const getCourses = createAsyncThunk('get_course',
 
                     // Wait for all promises to resolve
                     const coursesWithUsername = await Promise.all(usernamePromises);
-                    console.log("This is the updated course: ", coursesWithUsername)
                     return coursesWithUsername;
                 }
             }
