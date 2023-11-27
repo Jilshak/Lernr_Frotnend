@@ -6,4 +6,4 @@ const api = axios.create({
 
 export default api
 
-export const base = 'wss://lernr-backend.onrender.com/'
+export const base = 'wss://lernr-backend.onrender.com'
