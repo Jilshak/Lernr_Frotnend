@@ -19,17 +19,17 @@ This example emphasizes the user experience of the platform while acknowledging 
 Feel free to customize this format to further match your specific platform and tone.
 
 **Technologies Used:**
-> React,
-> Redux,
-> Tailwind CSS,
-> Daisy UI,
-> Chart JS,
-> Redux Toolkit
+* React
+* Redux
+* Tailwind CSS
+* Daisy UI
+* Chart JS
+* Redux Toolkit
 
 **For cloning and using this repo locally:**
-> git clone 'repo-link' ---> To clone the repo to your local machine
-> npm install --> To install the required packages for this repo (will be there in the package.json file)
-> npm run dev ---> To run the code in local machine
+* git clone 'repo-link' ---> To clone the repo to your local machine
+* npm install --> To install the required packages for this repo (will be there in the package.json file)
+* npm run dev ---> To run the code in local machine
 
 **Note:**
 The utils folder in the project directory will have an axios instance of the desired backend URL (base url) from where the data is being fetched so change it accordingly to get the data that is required for your use case.
