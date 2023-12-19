@@ -25,7 +25,6 @@ export const getCourses = createAsyncThunk('get_course',
 
                     // Wait for all promises to resolve
                     const coursesWithUsername = await Promise.all(usernamePromises);
-                    console.log("This is the updated course: ", coursesWithUsername)
                     return coursesWithUsername;
                 }
             } else {
@@ -43,7 +42,6 @@ export const getCourses = createAsyncThunk('get_course',
 
                     // Wait for all promises to resolve
                     const coursesWithUsername = await Promise.all(usernamePromises);
-                    console.log("This is the updated course: ", coursesWithUsername)
                     return coursesWithUsername;
                 }
             }
@@ -262,7 +260,6 @@ export const individualCourse = createAsyncThunk('individual_course',
                 console.log(courseByUserId)
                 const userRequest = await api.get(`user/${courseByUserId}`);
                 const userData = userRequest.data;
-                console.log(userData)
                 if (userRequest.status === 200) {
                     const username = userData.username;
                     const profile_image = userData.profile_image
@@ -654,7 +651,6 @@ export const getBoughtCourses = createAsyncThunk('get_bought_course', async (_id
                 })
             );
 
-            console.log("Bought Courses with Progress and Details: ", courseDetailsWithProgress);
             return courseDetailsWithProgress;
         }
     } catch (error) {
