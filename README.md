@@ -19,11 +19,11 @@ This example emphasizes the user experience of the platform while acknowledging 
 Feel free to customize this format to further match your specific platform and tone.
 
 **Technologies Used:**
-> React
-> Redux
-> Tailwind CSS
-> Daisy UI
-> Chart JS
+> React,
+> Redux,
+> Tailwind CSS,
+> Daisy UI,
+> Chart JS,
 > Redux Toolkit
 
 **For cloning and using this repo locally:**
