@@ -70,15 +70,15 @@ function Navbar() {
                         </Link>
                     }
                     {
-                        !token?.is_instructor ?
+                        
                             <>
                                 <Link to='/enrolled'>
                                     <li className='mx-3 font-semibold cursor-pointer'>Enrolled</li>
                                 </Link>
-                            </> : null
+                            </>
                     }
                     {
-                        !token?.is_instructor && cartItemCount.community ?
+                        cartItemCount.community ?
                             <>
                                 <Link to='/community'>
                                     <li className='mx-3 font-semibold lg:block md:block sm:block xs:hidden cursor-pointer'>Communities</li>
